@@ -29,19 +29,41 @@ HBase由HMaster和 HRegionServer 组成，同样遵从主从服务器架构。HB
 
 ![hbase 基本架构]()
 
-**Client：** 使用HBase的RPC机制与HMaster和HRegionServer进行通信，提交请求和获取结果。对于管理类操作，Client与HMaster进行RPC；对于数据读写类操作，Client与HRegionServer进行RPC。
+**Client：** 使用HBase的RPC机制与 HMaster和 HRegionServer 进行通信，提交请求和获取结果。对于管理类操作，Client与HMaster进行RPC；对于数据读写类操作，Client与HRegionServer进行RPC。
 
-**Zookeeper：** 通过将集群各节点状态信息注册到Zookeeper中，使得HMaster可随时感知各个HRegionServer的健康状态，而且也能避免HMaster的单点问题。
+**Zookeeper：** 通过将集群各节点状态信息注册到Zookeeper中，使得 HMaster可随时感知各个HRegionServer的健康状态，而且也能避免HMaster的单点问题。
 
-**HMaster：** 管理所有的HRegionServer，告诉其需要维护哪些HRegion，并监控所有HRegionServer的运行状态。当一个新的HRegionServer登录到HMaster时，HMaster会告诉它等待分配数据；而当某个HRegion死机时，HMaster会把它负责的所有HRegion标记为未分配，然后再把它们分配到其他HRegionServer中。HMaster没有单点问题，HBase可以启动多个HMaster，通过Zookeeper的选举机制保证集群中总有一个HMaster运行，从而提高了集群的可用性。
+- 保证任何时候，集群中只有一个HMaster
+- 实时监控HRegion Server的上线和下线信息，并实时通知给HMaster
+- 存储HBase的schema和table元数据
+- HMaster需要知道哪些HRegionServer是活的,可用的。及HRegionServer的位置信息，以便管理HRegionServer
+
+**HMaster：** 管理所有的HRegionServer，告诉其需要维护哪些 HRegion，并监控所有HRegionServer的运行状态。当一个新的HRegionServer登录到HMaster时，HMaster会告诉它等待分配数据；而当某个HRegion死机时，HMaster会把它负责的所有HRegion标记为未分配，然后再把它们分配到其他HRegionServer中。HMaster没有单点问题，HBase可以启动多个HMaster，通过Zookeeper的选举机制保证集群中总有一个HMaster运行，从而提高了集群的可用性。
+
+- 理论上HMaster可以启动多个，但是Zookeeper有Master Election机制保证且允许总有且只有一个Master在运行，来负责Table和Region的管理工作
+- 管理HRegionServer的负载均衡，调整Region分布
+- Region Split后，负责新Region的分布
+- 在HRegionServer停机后，负责失效HRegionServer上Region迁移工作
 
 **HRegion：** 当表的大小超过预设值的时候，HBase会自动将表划分为不同的区域，每个区域包含表中所有行的一个子集。对用户来说，每个表是一堆数据的集合，靠主键（RowKey）来区分。从物理上来说，一张表被拆分成了多块，每一块就是一个HRegion。我们用表名+开始/结束主键，来区分每一个HRegion，一个HRegion会保存一个表中某段连续的数据，一张完整的表数据是保存在多个HRegion中的。
 
 **HRegionServer：** HBase中的所有数据从底层来说一般都是保存在HDFS中的，用户通过一系列HRegionServer获取这些数据。集群一个节点上一般只运行一个HRegionServer，且每一个区段的HRegion只会被一个HRegionServer维护。HRegionServer主要负责响应用户I/O请求，向HDFS文件系统读写数据，是HBase中最核心的模块。HRegionServer内部管理了一系列HRegion对象，每个HRegion对应了逻辑表中的一个连续数据段。HRegion由多个HStore组成，每个HStore对应了逻辑表中的一个列族的存储，可以看出每个列族其实就是一个集中的存储单元。因此，为了提高操作效率，最好将具备共同I/O特性的列放在一个列族中。
 
+- 监控维护Region，处理对这些Region的响应，请求
+- 负责切分在运行过程中变得过大的Region
+
 **HStore：** 它是HBase存储的核心，由MemStore和StoreFiles两部分组成。MemStore是内存缓冲区，用户写入的数据首先会放入MemStore，当MemStore满了以后会Flush成一个StoreFile（底层实现是HFile），当StoreFile的文件数量增长到一定阈值后，会触发Compact合并操作，将多个StoreFiles合并成一个StoreFile，合并过程中会进行版本合并和数据删除操作。因此，可以看出HBase其实只有增加数据，所有的更新和删除操作都是在后续的Compact过程中进行的，这样使得用户的写操作只要进入内存就可以立即返回，保证了HBaseI/O的高性能。当StoreFiles Compact后，会逐步形成越来越大的StoreFile，当单个StoreFile大小超过一定阈值后，会触发Split操作，同时把当前的HRegion Split成2个HRegion，父HRegion会下线，新分出的2个子HRegion会被HMaster分配到相应的HRegionServer，使得原先1个HRegion的负载压力分流到2个HRegion上。
 
-**HLog：** 每个HRegionServer中都有一个HLog对象，它是一个实现了Write Ahead Log的预写日志类。在每次用户操作将数据写入MemStore的时候，也会写一份数据到HLog文件中，HLog文件会定期滚动刷新，并删除旧的文件（已持久化到StoreFile中的数据）。当HMaster通过Zookeeper感知到某个HRegionServer意外终止时，HMaster首先会处理遗留的 HLog文件，将其中不同HRegion的HLog数据进行拆分，分别放到相应HRegion的目录下，然后再将失效的HRegion重新分配，领取到这些HRegion的HRegionServer在加载 HRegion的过程中，会发现有历史HLog需要处理，因此会Replay HLog中的数据到MemStore中，然后Flush到StoreFiles，完成数据恢复。
+**HLog：** 每个HRegionServer中都有一个HLog对象，它是一个实现了Write Ahead Log 的预写日志类。在每次用户操作将数据写入MemStore的时候，也会写一份数据到HLog文件中，HLog文件会定期滚动刷新，并删除旧的文件（已持久化到StoreFile中的数据）。当HMaster通过Zookeeper感知到某个HRegionServer意外终止时，HMaster首先会处理遗留的 HLog文件，将其中不同HRegion的HLog数据进行拆分，分别放到相应HRegion的目录下，然后再将失效的HRegion重新分配，领取到这些HRegion的HRegionServer在加载 HRegion的过程中，会发现有历史HLog需要处理，因此会Replay HLog中的数据到MemStore中，然后Flush到StoreFiles，完成数据恢复。
+
+**注意**
+
+- 1. Client访问hbase上数据时并不需要Hmaster参与，数据的读写也只是访问RegioneServer，HMaster仅仅维护这table和Region的元数据信息，负载很低。
+- 2. HBase是通过DFS client把数据写到HDFS上的
+- 3. 每一个HRegionServer有多个HRegion，每一个HRegion有多个Store，每一个Store对应一个列簇。
+- 4. HFile是HBase中真正实际数据的存储格式，HFile是二进制格式文件，StoreFile就是对HFile进行了封装（其实就是一个东西），然后进行数据的存储。
+- 5. HStore由MemStore（只有一个）和StoreFile（多个）组成。
+- 6. HLog记录数据的变更信息，用来做数据恢复。
 
 #### 2.3 ROOT 表和 META 表
 
@@ -51,7 +73,8 @@ HBase的所有HRegion元数据被存储在.META.表中，随着HRegion的增多�
 
 ![hbase ROOT表]()
 
-**-ROOT-** 表永远不会被分割，它只有一个HRegion，这样可以保证最多只需要三次跳转就可以定位任意一个HRegion。为了加快访问速度，.META.表的所有HRegion全部保存在内存中。客户端会将查询过的位置信息缓存起来，且缓存不会主动失效。如果客户端根据缓存信息还访问不到数据，则询问相关.META.表的Region服务器，试图获取数据的位置，如果还是失败，则询问-ROOT-表相关的.META.表在哪里。最后，如果前面的信息全部失效，则通过ZooKeeper重新定位HRegion的信息。所以如果客户端上的缓存全部是失效，则需要进行6次网络来回，才能定位到正确的HRegion。
+**-ROOT-** 表永远不会被分割，它只有一个HRegion，这样可以保证最多只需要三次跳转就可以定位任意一个HRegion。
+为了加快访问速度，.META.表的所有HRegion全部保存在内存中。客户端会将查询过的位置信息缓存起来，且缓存不会主动失效。如果客户端根据缓存信息还访问不到数据，则询问相关.META.表的Region服务器，试图获取数据的位置，如果还是失败，则询问-ROOT-表相关的.META.表在哪里。最后，如果前面的信息全部失效，则通过ZooKeeper重新定位HRegion的信息。所以如果客户端上的缓存全部是失效，则需要进行6次网络来回，才能定位到正确的HRegion。
 
 ### 3 HBase数据模型
 
