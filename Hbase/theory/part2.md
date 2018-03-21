@@ -59,6 +59,10 @@ x<1,  1<=x<2,  2<=x<3,  3<=x
 
 val p = new Put(Bytes.toBytes(String.valueOf(random.nextInt(4)) + new Date().getTime))
 
+也可以取模
+
+val p = new Put(Bytes.toBytes((ID mod 5) + id))
+
 这句话是为一条新的数据，生成一个RowKey，那么我们的key值由2部分组成，随机散列+时间戳，
 其中随机散列包括：【0,1,2,3】一共4个值，根据上面我们划分的region，这4个值，将会映射到4个不同的region当中。
 
