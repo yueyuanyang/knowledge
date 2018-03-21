@@ -29,7 +29,8 @@ rowkey是一个二进制码流，可以是任意字符串，最大长度 64kb �
 
 ```
 在HBase当中，表会被划分为1...n个Region，被托管在RegionServer中。Region二个重要的属性:StartKey与EndKey表示这个 
-Region维护的rowKey范围，当我们要读/写数据时，如果rowKey落在某个start-end key范围内，那么就会定位到目标region并且读/写到相关的数据。
+Region维护的rowKey范围，当我们要读/写数据时，如果rowKey落在某个start-end key范围内，
+那么就会定位到目标region并且读/写到相关的数据。
 
 如果我们在建表的时候，不预先设定好分区，随着表内数据的增多，HBase会自动把表进行split，但是这样做有几点问题，
 第一，分区的原则，可能并不是我们想要的；
