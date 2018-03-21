@@ -59,12 +59,15 @@ HBase由HMaster和 HRegionServer 组成，同样遵从主从服务器架构。HB
 **注意**
 
 ```
-1. Client访问hbase上数据时并不需要Hmaster参与，数据的读写也只是访问RegioneServer，HMaster仅仅维护这table和Region的元数据信息，负载很低。
+1. Client访问hbase上数据时并不需要Hmaster参与，数据的读写也只是访问RegioneServer，
+   HMaster仅仅维护这table和Region的元数据信息，负载很低。
 2. HBase是通过DFS client把数据写到HDFS上的
 3. 每一个HRegionServer有多个HRegion，每一个HRegion有多个Store，每一个Store对应一个列簇。
-4. HFile是HBase中真正实际数据的存储格式，HFile是二进制格式文件，StoreFile就是对HFile进行了封装（其实就是一个东西），然后进行数据的存储。
+4. HFile是HBase中真正实际数据的存储格式，HFile是二进制格式文件，StoreFile就是对HFile进行了
+   封装（其实就是一个东西），然后进行数据的存储。
 5. HStore由MemStore（只有一个）和StoreFile（多个）组成。
 6. HLog记录数据的变更信息，用来做数据恢复。
+
 ```
 
 #### 2.3 ROOT 表和 META 表
