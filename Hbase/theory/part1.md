@@ -78,27 +78,27 @@ StoreFile是只读的，一旦创建后就不可以再修改。因此Hbase的更
 
 #### 4.1 写操作流程
 
-**步骤1：**Client通过Zookeeper的调度，向HRegionServer发出写数据请求，在HRegion中写数据。
+**步骤1：** Client通过Zookeeper的调度，向HRegionServer发出写数据请求，在HRegion中写数据。
 
-**步骤2：**数据被写入HRegion的MemStore，直到MemStore达到预设阈值。
+**步骤2：** 数据被写入HRegion的MemStore，直到MemStore达到预设阈值。
 
-**步骤3：**MemStore中的数据被Flush成一个StoreFile。
+**步骤3：** MemStore中的数据被Flush成一个StoreFile。
+ 
+**步骤4：** 随着StoreFile文件的不断增多，当其数量增长到一定阈值后，触发Compact合并操作，将多个StoreFile合并成一个StoreFile，同时进行版本合并和数据删除。
 
-**步骤4：**随着StoreFile文件的不断增多，当其数量增长到一定阈值后，触发Compact合并操作，将多个StoreFile合并成一个StoreFile，同时进行版本合并和数据删除。
+**步骤5：** StoreFiles通过不断的Compact合并操作，逐步形成越来越大的StoreFile。
 
-**步骤5：**StoreFiles通过不断的Compact合并操作，逐步形成越来越大的StoreFile。
-
-**步骤6：**单个StoreFile大小超过一定阈值后，触发Split操作，把当前HRegion Split成2个新的HRegion。父HRegion会下线，新Split出的2个子HRegion会被HMaster分配到相应的HRegionServer 上，使得原先1个HRegion的压力得以分流到2个HRegion上。
+**步骤6：** 单个StoreFile大小超过一定阈值后，触发Split操作，把当前HRegion Split成2个新的HRegion。父HRegion会下线，新Split出的2个子HRegion会被HMaster分配到相应的HRegionServer 上，使得原先1个HRegion的压力得以分流到2个HRegion上。
 
 #### 4.2 读操作流程
 
-**步骤1：**client访问Zookeeper，查找-ROOT-表，获取.META.表信息。
+**步骤1：** client访问Zookeeper，查找-ROOT-表，获取.META.表信息。
 
-**步骤2：**从.META.表查找，获取存放目标数据的HRegion信息，从而找到对应的HRegionServer。
+**步骤2：** 从.META.表查找，获取存放目标数据的HRegion信息，从而找到对应的HRegionServer。
 
-**步骤3：**通过HRegionServer获取需要查找的数据。
+**步骤3：** 通过HRegionServer获取需要查找的数据。
 
-**步骤4：**HRegionserver的内存分为MemStore和BlockCache两部分，MemStore主要用于写数据，BlockCache主要用于读数据。读请求先到MemStore中查数据，查不到就到BlockCache中查，再查不到就会到StoreFile上读，并把读的结果放入BlockCache。
+**步骤4：** HRegionserver的内存分为MemStore和BlockCache两部分，MemStore主要用于写数据，BlockCache主要用于读数据。读请求先到MemStore中查数据，查不到就到BlockCache中查，再查不到就会到StoreFile上读，并把读的结果放入BlockCache。
 
 
 
