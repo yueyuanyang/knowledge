@@ -1,7 +1,5 @@
 ## hive 分析窗口函数
 
-> 转载：http://lxw1234.com/archives/category/hive/page/4
-
 #### **hive分析窗口函数**
 
 #####**OVER(PARTITION BY)函数**
@@ -940,3 +938,5 @@ NULL            NULL               7       0
 可以实现这样的上钻过程：
 天月的UV->天的UV->总UV
 （这里，根据天和月进行聚合，和根据天聚合结果一样，因为有父子关系，如果是其他维度组合的话，就会不一样
+
+> 转载：http://lxw1234.com/archives/category/hive/page/4
