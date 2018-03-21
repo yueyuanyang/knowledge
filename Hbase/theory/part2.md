@@ -40,9 +40,10 @@ create 'testtable', 'common', 'data', {SPLITS => ['1','2','3']}
 ```
 | Name | Region Server |  start key | end key | locality | requests 
 |- | :-: | -: | :-: | :-: | :-: |
-|Harry Potter | Gryffindor| 90 | Harry Potter | Gryffindor| 90 |
-|Harry Potter | Gryffindor| 90 | Harry Potter | Gryffindor| 90 | 
-|Harry Potter | Gryffindor| 90 | Harry Potter | Gryffindor| 90 |
+|testtable:443444 | master:1602|  | 1 | 0.0| 21 |
+|testtable:234225 | slave01:1602| 1 | 2 | 0.0| 22 | 
+|testtable:234234 | slave02:1602| 2 | 3 | 0.0| 31 |
+|testtable:453343 | slave03:1602| 3 |  | 0.0| 23 |
 
 ```
 我们看到，我们用1,2,3三个数，把一个table划分为了4个region，这四个region分别是：
