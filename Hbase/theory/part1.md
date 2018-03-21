@@ -37,13 +37,13 @@ HBase由HMaster和 HRegionServer 组成，同样遵从主从服务器架构。HB
 
 **HRegion：** 当表的大小超过预设值的时候，HBase会自动将表划分为不同的区域，每个区域包含表中所有行的一个子集。对用户来说，每个表是一堆数据的集合，靠主键（RowKey）来区分。从物理上来说，一张表被拆分成了多块，每一块就是一个HRegion。我们用表名+开始/结束主键，来区分每一个HRegion，一个HRegion会保存一个表中某段连续的数据，一张完整的表数据是保存在多个HRegion中的。
 
-**”HRegionServer：** HBase中的所有数据从底层来说一般都是保存在HDFS中的，用户通过一系列HRegionServer获取这些数据。集群一个节点上一般只运行一个HRegionServer，且每一个区段的HRegion只会被一个HRegionServer维护。HRegionServer主要负责响应用户I/O请求，向HDFS文件系统读写数据，是HBase中最核心的模块。HRegionServer内部管理了一系列HRegion对象，每个HRegion对应了逻辑表中的一个连续数据段。HRegion由多个HStore组成，每个HStore对应了逻辑表中的一个列族的存储，可以看出每个列族其实就是一个集中的存储单元。因此，为了提高操作效率，最好将具备共同I/O特性的列放在一个列族中。
+**HRegionServer：** HBase中的所有数据从底层来说一般都是保存在HDFS中的，用户通过一系列HRegionServer获取这些数据。集群一个节点上一般只运行一个HRegionServer，且每一个区段的HRegion只会被一个HRegionServer维护。HRegionServer主要负责响应用户I/O请求，向HDFS文件系统读写数据，是HBase中最核心的模块。HRegionServer内部管理了一系列HRegion对象，每个HRegion对应了逻辑表中的一个连续数据段。HRegion由多个HStore组成，每个HStore对应了逻辑表中的一个列族的存储，可以看出每个列族其实就是一个集中的存储单元。因此，为了提高操作效率，最好将具备共同I/O特性的列放在一个列族中。
 
 **HStore：** 它是HBase存储的核心，由MemStore和StoreFiles两部分组成。MemStore是内存缓冲区，用户写入的数据首先会放入MemStore，当MemStore满了以后会Flush成一个StoreFile（底层实现是HFile），当StoreFile的文件数量增长到一定阈值后，会触发Compact合并操作，将多个StoreFiles合并成一个StoreFile，合并过程中会进行版本合并和数据删除操作。因此，可以看出HBase其实只有增加数据，所有的更新和删除操作都是在后续的Compact过程中进行的，这样使得用户的写操作只要进入内存就可以立即返回，保证了HBaseI/O的高性能。当StoreFiles Compact后，会逐步形成越来越大的StoreFile，当单个StoreFile大小超过一定阈值后，会触发Split操作，同时把当前的HRegion Split成2个HRegion，父HRegion会下线，新分出的2个子HRegion会被HMaster分配到相应的HRegionServer，使得原先1个HRegion的负载压力分流到2个HRegion上。
 
 **HLog：** 每个HRegionServer中都有一个HLog对象，它是一个实现了Write Ahead Log的预写日志类。在每次用户操作将数据写入MemStore的时候，也会写一份数据到HLog文件中，HLog文件会定期滚动刷新，并删除旧的文件（已持久化到StoreFile中的数据）。当HMaster通过Zookeeper感知到某个HRegionServer意外终止时，HMaster首先会处理遗留的 HLog文件，将其中不同HRegion的HLog数据进行拆分，分别放到相应HRegion的目录下，然后再将失效的HRegion重新分配，领取到这些HRegion的HRegionServer在加载 HRegion的过程中，会发现有历史HLog需要处理，因此会Replay HLog中的数据到MemStore中，然后Flush到StoreFiles，完成数据恢复。
 
-#### 2.3 ROOT表和META表
+#### 2.3 ROOT 表和 META 表
 
 HBase的所有HRegion元数据被存储在.META.表中，随着HRegion的增多，.META.表中的数据也会增大，并分裂成多个新的HRegion。为了定位.META.表中各个HRegion的位置，把.META.表中所有HRegion的元数据保存在-ROOT-表中，最后由Zookeeper记录-ROOT-表的位置信息。所有客户端访问用户数据前，需要首先访问Zookeeper获得-ROOT-的位置，然后访问-ROOT-表获得.META.表的位置，最后根据.META.表中的信息确定用户数据存放的位置，如下图所示。
 
@@ -101,4 +101,5 @@ StoreFile是只读的，一旦创建后就不可以再修改。因此Hbase的更
 **步骤4：** HRegionserver的内存分为MemStore和BlockCache两部分，MemStore主要用于写数据，BlockCache主要用于读数据。读请求先到MemStore中查数据，查不到就到BlockCache中查，再查不到就会到StoreFile上读，并把读的结果放入BlockCache。
 
 
+> http://blog.csdn.net/carl810224/article/details/51970039
 
