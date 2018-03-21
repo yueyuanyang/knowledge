@@ -37,17 +37,14 @@ rowkey是一个二进制码流，可以是任意字符串，最大长度 64kb �
 create 'testtable', 'common', 'data', {SPLITS => ['1','2','3']}
 
 建好之后，我们可以在HBase的web页面当中，看到表的分区的分布情况：
+```
+| Name | Region Server |  start key | end key | locality | requests 
+|- | :-: | -: | :-: | :-: | :-: |
+|Harry Potter | Gryffindor| 90 | Harry Potter | Gryffindor| 90 |
+|Harry Potter | Gryffindor| 90 | Harry Potter | Gryffindor| 90 | 
+|Harry Potter | Gryffindor| 90 | Harry Potter | Gryffindor| 90 |
 
 ```
-|Name | Academy | score 
-|- | :-: | -: 
-|Harry Potter | Gryffindor| 90 
-|Hermione Granger | Gryffindor | 100 
-|Draco Malfoy | Slytherin | 90
-
-```
-
-
 我们看到，我们用1,2,3三个数，把一个table划分为了4个region，这四个region分别是：
 
 x<1,  1<=x<2,  2<=x<3,  3<=x
