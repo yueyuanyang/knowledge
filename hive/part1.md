@@ -1,20 +1,25 @@
 ## hive 分析窗口函数
 
-#### **hive分析窗口函数**
+### hive分析窗口函数
 
-#####**OVER(PARTITION BY)函数**
+### OVER(PARTITION BY)函数
+
 开窗函数指定了分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变化而变化，举例如下：
-#####**over后的用法**
+
+### over后的用法
+
 ```
 over(order by salary)  按照salary排序进行累计，order by是个默认的开窗函数
 over(partition by deptno)  按照部门分区
 over(partition by deptno order by salary) 按照deptno分组和按照salary排序
 ```
 
-#####**开窗的窗口范围：**
-> over（order by salary range between 5 preceding and 5 following）：窗口范围为当前行数据幅度减5加5后的范围内的。
+### 开窗的窗口范围：
+
+over（order by salary range between 5 preceding and 5 following）：窗口范围为当前行数据幅度减5加5后的范围内的。
+
 ```
---sum(s)over(order by s range between 2 preceding and 2 following) 表示加2或2的范围内的求和
+-- sum(s)over(order by s range between 2 preceding and 2 following) 表示加2或2的范围内的求和
 
 select name,class,s, sum(s)over(order by s range between 2 
 preceding and 2 following) mm from t2
@@ -32,7 +37,8 @@ dss        1        95        190
 ddd        3        99        198
 gf         3        99        198
 ```
->over（order by salary rows between 5 preceding and 5 following）：窗口范围为当前行前后各移动5行。
+over（order by salary rows between 5 preceding and 5 following）：窗口范围为当前行前后各移动5行。
+
 ```
 --sum(s) over(order by s rows between 2 preceding and 2 following) 表示在上下两行之间的范围内
 
@@ -51,13 +57,15 @@ dss        1        95        480
 ddd        3        99        388
 gf         3        99        293
 ```
-> over（order by salary range between unbounded preceding and unbounded following）或者
+over（order by salary range between unbounded preceding and unbounded following）或者
+ 
 over（order by salary rows between unbounded preceding and unbounded following）：窗口不做限制
 
 ---
 Hive中提供了越来越多的分析函数，用于完成负责的统计分析
 
 本文涉及的函数汇总
+
 | 操作	| 解释   |
 | ------------- |:-------------:|
 | SUM      | 求和函数，结果和ORDER BY相关,默认为升序 | 
@@ -82,7 +90,7 @@ Hive中提供了越来越多的分析函数，用于完成负责的统计分析
 
 
 -----
-> **数据准备**
+**数据准备**
 
 ```
 CREATE EXTERNAL TABLE tmp(
@@ -108,9 +116,12 @@ cookie1 2015-04-14      2
 cookie1 2015-04-15      4
 cookie1 2015-04-16      4
 ```
-#### **SUM函数**
+### SUM函数
+
 sum为分组求和函数
+
 SUM — 注意,结果和ORDER BY相关,默认为升序
+
 ```
 SELECT cookieid,
 createtime,
@@ -134,22 +145,35 @@ cookie1  2015-04-15      4       22      22      26      16      20      8
 cookie1  2015-04-16      4       26      26      26      13      13      4
 ```
 pv1:  分组内从起点到当前行的pv累积，如，11号的pv1=10号的pv+11号的pv, 12号=10号+11号+12号
+
 pv2:  同pv1
+
 pv3:  分组内(cookie1)所有的pv累加
+
 pv4:  分组内当前行+往前3行，如，11号=10号+11号， 12号=10号+11号+12号， 13号=10号+11号+12号+13号， 14号=11号+12号+13号+14号
+
 pv5:  分组内当前行+往前3行+往后1行，如，14号=11号+12号+13号+14号+15号=5+7+3+2+4=21
+
 pv6:  分组内当前行+往后所有行，如，13号=13号+14号+15号+16号=3+2+4+4=13，14号=14号+15号+16号=2+4+4=10
 
 如果不指定ROWS BETWEEN,默认为从起点到当前行;
+
 如果不指定ORDER BY，则将分组内所有值累加;
+
 关键是理解ROWS BETWEEN含义,也叫做WINDOW子句：
+
 PRECEDING：往前
+
 FOLLOWING：往后
+
 CURRENT ROW：当前行
+
 UNBOUNDED：起点，UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING：表示到后面的终点
 
-####**AVG函数**
+### AVG函数
+
 AVG 用于统计平均值，和group by 配合使用
+
 ```
 SELECT cookieid,
 createtime,
@@ -171,8 +195,10 @@ cookie1 2015-04-14      2       3.6     3.6     3.7142857142857144      4.25    
 cookie1 2015-04-15      4       3.6666666666666665      3.6666666666666665      3.7142857142857144      4.0     4.0     4.0
 cookie1 2015-04-16      4       3.7142857142857144      3.7142857142857144      3.7142857142857144      3.25    3.25    4.0
 ```
-#### **MIN函数**
+### MIN函数
+
 min 为求取某列的最小值
+
 ```
 SELECT cookieid,
 createtime,
@@ -195,8 +221,10 @@ cookie1 2015-04-14      2       1       1       1       2       2       2
 cookie1 2015-04-15      4       1       1       1       2       2       4
 cookie1 2015-04-16      4       1       1       1       2       2       4
 ```
-####**MAX函数**
+### MAX函数
+
 max为求取某列的最大值
+
 ```
 SELECT cookieid,
 createtime,
@@ -221,7 +249,8 @@ cookie1 2015-04-16      4       7       7       7       4       4       4
 ```
 ---
 
-> 数据准备
+**数据准备**
+
 ```
 cookie1,2015-04-10,1
 cookie1,2015-04-11,5
@@ -267,11 +296,14 @@ cookie2 2015-04-14      3
 cookie2 2015-04-15      9
 cookie2 2015-04-16      7
 ```
-####**NTILE 函数**
+### NTILE 函数
 
 NTILE(n)，用于将分组数据按照顺序切分成n片，返回当前切片值。
+
 NTILE不支持ROWS BETWEEN，比如 NTILE(2) OVER(PARTITION BY cookieid ORDER BY createtime ROWS BETWEEN 3 PRECEDING AND CURRENT ROW)
+
 如果切片不均匀，默认增加第一个切片的分布
+
 ```
 SELECT 
 cookieid,
@@ -300,7 +332,8 @@ cookie2 2015-04-14      3       2       2       3
 cookie2 2015-04-15      9       2       3       4
 cookie2 2015-04-16      7       2       3       4
 ```
-#####  比如，统计一个cookie，pv数最多的前1/3的天
+### 比如，统计一个cookie，pv数最多的前1/3的天
+
 ```
 SELECT 
 cookieid,
@@ -328,10 +361,14 @@ cookie2 2015-04-14      3       2
 cookie2 2015-04-11      3       3
 cookie2 2015-04-10      2       3
 ```
-#### **ROW_NUMBER 函数**
+### ROW_NUMBER 函数
+
 ROW_NUMBER() –从1开始，按照顺序，生成分组内记录的序列
+
 –比如，按照pv降序排列，生成分组内每天的pv名次
+
 ROW_NUMBER() 的应用场景非常多，再比如，获取分组内排序第一的记录;获取一个session中的第一条refer等。
+
 ```
 SELECT 
 cookieid,
@@ -357,9 +394,12 @@ cookie2 2015-04-14      3       5
 cookie2 2015-04-11      3       6
 cookie2 2015-04-10      2       7
 ```
-####**RANK函数 和 DENSE_RANK函数**
+###  RANK函数 和 DENSE_RANK函数
+
 —RANK() 生成数据项在分组中的排名，排名相等会在名次中留下空位
+
 —DENSE_RANK() 生成数据项在分组中的排名，排名相等会在名次中不会留下空位
+
 ```
 SELECT 
 cookieid,
@@ -388,8 +428,10 @@ rn3: 如果相等，则按记录值排序，生成唯一的次序，如果所有
 
 ---
 
-####**CUME_DIST函数**
-数据准备
+### CUME_DIST函数
+
+**数据准备**
+
 ```
 d1,user1,1000
 d1,user2,2000
@@ -413,10 +455,13 @@ d1      user3   3000
 d2      user4   4000
 d2      user5   5000
 ```
-#### **CUME_DIST函数**
+### CUME_DIST函数
+
 –CUME_DIST 小于等于当前值的行数/分组内总行数
+
 –比如，统计小于等于当前薪水的人数，所占总人数的比例
-```select
+
+```
 SELECT 
 dept,
 userid,
@@ -439,9 +484,12 @@ rn1: 没有partition,所有数据均为1组，总行数为5，
 rn2: 按照部门分组，dpet=d1的行数为3,
      第二行：小于等于2000的行数为2，因此，2/3=0.6666666666666666
 ```
-####**PERCENT_RANK函数**
+### PERCENT_RANK函数
+
 –PERCENT_RANK 分组内当前行的RANK值-1/分组内总行数-1
+
 应用场景不了解，可能在一些特殊算法的实现中可以用到吧。
+
 ```
 SELECT 
 dept,
@@ -472,7 +520,9 @@ rn2: 按照dept分组，
 ```
 
 ----
-数据准备
+
+**数据准备**
+
 ```
 cookie1,2015-04-10 10:00:02,url2
 cookie1,2015-04-10 10:00:00,url1
@@ -515,9 +565,12 @@ cookie2 2015-04-10 11:00:00     url77
 cookie2 2015-04-10 10:10:00     url44
 cookie2 2015-04-10 10:50:01     url55
 ```
-####**LAG函数**
+### LAG函数
+
 LAG(col,n,DEFAULT) 用于统计窗口内往上第n行值
+
 第一个参数为列名，第二个参数为往上第n行（可选，默认为1），第三个参数为默认值（当往上第n行为NULL时候，取默认值，如不指定，则为NULL）
+
 ```
 SELECT cookieid,
 createtime,
@@ -556,10 +609,15 @@ last_2_time: 指定了往上第2行的值，为指定默认值
 			 cookie1第四行，往上2行为第二行值，2015-04-10 10:00:02
 			 cookie1第七行，往上2行为第五行值，2015-04-10 10:50:01
 ```
-####**LEAD函数**
+
+### LEAD函数
+
 与LAG相反
+
 LEAD(col,n,DEFAULT) 用于统计窗口内往下第n行值
+
 第一个参数为列名，第二个参数为往下第n行（可选，默认为1），第三个参数为默认值（当往下第n行为NULL时候，取默认值，如不指定，则为NULL
+
 ```
 SELECT cookieid,
 createtime,
@@ -589,8 +647,10 @@ cookie2 2015-04-10 11:00:00     url77   7       1970-01-01 00:00:00     NULL
  
 --逻辑与LAG一样，只不过LAG是往上，LEAD是往下。
 ```
-####**FIRST_VALUE函数**
+### FIRST_VALUE函数
+
 取分组内排序后，截止到当前行，第一个值
+
 ```
 SELECT cookieid,
 createtime,
@@ -616,8 +676,10 @@ cookie2 2015-04-10 10:50:01     url55   5       url11
 cookie2 2015-04-10 10:50:05     url66   6       url11
 cookie2 2015-04-10 11:00:00     url77   7       url11
 ```
-####**LAST_VALUE函数**
+### LAST_VALUE函数
+
 取分组内排序后，截止到当前行，最后一个值
+
 ```
 SELECT cookieid,
 createtime,
@@ -644,7 +706,8 @@ cookie2 2015-04-10 10:50:01     url55   5       url55
 cookie2 2015-04-10 10:50:05     url66   6       url66
 cookie2 2015-04-10 11:00:00     url77   7       url77
 ```
-#####**如果不指定ORDER BY，则默认按照记录在文件中的偏移量进行排序，会出现错误的结果**
+### 如果不指定ORDER BY，则默认按照记录在文件中的偏移量进行排序，会出现错误的结果
+
 ```
 SELECT cookieid,
 createtime,
@@ -692,7 +755,8 @@ cookie2 2015-04-10 11:00:00     url77   url55
 cookie2 2015-04-10 10:10:00     url44   url55
 cookie2 2015-04-10 10:50:01     url55   url55
 ```
-#####**如果想要取分组内排序后最后一个值，则需要变通一下：**
+### 如果想要取分组内排序后最后一个值，则需要变通一下：
+
 ```
 SELECT cookieid,
 createtime,
@@ -720,10 +784,12 @@ cookie2 2015-04-10 10:50:01     url55   5       url55   url77
 cookie2 2015-04-10 10:50:05     url66   6       url66   url77
 cookie2 2015-04-10 11:00:00     url77   7       url77   url77
 ```
-####**提示：在使用分析函数的过程中，要特别注意ORDER BY子句，用的不恰当，统计出的结果就不是你所期望的。**
+**提示：在使用分析函数的过程中，要特别注意ORDER BY子句，用的不恰当，统计出的结果就不是你所期望的。**
 
 -----
-数据准备
+
+**数据准备**
+
 ```
 2015-03,2015-03-10,cookie1
 2015-03,2015-03-10,cookie5
@@ -766,8 +832,10 @@ OK
 2015-04 2015-04-15      cookie2
 2015-04 2015-04-16      cookie1
 ```
-####**GROUPING SETS 函数**
+### GROUPING SETS 函数
+
 在一个GROUP BY查询中，根据不同的维度组合进行聚合，等价于将不同维度的GROUP BY结果集进行UNION ALL
+
 ```
 SELECT 
 month,
@@ -796,7 +864,8 @@ SELECT month,NULL,COUNT(DISTINCT cookieid) AS uv,1 AS GROUPING__ID FROM lxw1234 
 UNION ALL 
 SELECT NULL,day,COUNT(DISTINCT cookieid) AS uv,2 AS GROUPING__ID FROM lxw1234 GROUP BY day
 ```
-再如
+**再如**
+
 ```
 SELECT 
 month,
@@ -835,8 +904,10 @@ SELECT month,day,COUNT(DISTINCT cookieid) AS uv,3 AS GROUPING__ID FROM lxw1234 G
 ```
 其中的 GROUPING__ID，表示结果属于哪一个分组集合。
 
-####**CUBE函数**
+###  CUBE函数
+
 根据GROUP BY的维度的所有组合进行聚合。
+
 ```
 SELECT 
 month,
@@ -875,8 +946,10 @@ SELECT NULL,day,COUNT(DISTINCT cookieid) AS uv,2 AS GROUPING__ID FROM lxw1234 GR
 UNION ALL 
 SELECT month,day,COUNT(DISTINCT cookieid) AS uv,3 AS GROUPING__ID FROM lxw1234 GROUP BY month,day
 ```
-####**ROLLUP函数**
+### ROLLUP函数
+
 是CUBE的子集，以最左侧的维度为主，从该维度进行层级聚合。
+
 ```
 比如，以month维度进行层级聚合：
 SELECT 
