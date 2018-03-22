@@ -115,10 +115,125 @@ hbase协处理器包括两种，一种是观察者(Observer)，另外一种是�
 ### 哈希
 
 哈希会使同一行永远用一个前缀加盐。哈希也可以使负载分散到整个集群，但是读却是可以预测的。使用确定的哈希可以让客户端重构完整的rowkey，可以使用get操作准确获取某一个行数据
+```
+hash就是rowkey前面由一串随机字符串组成,随机字符串生成方式可以由SHA或者MD5等方式生成，只要region所管理
+的start-end keys范围比较随机，那么就可以解决写热点问题。
+
+long currentId = 1L;  
+byte [] rowkey = Bytes.add(MD5Hash.getMD5AsHex(Bytes.toBytes(currentId)).substring(0, 8).getBytes(),  
+      Bytes.toBytes(currentId)); 
+
+假设rowKey原本是自增长的long型，可以将rowkey转为hash再转为bytes，加上本身id 转为bytes,组成rowkey，
+这样就生成随便的rowkey。那么对于这种方式的rowkey设计，如何去进行预分区呢？
+    1.取样，先随机生成一定数量的rowkey,将取样数据按升序排序放到一个集合里
+    2.根据预分区的region个数，对整个集合平均分割，即是相关的splitKeys.
+    3.HBaseAdmin.createTable(HTableDescriptor tableDescriptor,byte[][] splitkeys)可以指定
+预分区的splitKey，即是指定region间的rowkey临界值.
+
+
+1.创建split计算器，用于从抽样数据中生成一个比较合适的splitKeys
+public class HashChoreWoker implements SplitKeysCalculator{  
+    //随机取机数目  
+    private int baseRecord;  
+    //rowkey生成器  
+    private RowKeyGenerator rkGen;  
+    //取样时，由取样数目及region数相除所得的数量.  
+    private int splitKeysBase;  
+    //splitkeys个数  
+    private int splitKeysNumber;  
+    //由抽样计算出来的splitkeys结果  
+    private byte[][] splitKeys;  
+  
+    public HashChoreWoker(int baseRecord, int prepareRegions) {  
+        this.baseRecord = baseRecord;  
+        //实例化rowkey生成器  
+        rkGen = new HashRowKeyGenerator();  
+        splitKeysNumber = prepareRegions - 1;  
+        splitKeysBase = baseRecord / prepareRegions;  
+    }  
+  
+    public byte[][] calcSplitKeys() {  
+        splitKeys = new byte[splitKeysNumber][];  
+        //使用treeset保存抽样数据，已排序过  
+        TreeSet<byte[]> rows = new TreeSet<byte[]>(Bytes.BYTES_COMPARATOR);  
+        for (int i = 0; i < baseRecord; i++) {  
+            rows.add(rkGen.nextId());  
+        }  
+        int pointer = 0;  
+        Iterator<byte[]> rowKeyIter = rows.iterator();  
+        int index = 0;  
+        while (rowKeyIter.hasNext()) {  
+            byte[] tempRow = rowKeyIter.next();  
+            rowKeyIter.remove();  
+            if ((pointer != 0) && (pointer % splitKeysBase == 0)) {  
+                if (index < splitKeysNumber) {  
+                    splitKeys[index] = tempRow;  
+                    index ++;  
+                }  
+            }  
+            pointer ++;  
+        }  
+        rows.clear();  
+        rows = null;  
+        return splitKeys;  
+    }  
+}
+
+KeyGenerator及实现
+
+//interface  
+public interface RowKeyGenerator {  
+    byte [] nextId();  
+}  
+//implements  
+public class HashRowKeyGenerator implements RowKeyGenerator {  
+    private long currentId = 1;  
+    private long currentTime = System.currentTimeMillis();  
+    private Random random = new Random();  
+    public byte[] nextId() {  
+        try {  
+            currentTime += random.nextInt(1000);  
+            byte[] lowT = Bytes.copy(Bytes.toBytes(currentTime), 4, 4);  
+            byte[] lowU = Bytes.copy(Bytes.toBytes(currentId), 4, 4);  
+            return Bytes.add(MD5Hash.getMD5AsHex(Bytes.add(lowU, lowT)).substring(0, 8).getBytes(),  
+                    Bytes.toBytes(currentId));  
+        } finally {  
+            currentId++;  
+        }  
+    }  
+}  
+
+@Test  
+public void testHashAndCreateTable() throws Exception{  
+        HashChoreWoker worker = new HashChoreWoker(1000000,10);  
+        byte [][] splitKeys = worker.calcSplitKeys();  
+          
+        HBaseAdmin admin = new HBaseAdmin(HBaseConfiguration.create());  
+        TableName tableName = TableName.valueOf("hash_split_table");  
+          
+        if (admin.tableExists(tableName)) {  
+            try {  
+                admin.disableTable(tableName);  
+            } catch (Exception e) {  
+            }  
+            admin.deleteTable(tableName);  
+        }  
+  
+        HTableDescriptor tableDesc = new HTableDescriptor(tableName);  
+        HColumnDescriptor columnDesc = new HColumnDescriptor(Bytes.toBytes("info"));  
+        columnDesc.setMaxVersions(1);  
+        tableDesc.addFamily(columnDesc);  
+  
+        admin.createTable(tableDesc ,splitKeys);  
+  
+        admin.close();  
+    }  
+
+```
 
 ### 反转
 
-第三种防止热点的方法时反转固定长度或者数字格式的rowkey。这样可以使得rowkey中经常改变的部分（最没有意义的部分）放在前面。这样可以有效的随机rowkey，但是牺牲了rowkey的有序性。
+第三种防止热点的方法时反转固定长度或者数字格式的rowkey。这样可以使得rowkey中经常改变的部分（最没有意义的部分）放在前面。这样可以有效的随机rowkey，但是牺牲了rowkey的有序性(string.reverse)。
 
 反转rowkey的例子以手机号为rowkey，可以将手机号反转后的字符串作为rowkey，这样的就避免了以手机号那样比较固定开头导致热点问题
 
