@@ -1,6 +1,6 @@
 ## Elasticsearch 基本概念含义
 
-### 1.ES Restful API GET、POST、PUT、DELETE、HEAD含义： 
+###  1. ES Restful API GET、POST、PUT、DELETE、HEAD含义： 
 
 1）GET：获取请求对象的当前状态。 
 
