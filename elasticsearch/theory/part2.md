@@ -14,7 +14,7 @@ GET、POST、PUT、DELETE、HEAD含义：
 
 5）HEAD：请求获取对象的基础信息。
 
-### Mysql 与 Elasticsearch 核心概念对比示意图
+### 2. Mysql 与 Elasticsearch 核心概念对比示意图
 
 | Mysql | Elasticsearch | 
 | - | :-: |
