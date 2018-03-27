@@ -70,6 +70,16 @@ HBase由HMaster和 HRegionServer 组成，同样遵从主从服务器架构。HB
 
 ```
 
+### RowKey
+
+用来表示唯一一行记录的`主键`，HBase的数据是按照RowKey的`字典顺序进行全局排序`的，所有的查询都只能依赖于这一个排序维度。
+
+**通过下面一个例子来说明一下"字典排序"的原理：**
+
+RowKey列表{"abc", "a", "bdf", "cdf", "defg"}按字典排序后的结果为{"a", "abc", "bdf", "cdf", "defg"}
+
+也就是说，当两个RowKey进行排序时，先对比两个RowKey的第一个字节，如果相同，则对比第二个字节，依次类推...如果在对比到第M个字节时，已经超出了其中一个RowKey的字节长度，那么，短的RowKey要被排在另外一个RowKey的前面。
+
 ### Hbase 整体架构图
 
 ![Hbase 整体架构图](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/Hbase_%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE.jpg)
