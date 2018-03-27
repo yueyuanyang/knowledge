@@ -70,6 +70,10 @@ HBase由HMaster和 HRegionServer 组成，同样遵从主从服务器架构。HB
 
 ```
 
+### Hbase 整体架构图
+
+![Hbase 整体架构图](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/Hbase_%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE.jpg)
+
 #### 2.3 ROOT 表和 META 表
 
 HBase的所有HRegion元数据被存储在.META.表中，随着HRegion的增多，.META.表中的数据也会增大，并分裂成多个新的HRegion。为了定位.META.表中各个HRegion的位置，把.META.表中所有HRegion的元数据保存在-ROOT-表中，最后由Zookeeper记录-ROOT-表的位置信息。所有客户端访问用户数据前，需要首先访问Zookeeper获得-ROOT-的位置，然后访问-ROOT-表获得.META.表的位置，最后根据.META.表中的信息确定用户数据存放的位置，如下图所示。
