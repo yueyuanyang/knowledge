@@ -20,7 +20,7 @@ Elasticsearch使用的倒排索引比关系型数据库的B-Tree索引快
 
 因此在这个基础上，再结合磁盘的读取特性(顺序读/随机读)，传统关系型数据库采用了B-Tree/B+Tree这样的数据结构：
 
-![B-Tree索引](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/b-tree.jpg)
+![B-Tree索引](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/b-tree.png)
 
 为了提高查询的效率，减少磁盘寻道次数，将多个值作为一个数组通过连续区间存放，一次寻道读取多个数据，同时也降低树的高度。
 
