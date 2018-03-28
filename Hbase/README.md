@@ -6,6 +6,6 @@
 
 [2. HBase的 RowKey 设计原则](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/theory/part2.md)
 
-### 实战 篇
+### 实战篇
 
 [1. 新版Hbase访问API](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/actual/part1.md)
