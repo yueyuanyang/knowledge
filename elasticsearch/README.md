@@ -10,4 +10,6 @@
 
 - [2.2 Elasticsearch系统概念 —— 索引](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part5.md)
 
+- [2.3 Elasticsearch系统概念 —— 分片](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part6.md)
+
 [3. Elasticsearch 基本概念含义](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part2.md)
