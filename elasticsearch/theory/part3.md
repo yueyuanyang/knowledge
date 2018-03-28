@@ -53,7 +53,7 @@ Transport代表 elasticsearch 内部的节点或者集群与客户端之间的�
 
 说完Elasticsearch的几个基本概念后，给大伙上一张 Elasticsearch分布式搜索引擎的总体框架图：
 
-
+![总体框架图](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/462487.png)
 
 ElasticSearch是基于Lucene开发的分布式搜索框架，包含如下特性：
 - 分布式索引、搜索。
