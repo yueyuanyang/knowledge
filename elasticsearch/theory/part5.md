@@ -26,7 +26,7 @@ Elasticsearch使用的倒排索引比关系型数据库的B-Tree索引快
 
 **什么是倒排索引?**
 
-先上中的图解
+先上ES中的图解
 
 ![索引总图解](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/index.png)
 
