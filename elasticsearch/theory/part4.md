@@ -47,7 +47,8 @@ node.data = false
 
 ### 节点拓扑图
 
-[节点拓扑图](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/121.jpg)
+![节点拓扑图](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/121.jpg)
+
 
 ### 分片与集群状态
 
