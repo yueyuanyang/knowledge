@@ -39,6 +39,8 @@ Mysql只有term dictionary这一层，是以b-tree排序的方式存储在磁盘
 - term index在内存中是以FST（finite state transducers）的形式保存的，其特点是非常节省内存。
 - Term dictionary在磁盘上是以分block的方式保存的，一个block内部利用公共前缀压缩，比如都是Ab开头的单词就可以把Ab省去。这样term dictionary可以比b-tree更节约磁盘空间。
 
+[时间序列数据库的秘密(2)——索引](http://www.infoq.com/cn/articles/database-timestamp-02?utm_source=infoq&utm_medium=related_content_link&utm_campaign=relatedContent_articles_clk)
+
 **部分详解：**
 
 **Posting List**
