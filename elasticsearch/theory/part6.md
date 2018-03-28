@@ -86,7 +86,7 @@ shard = hash(routing) % number_of_primary_shards
 ```
 这样我们就按照用户的customerID的值将具有相同customerID的文档置于同一分片上了。
 
-第二种方法就是直接从文档中提取到对应的路由值：
+**第二种方法**就是直接从文档中提取到对应的路由值：
 
 ```
  curl -XPUT 'http://localhost:9200/store/order/_mapping' -d '  
