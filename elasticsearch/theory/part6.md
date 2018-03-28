@@ -8,6 +8,9 @@
 
 ![索引与分片的关系图](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/15050012808218.jpg)
 
+**存储目录截图：**
+
+![存储目录截图：](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/15050013393691.jpg)
 一个分片可以是 主 分片或者 副本 分片，索引建立的时候就已经确定了主分片数，副本分片数可以随时修改。
 
 初始化时确定主分片数：
