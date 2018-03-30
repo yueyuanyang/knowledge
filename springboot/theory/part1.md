@@ -55,7 +55,9 @@ Dao主要做数据库的交互工作 Modle 是模型 存放你的实体类 Servi
 最基本的分层方式，结合了SSH架构。modle层就是对应的数据库表的实体类(如User类)。Dao层，一般可以再分为**Dao接口和** DaoImpl实现类
 
 如userDao接口和userDaoImpl实现类,接口负责定义数据库curd的操作方法，实现类负责具体的实现，即实现Dao接口定义的方法。Service层，引用对应的Dao层数据库操作，在这里可以编写自己需要的代码（比如简单的判断），也可以再细分为Service接口和ServiceImpl实现类。Action层：引用对应的Service层实现业务逻辑，在这里结合Struts的配置文件，跳转到指定的页面，当然也能接受页面传递的请求数据，也可以做些计算处理、前端输入合法性检验(前端可修改网页绕过前端合法性检验，需在后台加一层)。
+
 Action像是服务员，顾客点什么菜，菜上给几号桌，都是ta的职责；Service是厨师，action送来的菜单上的菜全是ta做的；Dao是厨房的小工，和原材料(通过hibernate操作数据库)打交道的事情全是ta管。
+
 对象的调用流程：JSP—Action—Service—DAO—Hibernate—数据库。
 
 
