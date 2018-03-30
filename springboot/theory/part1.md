@@ -1,4 +1,4 @@
-## spring boot 编写架构及常用注解
+## spring boot 编写架构讲解
 
 ## 编写基本架构作用
 
@@ -63,8 +63,4 @@ Dao主要做数据库的交互工作 Modle 是模型 存放你的实体类 Servi
 Action像是服务员，顾客点什么菜，菜上给几号桌，都是ta的职责；Service是厨师，action送来的菜单上的菜全是ta做的；Dao是厨房的小工，和原材料(通过hibernate操作数据库)打交道的事情全是ta管。
 
 对象的调用流程：JSP—Action—Service—DAO—Hibernate—数据库。
-
-
-
-
 
