@@ -29,6 +29,10 @@
 
 Dao主要做数据库的交互工作 Modle 是模型 存放你的实体类 Service 做相应的业务逻辑处理 Action是一个控制器
 
+## 代码架构图解
+
+![代码架构图解](https://github.com/yueyuanyang/knowledge/blob/master/springboot/img/2.png)
+
 **首先解释面上意思，service是业务层，dao是数据访问层。**
 
 这个问题我曾经也有过，记得以前刚学编程的时候，都是在service里直接调用dao，service里面就new一个dao类对象，调用，其他有意义的事没做，也不明白有这个有什么用，参加工作久了以后就会知道，业务才是工作中的重中之重。
