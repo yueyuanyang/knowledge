@@ -35,7 +35,7 @@
 
 **@Bean:**
 
-相当于XML中的<bean></bean>,**放在方法的上面，而不是类**，意思是产生一个bean,并交给spring管理。
+相当于XML中的 <bean></bean> ,**放在方法的上面，而不是类**，意思是产生一个bean,并交给spring管理。
 
 **@EnableAutoConfiguration：**
 
