@@ -19,8 +19,7 @@
 
 **@ResponseBody：**
 
-表示该方法的返回结果直接写入HTTP response body中
-一般在异步获取数据时使用，在使用@RequestMapping后，返回值通常解析为跳转路径，加上@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。
+表示该方法的返回结果直接写入HTTP response body中,一般在异步获取数据时使用，在使用@RequestMapping后，返回值通常解析为跳转路径，加上@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。
 
 **@Component：**
 
@@ -60,13 +59,15 @@ byType方式。把配置好的Bean拿来用，完成属性、方法的组装，�
 **@RequestMapping：**
 
 RequestMapping是一个用来处理请求地址映射的注解，可用于类或方法上。用于类上，表示类中的所有响应请求的方法都是以该地址作为父路径。
+
 该注解有六个属性：
-params:指定request中必须包含某些参数值是，才让该方法处理。
-headers:指定request中必须包含某些指定的header值，才能让该方法处理请求。
-value:指定请求的实际地址，指定的地址可以是URI Template 模式
-method:指定请求的method类型， GET、POST、PUT、DELETE等
-consumes:指定处理请求的提交内容类型（Content-Type），如application/json,text/html;
-produces:指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回
+
+- params:指定request中必须包含某些参数值是，才让该方法处理。
+- headers:指定request中必须包含某些指定的header值，才能让该方法处理请求。
+- value:指定请求的实际地址，指定的地址可以是URI Template 模式
+- method:指定请求的method类型， GET、POST、PUT、DELETE等
+- consumes:指定处理请求的提交内容类型（Content-Type），如application/json,text/html;
+- produces:指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回
 
 **@RequestParam：**
 
