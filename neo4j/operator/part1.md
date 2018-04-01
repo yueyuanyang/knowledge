@@ -162,6 +162,38 @@ Neo4j的支持以下比较运营商的Neo4j CQL使用WHERE子句来支持条件�
 MATCH (emp:Employee) 
 WHERE emp.name = 'Abc'
 RETURN emp
+
+MATCH (emp:Employee) 
+WHERE emp.name = 'Abc' OR emp.name = 'Xyz'
+RETURN emp
+
+```
+
+**创建WHERE子句的关系**
+
+在Neo4j的CQL，我们可以创建不同的方法拖车节点之间的关系。
+
+- 创建两个现有的节点之间的关系
+
+- 一次创建它们之间的两个节点和关系
+
+- 创建WHERE子句两个已存在节点之间的关系
+
+**句法**
+
+MATCH (<node1-label-name>:<node1-name>),(<node2-label-name>:<node2-name>) 
+WHERE <condition>
+CREATE (<node1-label-name>)-[<relationship-label-name>:<relationship-name>
+       {<relationship-properties>}]->(<node2-label-name>) 
+	
+```
+输入在数据浏览器下面的命令来创建客户和信用卡式节点之间的关系。
+
+MATCH (cust:Customer),(cc:CreditCard) 
+WHERE cust.id = "1001" AND cc.id= "5001" 
+CREATE (cust)-[r:DO_SHOPPING_WITH{shopdate:"12/12/2014",price:55000}]->(cc) 
+RETURN r
+
 ```
 
 
