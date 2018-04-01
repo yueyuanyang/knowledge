@@ -58,6 +58,113 @@ CREATE (dept:Dept { deptno:10,dname:"Accounting",location:"Hyderabad" })
 3) 三个属性是创建即DEPTNO，DNAME，位置
 
 ```
+### 多个标签节点
+
+**句法**
+
+CREATE (<node-name>:<label-name1>:<label-name2>.....:<label-namen>)
+
+| 语法元素 | 描述 
+| - | :-: | 
+| 创建 | 这是一个Neo4j的CQL关键字
+| <节点名称> | 这是我们要创建一个节点名称 |
+| <标签名1>，<标签名2> | 它是一个节点的标签名称的列表 |
+
+**实例**
+
+```
+此示例演示如何创建多个标签名称为“电影”节点。
+
+影院，影片，电影，图片：由我们的客户端提供多标签名称
+
+CREATE (m:Movie:Cinema:Film:Picture)
+
+```
+
+### 单个标签有关系
+
+**句法**
+
+CREATE (<node1-name>:<label1-name>)- [(<relationship-name>:<relationship-label-name>)]
+	->(<node2-name>:<label2-name>)
+   
+**语法说明**
+
+| 语法元素 | 描述 
+| - | :-: | 
+| 创建 | 这是一个Neo4j的CQL关键字
+| <节点1名> | 这是一个从节点的名称 |
+| <节点2名>| 这是A到节点的名称 |
+| <LABEL1名称>| 这是一个从节点的标签名称 |
+| <LABEL1名称> | 这是一个到节点的标签名称。 |
+| <关系名称>| 它是一个关系的一个名字 |
+| 	<相关标签名称> | 这是一个关系的标签名称 |
+
+```
+CREATE (p1:Profile1)-[r1:LIKES]->(p2:Profile2)
+在这里，p1和Profile1的都是“从节点”的节点名称和节点标签名称
+
+P2和Profile2的都是的“节点”节点名称和节点标签名称
+
+R1是有关系的名字
+
+喜欢是有关系的标签名称
+
+```
+
+### 简单的WHERE子句语法
+
+WHERE <condition>
+ 
+**复杂的WHERE子句语法**
+
+WHERE <condition> <boolean-operator> <condition>
+   
+我们可以通过使用布尔运算符将多个条件对同样的命令。
+
+**<条件>的语法：**
+
+<property-name> <comparison-operator> <value>
+
+| 语法元素 | 描述 
+| - | :-: | 
+| 哪里 | 这是一个Neo4j的CQL关键字|
+| <属性名称> | 这是一个节点或关系的属性名 |
+| <比较运算符>| 这是Neo4j的CQL比较operators.Please的一个是指在Neo4j的CQL可用比较运营商 |
+| <值>| 这就像一些文字，字符串文字等文本值 |
+
+**布尔运算符中的Neo4j CQL**
+
+Neo4j的支持以下布尔运算符中的Neo4j CQL使用WHERE子句来支持多个条件。
+
+| 语法元素 | 描述 
+| - | :-: | 
+| and | 这是一个Neo4j的CQL关键字支持与操作。 它就像SQL和运营商 |
+| OR | 	这是一个Neo4j的CQL关键字来支持或操作。 它就像SQL和运营商 |
+| NOT| 这是一个Neo4j的CQL关键字方式支持非操作。 它就像SQL和运营商 |
+| XOR| 它是一个的Neo4j CQL关键词来支持XOR操作。 它就像SQL和运营商 |
+
+**比较运营商的Neo4j CQL**
+
+Neo4j的支持以下比较运营商的Neo4j CQL使用WHERE子句来支持条件。
+
+| 语法元素 | 描述 
+| - | :-: | 
+| = | 这是一个Neo4j的定制列表“等于”操作符 |
+| <> | 这是一个Neo4j的定制列表“不等于”操作符 |
+| < | 这是一个Neo4j的定制列表“不等于”操作符 |
+| > | 这是一个Neo4j的定制列表“大于”操作符 |
+| <= | 	这是一个Neo4j的定制列表“小于或等于”操作符 |
+| >= | 这是一个Neo4j的定制列表“大于或等于”操作符 |
+
+**实例**
+```
+MATCH (emp:Employee) 
+WHERE emp.name = 'Abc'
+RETURN emp
+```
+
+
 
 ## 查询节点 —— match命令
 
