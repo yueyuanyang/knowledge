@@ -61,7 +61,7 @@ CREATE (dept:Dept { deptno:10,dname:"Accounting",location:"Hyderabad" })
 
 ## 查询节点 —— match命令
 
-Neo4j的CQL MATCH命令用于
+Neo4j的 CQL MATCH命令用于
 
 - 要获取有关数据库节点和属性数据
 - 要获得有关节点，从数据库中的关系和属性数据
@@ -77,6 +77,85 @@ MATCH
 | - | :-: | 
 | <节点名称> | 这是我们要创建一个节点名称 |
 | <标签名称> | 这是一个节点的标签名称 |
+
+**实例**
+
+```
+MATCH (dept:Dept)
+```
+
+### Neo4j CQL - return子句
+
+eo4j的CQL RETURN子句用于 
+
+- 要检索节点的一些特性
+- 要检索节点的所有属性
+- 要检索节点和关联关系的一些性质
+- 要检索节点和关联关系的所有属性
+
+**返回的命令语法：**
+
+RETURN 
+   <node-name>.<property1-name>,
+   ........
+   <node-name>.<propertyn-name>
+
+**语法说明**
+
+| 语法元素 | 描述 
+| - | :-: | 
+| <节点名称> | 这是我们要创建一个节点名称 |
+| <Property1名> ... <propertyN中名称> | 属性是键 - 值对。 <属性名称>定义了将要分配给创建节点的属性的名称 |
+
+**实例：**
+
+```
+RETURN dept.deptno
+
+部门是一个节点名
+DEPTNO是部门节点的属性名称
+
+```
+### Neo4j CQL - MATCH及RETURN
+
+在Neo4j的CQL，我们不能用MATCh或RETURN单独命令，所以我们要结合这两个命令来检索数据库中的数据。
+
+Neo4j的CQL MATCH + RETURN命令用于 -
+
+- 要检索节点的一些特性
+- 要检索节点的所有属性
+- 要检索节点和关联关系的一些性质
+- 要检索节点和关联关系的所有属性
+
+**匹配返回命令语法：**
+
+MATCH Command
+RETURN Command
+
+| 语法元素 | 描述 
+| - | :-: | 
+| match命令 | 这是Neo4j的CQL MATCH命令 |
+| RETURN指令 | 这是Neo4j的CQL RETURN命令 |
+
+**实例**
+```
+MATCH (dept: Dept)
+RETURN dept.deptno,dept.dname
+```
+这里 -
+
+- 部门是一个节点名
+- 这里是部节点标签名称
+- DEPTNO是部门节点的属性名称
+- DNAME是部门节点的属性名称
+
+
+
+
+
+
+
+
 
 
 
