@@ -14,6 +14,9 @@
 select trx_state, trx_started, trx_mysql_thread_id, trx_query 
 from information_schema.innodb_trx\G
 ```
+**查看mysql安装目录**
+
+> show variables like "%char%";
 
 
 
