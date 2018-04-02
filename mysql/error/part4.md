@@ -22,7 +22,7 @@ set global slave_rows_search_algorithms='TABLE_SCAN,INDEX_SCAN,HASH_SCAN';
 
 ```
 
-使用mariadb，但碰到客户存在无索引或索引非常烂的表时，经常会因为一个大的delete或update导致巨大的主从延迟。想到mysql5.6的时候号称通过引入 hash_scan 算法解决了这个问题，
+使用mariadb，但碰到客户存在无索引或索引非常烂的表时，经常会因为一个大的delete或update导致巨大的主从延迟。想到`mysql5.6`的时候号称通过引入 hash_scan 算法解决了这个问题，
 
 ### system lock 延迟的原因
 
