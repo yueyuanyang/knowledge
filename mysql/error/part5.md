@@ -1,6 +1,6 @@
 ## mysql 常用命令
 
-**主从复制状态*
+**主从复制状态**
 
 > show slave status\G   \G 格式化
 
