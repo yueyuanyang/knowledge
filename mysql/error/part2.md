@@ -21,4 +21,21 @@ Error_code: 1032;`handler error HA_ERR_KEY_NOT_FOUND`;
 the event's master log mysql-bin.000006, end_log_pos 254
 ```
 
+- 第二种：主键重复。在slave已经有该记录，又在master上插入了同一条记录。
+```
+Last_SQL_Error: Could not execute Write_rows event on table hcy.t1; 
+Duplicate entry '2' for key 'PRIMARY', 
+Error_code: 1062; 
+handler error HA_ERR_FOUND_DUPP_KEY; the event's master log mysql-bin.000006, end_log_pos 924
+
+```
+- 第三种：在master上更新一条记录，而slave上找不到，丢失了数据。
+```
+Last_SQL_Error: Could not execute Update_rows event on table hcy.t1;
+Can't find record in 't1', 
+Error_code: 1032; 
+handler error HA_ERR_KEY_NOT_FOUND; the event's master log mysql-bin.000010, end_log_pos 263
+```
+
+
 
