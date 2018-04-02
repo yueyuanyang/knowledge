@@ -1,6 +1,6 @@
 ## 记一次MySQL中Waiting for table metadata lock的解决方法
 
-在网上查询得知MySQL在进行一些alter table等DDL操作时，如果该表上有未提交的事务则会出现 Waiting for table metadata lock ，而一旦出现metadata lock，该表上的后续操作都会被阻塞
+在网上查询得知MySQL在进行一些alter table等DDL操作时，如果该表上有未提交的事务则会出现 `Waiting for table metadata lock` , 而一旦出现metadata lock，该表上的后续操作都会被阻塞
 
 所以这个问题需从两方面解决：
 
