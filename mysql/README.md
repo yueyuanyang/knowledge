@@ -1,5 +1,11 @@
 ## 目录
 
+##  常用命令汇总
+
+[查询命令](https://github.com/yueyuanyang/knowledge/blob/master/mysql/error/part5.md)
+
+
+
 ##  mysql 问题篇
 
 ### 1. 主从复制问题集锦
