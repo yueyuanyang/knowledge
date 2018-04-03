@@ -5,3 +5,11 @@
 
 2. 查看所有的表
 > list
+
+3. 查看表的结构
+> descibe 't1'
+
+4. 增加一个列族
+> disable 't1'
+  alter 't1',NAME=>'f1',VERSIONS=>3
+  enable 't1'   
