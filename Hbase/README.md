@@ -10,6 +10,9 @@
 
 **hbase shel 操作**
 
+[1. HBase Shell 的基本操作——增删改查](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/shell/part1.md)
+
+[2. HBase filter shell操作](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/shell/part2.md)
 
 ### 实战篇
 
