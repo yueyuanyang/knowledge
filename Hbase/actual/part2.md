@@ -257,216 +257,112 @@ scan.setFilter(filter);
 
 package cn.cstor.cproc.java.util;
 
-
-
 import java.io.DataInput;
-
 import java.io.DataOutput;
-
 import java.io.IOException;
-
 import java.util.List;
-
-
-
 import org.apache.commons.logging.Log;
-
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.hadoop.hbase.KeyValue;
-
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
-
 import org.apache.hadoop.hbase.filter.FilterBase;
-
-
-
 import com.google.protobuf.InvalidProtocolBufferException;
-
-
-
- 
 
 public class RowPaginationFilter extends FilterBase {
 
-
-
 static final Log LOG = LogFactory.getLog(RowPaginationFilter.class);
-
 private int rowsAccepted = 0;
-
 private int offset = 0;
-
 private int limit = 0;
-
-
 
 public RowPaginationFilter() {
 
 }
 
-
-
- 
-
 public RowPaginationFilter(int offset, int limit) {
-
-this.offset = offset;
-
-this.limit = limit;
-
+   this.offset = offset;
+   this.limit = limit;
 }
 
-
-
 @Override
-
 public void reset() {
-
 // noop
-
 }
 
-
-
 @Override
-
 public boolean filterAllRemaining() {
-
-return this.rowsAccepted > this.limit + this.offset;
-
+    return this.rowsAccepted > this.limit + this.offset;
 }
-
-
 
 @Override
-
 public boolean filterRowKey(byte[] rowKey, int offset, int length) {
-
-return false;
-
+   return false;
 }
-
-
 
 public ReturnCode filterKeyValue(KeyValue v) {
-
-return ReturnCode.INCLUDE;
-
+   return ReturnCode.INCLUDE;
 }
-
-
 
 @SuppressWarnings("deprecation")
-
 @Override
-
 public void filterRow(List ignored) {
-
-try {
-
-super.filterRow(ignored);
-
-} catch (IOException e) {
-
-e.printStackTrace();
-
+   try {
+     super.filterRow(ignored);
+   } catch (IOException e) {
+     e.printStackTrace();
+   }
 }
-
-}
-
-
 
 // true to exclude row, false to include row.
 
 @Override
-
 public boolean filterRow() {
-
-boolean isExclude = this.rowsAccepted < this.offset || this.rowsAccepted >= this.limit + this.offset;
-
-rowsAccepted++;
-
-return isExclude;
-
+    boolean isExclude = this.rowsAccepted < this.offset || this.rowsAccepted >= this.limit + this.offset;
+    rowsAccepted++;
+    return isExclude;
 }
-
-
 
 public void readFields(final DataInput in) throws IOException {
 
-this.offset = in.readInt();
-
-this.limit = in.readInt();
-
+     this.offset = in.readInt();
+     this.limit = in.readInt();
 }
 
-
-
-public void write(final DataOutput out) throws IOException {
-
-out.write(offset);
-
-out.write(limit);
-
+public void write(final DataOutput out) throws IOException {  
+  out.write(offset);
+  out.write(limit);
 }
-
-
 
 @Override  //重写该方法
-
     public byte[] toByteArray() {
-
-RowPaginationProto.RowPaginationFilter.Builder builder =
-
-RowPaginationProto.RowPaginationFilter.newBuilder();
-
- 
+         RowPaginationProto.RowPaginationFilter.Builder builder =
+         RowPaginationProto.RowPaginationFilter.newBuilder();
 
         builder.setLimit(this.limit);
-
         builder.setOffset(this.offset);
-
         return builder.build().toByteArray();
-
     }
 
-    
 
    //定义该方法，用于对象反序列化操作
 
     public static RowPaginationFilter parseFrom(final byte [] bytes) throws DeserializationException {
-
     RowPaginationProto.RowPaginationFilter proto = null;
-
         try {
-
             proto = RowPaginationProto.RowPaginationFilter.parseFrom(bytes);
-
         } catch (InvalidProtocolBufferException e) {
-
             throw new DeserializationException(e);
-
         }
-
         return new RowPaginationFilter(proto.getOffset(),proto.getLimit());
-
     }
-
 }
-
- 
 
 注：自订filter中必须重写这两个个方法：
     public static Filter parseFrom(final byte [] pbBytes) throws DeserializationException
-
     public byte [] toByteArray()
-
- 
-
+    
 3、将xxxx和xxxx这两个类用myeclipse打成jar包部署到hbase中（放到lib目录中或者放任意目录通过修改hbase_evn.sh配置文件HBASE_CLASSPATH指定该jar包路径也可以）注：jar包要分发到所有 regionserver上，因为过滤器是在各regionserver上执行的。
 
- 
-
 4、重启HBASE，测试过滤器是否生效。
+
 ```
