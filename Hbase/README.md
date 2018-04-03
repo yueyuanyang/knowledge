@@ -17,3 +17,5 @@
 ### 实战篇
 
 [1. 新版Hbase访问API —— CellUtil使用](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/actual/part1.md)
+
+[1. Filter - 过滤器的介绍以及使用](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/actual/part2.md)
