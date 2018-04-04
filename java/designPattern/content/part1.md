@@ -14,7 +14,7 @@
 | 范围 | 创建型 | 结构型 | 行为型 |
 | - | - | - |  - |
 | 对象创建 | Singleton（单例）<br>Prototype（原型）<br>Factory Method（工厂方法）<br>Abstract Factory（抽象工厂）<br>Builder（建造者）| | 
-| 接口适配 | Factory Method（工厂方法）| Adapter（适配器）<br>Bridge（桥接）<br>Façade（外观） | Interpreter（解释器）<br>Template Method（模版方法）
+| 接口适配 | | Adapter（适配器）<br>Bridge（桥接）<br>Façade（外观） | Interpreter（解释器）<br>Template Method（模版方法）
 | 对象去耦 | | | Mediator（中介者）<br>Observer（观察者）
 | 抽象集合 | | Composite（组合） | IIterator（迭代器）
 | 行为扩展 | | Decorator（装饰） | Visitor（访问者）<br>Chain of Responsibility（职责链）
