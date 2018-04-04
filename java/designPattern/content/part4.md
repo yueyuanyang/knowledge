@@ -34,3 +34,159 @@
 
 ### 开始实例
 
+下面我就以角色游戏为背景，为大家介绍：假设公司需要做一款武侠游戏，我们就是负责游戏的角色模块，需求是这样的：每个角色对应一个名字，每类角色对应一种样子，每个角色拥有一个逃跑、攻击、防御的技能。
+
+**初步的代码：**
+
+```
+package com.zhy.bean;  
+  
+/** 
+ * 游戏的角色超类 
+ *  
+ * @author zhy 
+ *  
+ */  
+public abstract class Role  
+{  
+    protected String name;  
+  
+    protected abstract void display();  
+  
+    protected abstract void run();  
+  
+    protected abstract void attack();  
+  
+    protected abstract void defend();  
+  
+}  
+
+```
+
+**创建角色**
+
+```
+package com.zhy.bean;  
+  
+public class RoleA extends Role  
+{  
+    public RoleA(String name)  
+    {  
+        this.name = name;  
+    }  
+  
+    @Override  
+    protected void display()  
+    {  
+        System.out.println("样子1");  
+    }  
+  
+    @Override  
+    protected void run()  
+    {  
+        System.out.println("金蝉脱壳");  
+    }  
+  
+    @Override  
+    protected void attack()  
+    {  
+        System.out.println("降龙十八掌");  
+    }  
+  
+    @Override  
+    protected void defend()  
+    {  
+        System.out.println("铁头功");  
+    }  
+  
+}  
+
+```
+
+没几分钟，你写好了上面的代码，觉得已经充分发挥了OO的思想，正在窃喜，这时候项目经理说，再添加两个角色
+
+RoleB(样子2 ，降龙十八掌，铁布衫，金蝉脱壳)。
+RoleC(样子1，拥有九阳神功，铁布衫，烟雾弹)。
+
+于是你觉得没问题，开始写代码，继续集成Role，写成下面的代码：
+```
+package com.zhy.bean;  
+  
+public class RoleB extends Role  
+{  
+    public RoleB(String name)  
+    {  
+        this.name = name;  
+    }  
+  
+    @Override  
+    protected void display()  
+    {  
+        System.out.println("样子2");  
+    }  
+  
+    @Override  
+    protected void run()  
+    {  
+        System.out.println("金蝉脱壳");//从RoleA中拷贝  
+    }  
+  
+    @Override  
+    protected void attack()  
+    {  
+        System.out.println("降龙十八掌");//从RoleA中拷贝  
+    }  
+  
+    @Override  
+    protected void defend()  
+    {  
+        System.out.println("铁布衫");  
+    }  
+  
+}  
+
+```
+**创建角色**
+```
+package com.zhy.bean;  
+  
+public class RoleC extends Role  
+{  
+    public RoleC(String name)  
+    {  
+        this.name = name;  
+    }  
+  
+    @Override  
+    protected void display()  
+    {  
+        System.out.println("样子1");//从RoleA中拷贝  
+    }  
+  
+    @Override  
+    protected void run()  
+    {  
+        System.out.println("烟雾弹");  
+    }  
+  
+    @Override  
+    protected void attack()  
+    {  
+        System.out.println("九阳神功");  
+    }  
+  
+    @Override  
+    protected void defend()  
+    {  
+        System.out.println("铁布衫");//从B中拷贝  
+    }  
+  
+}  
+
+```
+
+
+
+
+
+
