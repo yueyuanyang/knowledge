@@ -2,7 +2,7 @@
 
 ### 设计模式分类
 
-分类总结
+[分类总结](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part1.md)
 
 ### 创建型设计模式
 
