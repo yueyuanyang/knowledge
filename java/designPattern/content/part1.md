@@ -20,6 +20,6 @@
 | 行为扩展 | | Decorator（装饰） | Visitor（访问者）<br>Chain of Responsibility（职责链）
 | 算法封装 | |  | Template Method（模板方法）<br>Strategy（策略）<br>Command
 | 性能与对象访问 | | Flyweight（享元）<br>Proxy（代理） | 
-| 对象状态 || Adapter(类)(适配器) | Interpreter（解释器）
+| 对象状态 ||  |Memento（备忘录）<br> State（状态）
 | 其他 | || Interpreter（解释器）
 
