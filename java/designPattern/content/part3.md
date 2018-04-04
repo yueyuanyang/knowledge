@@ -5,9 +5,12 @@
 单例模式确保某个类只有一个实例，而且自行实例化并向整个系统提供这个实例。在计算机系统中，线程池、缓存、日志对象、对话框、打印机、显卡的驱动程序对象常被设计成单例。这些应用都或多或少具有资源管理器的功能。每台计算机可以有若干个打印机，但只能有一个Printer Spooler，以避免两个打印作业同时输出到打印机中。每台计算机可以有若干通信端口，系统应当集中管理这些通信端口，以避免一个通信端口同时被两个请求同时调用。总之，选择单例模式就是为了避免不一致状态，避免政出多头。
 
 ### 单例模式特点：
-　　1、单例类只能有一个实例。
-　　2、单例类必须自己创建自己的唯一实例。
-　　3、单例类必须给所有其他对象提供这一实例。
+
+1、单例类只能有一个实例。
+
+2、单例类必须自己创建自己的唯一实例。
+
+3、单例类必须给所有其他对象提供这一实例。
 
 单例模式保证了全局对象的唯一性，比如系统启动读取配置文件就需要单例保证配置的一致性。
 
@@ -23,7 +26,7 @@
 
 ### 实现单例模式的方式
 
-1.饿汉式单例（立即加载方式）
+**1.饿汉式单例（立即加载方式）**
 
 ```
 // 饿汉式单例
@@ -43,5 +46,76 @@ public class Singleton1 {
 
 饿汉式单例在类加载初始化时就创建好一个静态的对象供外部使用，除非系统重启，这个对象不会改变，所以本身就是线程安全的。Singleton通过将构造方法限定为private避免了类在外部被实例化，在同一个虚拟机范围内，Singleton的唯一实例只能通过getInstance()方法访问。（事实上，通过Java反射机制是能够实例化构造方法为private的类的，那基本上会使所有的Java单例实现失效。此问题在此处不做讨论，姑且闭着眼就认为反射机制不存在。）
 
+**2.懒汉式单例（延迟加载方式）**
 
+```
+// 懒汉式单例
+public class Singleton2 {
+
+    // 私有构造
+    private Singleton2() {}
+
+    private static Singleton2 single = null;
+
+    public static Singleton2 getInstance() {
+        if(single == null){
+            single = new Singleton2();
+        }
+        return single;
+    }
+}
+
+```
+
+该示例虽然用延迟加载方式实现了懒汉式单例，但在多线程环境下会产生多个single对象，如何改造请看以下方式:
+
+**使用synchronized同步锁**
+
+```
+public class Singleton3 {
+    // 私有构造
+    private Singleton3() {}
+
+    private static Singleton3 single = null;
+
+    public static Singleton3 getInstance() {
+        
+        // 等同于 synchronized public static Singleton3 getInstance()
+        synchronized(Singleton3.class){
+          // 注意：里面的判断是一定要加的，否则出现线程安全问题
+            if(single == null){
+                single = new Singleton3();
+            }
+        }
+        return single;
+    }
+}
+
+
+```
+
+在方法上加synchronized同步锁或是用同步代码块对类加同步锁，此种方式虽然解决了多个实例对象问题，但是该方式运行效率却很低下，下一个线程想要获取对象，就必须等待上一个线程释放锁之后，才可以继续运行。
+
+**推荐使用**
+```
+public class Singleton4 {
+    // 私有构造
+    private Singleton4() {}
+
+    private static Singleton4 single = null;
+
+    // 双重检查
+    public static Singleton4 getInstance() {
+        if (single == null) {
+            synchronized (Singleton4.class) {
+                if (single == null) {
+                    single = new Singleton4();
+                }
+            }
+        }
+        return single;
+    }
+}
+```
+使用双重检查进一步做了优化，可以避免整个方法被锁，只对需要锁的代码部分加锁，可以提高执行效率。**推荐使用**
 
