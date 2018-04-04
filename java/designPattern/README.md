@@ -10,7 +10,7 @@
 - Prototype Pattern（原型模式）
 - Factory Method Pattern（工厂方法模式） 
 - Abstract Factory Pattern（抽象工厂模式）
-- Builder Pattern（建造者模式）
+- [Builder Pattern（建造者模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part2.md)
 
 ### 结构型设计模式
 
