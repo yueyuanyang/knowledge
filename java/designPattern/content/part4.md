@@ -36,6 +36,10 @@
 
 下面我就以角色游戏为背景，为大家介绍：假设公司需要做一款武侠游戏，我们就是负责游戏的角色模块，需求是这样的：每个角色对应一个名字，每类角色对应一种样子，每个角色拥有一个逃跑、攻击、防御的技能。
 
+#### 实例图
+
+![图](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/Strategy.png)
+
 **初步的代码：**
 
 ```   
