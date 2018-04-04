@@ -48,13 +48,9 @@
 public abstract class Role  
 {  
     protected String name;  
-  
     protected abstract void display();  
-  
-    protected abstract void run();  
-  
-    protected abstract void attack();  
-  
+    protected abstract void run();    
+    protected abstract void attack();    
     protected abstract void defend();  
   
 }  
@@ -251,17 +247,15 @@ public class RunJCTQ implements IRunBehavior
 /** 
  * 游戏的角色超类 
  *  
- * @author zhy 
- *  
  */  
 public abstract class Role  
 {  
-    protected String name;  
-  
-    protected IDefendBehavior defendBehavior;  
-    protected IDisplayBehavior displayBehavior;  
-    protected IRunBehavior runBehavior;  
-    protected IAttackBehavior attackBehavior;  
+    protected String name;  // 公共属性
+  
+    protected IDefendBehavior defendBehavior;         // 动态属性
+    protected IDisplayBehavior displayBehavior;      // 动态属性
+    protected IRunBehavior runBehavior;             // 动态属性
+    protected IAttackBehavior attackBehavior;       // 动态属性
   
     public Role setDefendBehavior(IDefendBehavior defendBehavior)  
     {  
@@ -310,6 +304,7 @@ public abstract class Role
 }  
 
 ```
+
 **每个角色现在只需要一个name了：**
 
 ```
@@ -326,7 +321,6 @@ public class RoleA extends Role
 #### 现在我们需要一个金蝉脱壳，降龙十八掌！，铁布衫，样子1的角色A只需要这样：
 
 ```
-package com.zhy.bean;  
   
 public class Test  
 {  
