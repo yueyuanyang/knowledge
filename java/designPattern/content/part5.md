@@ -23,14 +23,60 @@
 充电器本身相当于Adapter，220V交流电相当于src，我们的目dst标是5V直流电。 
 我们现有的src类：
 
-```
-//src类: 我们有的220V电压
+**原来的类实现**
 
-public class Voltage220 {
-    public int output220V() {
-        int src = 220;
-        System.out.println("我是" + src + "V");
-        return src;
+```
+public class Source {
+    public void method1() {
+        System.out.println("我是方法一");
     }
 }
 ```
+
+**实现的接口**
+
+```
+/**
+ * Created by dell on 2016/10/7.
+ */
+public interface AdapterInfc {
+    void method1();
+    void method2();
+}
+
+```
+
+**适配器**
+
+```
+/**
+ * Created by dell on 2016/10/7.
+ * 类适配器是继承了原有的类
+ */
+public class AdapterInfcImpl extends Source implements AdapterInfc {
+
+    public void method2() {
+        System.out.println("第二期功能扩展，我要扩展方法");
+    }
+}
+```
+
+**测试类**
+
+```
+/**
+ * 适配器模式
+ * 类适配器
+ * Created by dell on 2016/10/7.
+ */
+public class Test {
+    public static void main(String[] agrs) {
+        AdapterInft inft = new AdapterInftImpl();
+        inft.method1();
+        inft.method2();
+    }
+}
+```
+
+
+
