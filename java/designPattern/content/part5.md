@@ -14,7 +14,7 @@
 需要被适配的类、接口、对象（我们有的），简称 src（source） 最终需要的输出（我们想要的），简称 dst (destination，即Target)适配器称之为 Adapter 。
 一句话描述适配器模式的感觉： src->Adapter->dst,即src以某种形式（三种形式分别对应三种适配器模式）给到Adapter里，最终转化成了dst。
 
-### 类适配器模式
+### 二、类适配器模式
 
 一句话描述：Adapter类，通过继承 src类，实现 dst 类接口，完成src->dst的适配。
 
@@ -102,5 +102,62 @@ Java这种单继承的机制，所有需要继承的我个人都不太喜欢。 
 但同样由于其继承了src类，所以它可以根据需求重写src类的方法，使得Adapter的灵活性增强了。
 
 
+### 三、对象适配器模式（常用）:
 
+基本思路和类的适配器模式相同，只是将Adapter类作修改，这次不继承src类，而是持有src类的实例，以解决`兼容性`的问题。 
+即：`持有` src类，`实现` dst 类`接口`，完成src->dst的适配。 
+（根据“合成复用原则”，在系统中尽量使用关联关系来替代继承关系，因此大部分结构型模式都是对象结构型模式。） 
 
+**Adapter类如下：**
+
+```
+/**
+ * 介绍：对象适配器模式：
+ * 持有 src类，实现 dst 类接口，完成src->dst的适配。 。以达到解决**兼容性**的问题。
+ */
+
+public class VoltageAdapter2 implements Voltage5 {
+    private Voltage220 mVoltage220;
+
+    public VoltageAdapter2(Voltage220 voltage220) {
+        mVoltage220 = voltage220;
+    }
+
+    @Override
+    public int output5V() {
+        int dst = 0;
+        if (null != mVoltage220) {
+            int src = mVoltage220.output220V();
+            System.out.println("对象适配器工作，开始适配电压");
+            dst = src / 44;
+            System.out.println("适配完成后输出电压：" + dst);
+        }
+        return dst;
+    }
+}
+```
+**测试代码：**
+
+```
+public class test {
+
+    public static void main(String[] args) {
+        
+     System.out.println("\n===============对象适配器==============");
+        VoltageAdapter2 voltageAdapter2 = new VoltageAdapter2(new Voltage220());
+        Mobile mobile2 = new Mobile();
+        mobile2.charging(voltageAdapter2);
+    }
+}
+
+```
+**小结:**
+
+对象适配器和类适配器其实算是同一种思想，只不过实现方式不同。 
+根据合成复用原则，组合大于继承， 
+所以它解决了类适配器必须继承src的局限性问题，也不再强求dst必须是接口。 
+同样的它使用成本更低，更灵活。
+
+（和装饰者模式初学时可能会弄混，这里要搞清，装饰者是对src的装饰，使用者毫无察觉到src已经被装饰了（使用者用法不变）。 这里对象适配以后，使用者的用法还是变的。 
+
+**即，装饰者用法： setSrc->setSrc，对象适配器用法：setSrc->setAdapter.)**
