@@ -21,27 +21,24 @@
 别的文章都用生活中充电器的例子来讲解适配器,的确，这是个极佳的举例
 
 充电器本身相当于Adapter，220V交流电相当于src，我们的目dst标是5V直流电。 
-我们现有的src类：
 
-**原来的类实现**
+**我们现有的src类：**
 
 ```
-public class Source {
-    public void method1() {
-        System.out.println("我是方法一");
+public class Voltage220 {
+    public int output220V() {
+        int src = 220;
+        System.out.println("我是" + src + "V");
+        return src;
     }
 }
 ```
-
-**实现的接口**
-
+**我们想要的dst接口：**
 ```
-/**
- * Created by dell on 2016/10/7.
- */
-public interface AdapterInfc {
-    void method1();
-    void method2();
+//介绍：dst接口：客户需要的5V电压
+
+public interface Voltage5 {
+    int output5V();
 }
 
 ```
@@ -50,33 +47,40 @@ public interface AdapterInfc {
 
 ```
 /**
- * Created by dell on 2016/10/7.
- * 类适配器是继承了原有的类
+ * 介绍：Adapter类：完成220V-5V的转变
+ * 通过继承src类，实现 dst 类接口，完成src->dst的适配。
  */
-public class AdapterInfcImpl extends Source implements AdapterInfc {
-
-    public void method2() {
-        System.out.println("第二期功能扩展，我要扩展方法");
+ 
+ public class VoltageAdapter extends Voltage220 implements Voltage5 {
+    @Override
+    public int output5V() {
+        int src = output220V();
+        System.out.println("适配器工作开始适配电压");
+        int dst = src / 44;
+        System.out.println("适配完成后输出电压：" + dst);
+        return dst;
     }
 }
-```
-
-**测试类**
 
 ```
-/**
- * 适配器模式
- * 类适配器
- * Created by dell on 2016/10/7.
- */
-public class Test {
-    public static void main(String[] agrs) {
-        AdapterInft inft = new AdapterInftImpl();
-        inft.method1();
-        inft.method2();
+**Client类**
+
+```
+// 介绍：Client类：手机 .需要5V电压
+public class Mobile {
+    /**
+     * 充电方法
+     */
+    public void charging(Voltage5 voltage5) {
+        if (voltage5.output5V() == 5) {
+            System.out.println("电压刚刚好5V，开始充电");
+        } else if (voltage5.output5V() > 5) {
+            System.out.println("电压超过5V，都闪开 我要变成note7了");
+        }
     }
-}
+
 ```
+
 
 
 
