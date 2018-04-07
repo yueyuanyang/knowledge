@@ -14,7 +14,7 @@
 
 ### 结构型设计模式
 
-- Adapter Pattern（适配器模式） 
+- [Adapter Pattern（适配器模式](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part5.md) 
 - Bridge Pattern（桥接模式）
 - Composite Pattern（组合模式）
 - Decorator Pattern（装饰者模式）
