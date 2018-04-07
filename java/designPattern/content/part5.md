@@ -108,6 +108,8 @@ Java这种单继承的机制，所有需要继承的我个人都不太喜欢。 
 即：`持有` src类，`实现` dst 类`接口`，完成src->dst的适配。 
 （根据“合成复用原则”，在系统中尽量使用关联关系来替代继承关系，因此大部分结构型模式都是对象结构型模式。） 
 
+**实例 1**
+
 **Adapter类如下：**
 
 ```
@@ -120,7 +122,7 @@ public class VoltageAdapter2 implements Voltage5 {
     private Voltage220 mVoltage220;
 
     public VoltageAdapter2(Voltage220 voltage220) {
-        mVoltage220 = voltage220;
+        this.mVoltage220 = voltage220;
     }
 
     @Override
@@ -151,6 +153,131 @@ public class test {
 }
 
 ```
+
+### 接口适配器
+
+首先想象这么一个场景，有一天，你的老板交给你这么一个任务，查看你们新上线的游戏中每个服的在线人数。对于相应的功能，相应的接口已经提供，只需要调用就行，例如你们的游戏有三个服务器，只要调用Utility.getOnlinePlayerCount(int)，传入相应的数值，就能得到在线人数，如果你传入了一个不存在的服，则会返回-1。然后你只要将得到的数据拼装成XML就好，具体的显示功能由你的老板来完成。于是，初步的代码便很快写出来:
+
+首先定义一个用于统计在线人数的接口PlayerCount，如下：
+```
+public interface PlayerCount {
+   String getServerName();
+   int getPlayerCount();
+
+}
+
+```
+
+接着定义三个实现了PlayerCount接口的类，分别对应三个不同的服务器：
+
+```
+public class ServerOne inplement PlayerCount {
+    public String getServerName() {
+        return "一服"；
+    }
+    
+    public int getPlayerCount() {
+    
+       return Utility.getOnlinePlayerCount(1)
+    }
+
+}
+
+public class ServerOne inplement PlayerCount {
+    public String getServerName() {
+        return "二服"；
+    }
+    
+    public int getPlayerCount() {
+    
+       return Utility.getOnlinePlayerCount(2)
+    }
+
+}
+
+public class ServerOne inplement PlayerCount {
+    public String getServerName() {
+        return "三服"；
+    }
+    
+    public int getPlayerCount() {
+    
+       return Utility.getOnlinePlayerCount(3)
+    }
+
+}
+
+```
+
+然后定义一个封装XML的类：XMLBuilder
+
+```
+public class XMLBuilder {
+
+    public static String buildXML(PlayerCount player) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<root>")
+        builder.append("<server>").append(player.getServerName()).append("</server>")
+        builder.append("<player_count>").append(player.getPlayerCount()).append("</player_count>")
+        builder.append("</root>")
+        return builder.toString;
+    }
+
+}
+
+```
+**测试类***
+
+```
+public class Test {
+   public static void main(String[] args){
+   
+        XMLBuilder.buildXML(new ServerOne());
+   
+   }
+
+}
+
+```
+相应的，二服，三服也比较简单，对自己所写的代码，自己也是很满意的。在你提交的时候，你的老板，突然微笑着告诉你，Utility.getOnlinePlayerCount(int)方法主要是针对二、三服的，是后来加上去的，而一服，一直没改过来，是用ServerFirst这个类。
+
+咦，你脑子一动，那只要将Utility.getOnlinePlayerCount(int)方法修改下，将一服加进去就可以了，但是现在问题来了，Utility和ServerFirst这两个类都已经被打到Jar包里了，没法修改啊，咋办呢。分析一下，因为我们前期定义的PlayerCount接口，然后各个实现类的getPlayCount()方法里面，具体的去调用Utility.getOnlinePlayerCount(int)方法，然而，Utility.getOnlinePlayerCount(int)方法并没有实现Utility.getOnlinePlayerCount(1)，所以这样不行。对于一服，它自己的获取在线人数的方法是ServerFirst类里面的getOnlinePlayerCount()方法，也就是ServerFirst.getOnlinePlayerCount()方法。
+
+那么我们怎么做呢，很简单，核心思想就是只要能让两个互不兼容的接口能正常对接就行了，上面的代码中，XMLBuilder中使用PlayerCount这个接口来拼装XML，而ServerFirst并没有实现PlayerCount这个接口，所以在XMLBuilder中，就没有办法使用ServerFirst这个类作为参数，并调用其中的获取在线人数的方法，这个时候就需要一个适配器类来为XMLBuilder和ServerFirst之间搭起一座桥梁，把ServerFirst传到PlayerCount中去，便可以调用ServerFirst中的方法了，毫无疑问，ServerOne就将充当适配器类的角色。修改ServerOne的代码，如下所示：
+
+```
+public class ServerAdaper implement PlayerCount {
+    
+    private ServerFirst mSeverFirst;
+    public ServerAdaper() {
+        mSeverFirst = new ServerFrist;
+    }
+    
+   public String getServerName() {
+        return "一服"；
+    }
+    
+    public int getPlayerCount() {    
+       return mSeverFirst.getOnlinePlayerCount(1); // 调用mSeverFirst中的getOnlinePlayerCount方法
+    }
+
+}
+
+```
+
+**测试类***
+
+```
+public class Test {
+   public static void main(String[] args){
+        XMLBuilder.buildXML(new ServerAdaper());
+   
+   }
+
+}
+
+```
+
 **小结:**
 
 对象适配器和类适配器其实算是同一种思想，只不过实现方式不同。 
