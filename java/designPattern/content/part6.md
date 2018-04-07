@@ -7,7 +7,7 @@
 简单工厂模式其实不是一个设计模式，反而比较像一种编程习惯。主要我们定义一个非常简单的类主要负责帮我们生产不同的产品。
 类图如下：
 
-![类图1](https://github.com/yueyuanyang/knowledge/tree/master/java/designPattern/img/factory.png)
+![类图1](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/factory.png)
 
 客户端通过简单工厂可以生产出具体产品A，具体产品B，具体产品C。
 
@@ -69,7 +69,7 @@ public class PizzaStore {
 
 这个和简单工厂有区别，简单工厂模式只有一个工厂，工厂方法模式对每一个产品都有相应的工厂。
 
-![类图2](https://github.com/yueyuanyang/knowledge/tree/master/java/designPattern/img/factory1.png)
+![类图2](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/factory1.png)
 
 构建一个工厂的时候，实际上是构建一个具体的子类对象，让子类决定去生产什么产品。
 
@@ -146,7 +146,7 @@ public class PizzaTestDrive {
 
 **类图**：
 
-![类图3](https://github.com/yueyuanyang/knowledge/tree/master/java/designPattern/img/factory2.png)
+![类图3](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/factory2.png)
 
 **抽象工厂模式与工厂方法模式的区别**
 
@@ -154,7 +154,7 @@ public class PizzaTestDrive {
 
 在抽象工厂模式中，有一个产品族的概念：`所谓的产品族，是指位于不同产品等级结构中功能相关联的产品组成的家族`。抽象工厂模式所提供的一系列产品就组成一个产品族；而工厂方法提供的一系列产品称为一个等级结构。我们依然拿生产汽车的例子来说明他们之间的区别。
 
-![类图4](https://github.com/yueyuanyang/knowledge/tree/master/java/designPattern/img/factory3.png)
+![类图4](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/factory4.png)
 
 在上面的类图中，两厢车和三厢车称为两个不同的等级结构；而2.0排量车和2.4排量车则称为两个不同的产品族。再具体一点，2.0排量两厢车和2.4排量两厢车属于同一个等级结构，2.0排量三厢车和2.4排量三厢车属于另一个等级结构；而2.0排量两厢车和2.0排量三厢车属于同一个产品族，2.4排量两厢车和2.4排量三厢车属于另一个产品族。
 
