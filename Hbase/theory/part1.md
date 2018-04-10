@@ -144,6 +144,10 @@ StoreFile是只读的，一旦创建后就不可以再修改。因此Hbase的更
 
 **步骤4：** HRegionserver的内存分为MemStore和BlockCache两部分，MemStore主要用于写数据，BlockCache主要用于读数据。读请求先到MemStore中查数据，查不到就到BlockCache中查，再查不到就会到StoreFile上读，并把读的结果放入BlockCache。
 
+#### 总体图
+
+![总体图]()
+
 
 > http://blog.csdn.net/carl810224/article/details/51970039
 
