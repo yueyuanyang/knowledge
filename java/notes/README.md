@@ -108,11 +108,13 @@ Map的keySet 每次返回的是同一个Set实例。
 终结方法的合法用途： 
 
 `1 使用者忘记调用显式终止方法，终结方法可以充当 “安全网”，迟一点释放比不释放要好`。（希望尽可能不要这样） 。如果终结方法发现资源还未被终止，`应该在日志中记录一条警告`。因为这是客户端的一个bug。但是要考虑这种额外的保护是否值得。 
+
 四个示例：FileInputStream、FileOutputStream、Timer、Connection。
 
 2 释放native对象的资源。
 
 还有一点，终结方法链不会自动执行。如果类有终结方法，并且子类覆盖了终结方法，要手动调用超类的终结方法。应该在try中终结子类，在finally中调用超类的finalize().
+
 ```
  protected void finalize() throws Throwable {
         try {
@@ -136,6 +138,55 @@ private final Object finalizerGuardian = new Object() {
 };
     
 ```
+
+## 第三章 对于所有对象都通用的方法
+
+### 8. 覆盖equals时请遵守通用约定
+
+“值类（value class）”仅仅是一个表示值的类，例如Integer或Date。需要覆盖equals（）。 
+有一种值类不需要覆盖，即第一条确保下的“每个值至多只存在一个对象”的类。枚举类型就属于这种类。 
+equals()方法实现了等价关系。
+
+1. **自反性**。对于任何非null的引用值x，x.equals(x)必须返回true.(对象必须等于其自身)
+2. **对称性**。对于任何非null的引用值x和y，当且仅当y.equals(x)返回true时，x.equals(y)必须返回true。（警惕子类父类不同的equals实现时）
+3. **传递性**。对于任何非null的引用只x、y和z，如果x.equals(y)返回true，并且y.equals(z)也返回true，那么x.equeals(z)也必须返回true。（优先使用组合而不是继承，可以避免违反传递性 对称性，否则没有完美解决方案。 只要超类不能直接创建实例，则不会违反原则）
+4. **一致性**。对于任何非null的引用值x和y，只要equals的比较操作在对象中所用的信息没有被修改，多次调用x.equals(y)返回值一致。（）
+5. **非空性**。对于任何非null的引用值x，x.equals(null)必须返回false。（不用重复判空，只需要用instance 即可）
+
+实现`高质量equals方法`的诀窍：
+
+1. **使用==操作符** 检查”参数是否为这个对象的引用”。如果是，返回true。这是一种性能优化，适用于比较操作昂贵的情况。
+2. **使用instanceof操作符检查**“参数是否为正确的类型”。如果不是，返回false。
+3. 把参数**强转**成正确的类型。
+4. 对于该类中的每个“关键”域进行**匹配比较。（float使用Float.compare()比较，double使用Double.compare()比较**。 有些filed可能为null,且合法。 可以用 (field ==null? o.field==null: field.equals(0.field)) 。 如果field和o.field通常是相同的对象引用，那么下面的做法更快一些: ( field == o.field || field!=null && field.equlas(0.field))）
+5. 编写完equals方法之后，应该去测试 对称性、传递性、一致性。
+6. 覆盖equals时，同时覆盖hashCode。
+7. 不要将**equals()方法声明中**的**Object对象**替换为其他的类型。(public boolean equals(MyClass o)){})
+
+```
+ //一个示例
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof EnumSingletonTest)) {
+            return false;
+        }
+        EnumSingletonTest data = (EnumSingletonTest) o;
+        return data.xxx == xxx
+                && dta.bbb == bbb;
+    }
+```
+
+### 9. 覆盖equals时 总要覆盖 hashCode
+
+不覆盖该方法，会导致该类无法配合HashMap、HashSet和Hashtable一起使用。 
+**因为equals()相等的话，hashCode（）一定要相等。**
+一个好的散列函数通常倾向于“**为不相等的对象产生不相等的散列码”**。
+
+
+
 
 
 
