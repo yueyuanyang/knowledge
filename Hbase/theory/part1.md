@@ -146,7 +146,7 @@ StoreFile是只读的，一旦创建后就不可以再修改。因此Hbase的更
 
 #### 总体图
 
-![总体图]()
+![总体图](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/Hbase_%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE.jpg)
 
 
 > http://blog.csdn.net/carl810224/article/details/51970039
