@@ -115,32 +115,6 @@ print urllib2.urlopen(request).read()
 
 对于这两个库，我的评价是，都是HTML/XML的处理库，Beautifulsoup纯python实现，效率低，但是功能实用，比如能用通过结果搜索获得某个HTML节点的源码；lxmlC语言编码，高效，支持Xpath
 
-### 对于页面解析最强大的当然是正则表达式，这个对于不同网站不同的使用者都不一样，就不用过多的说明，附两个比较好的网址：
-
-
-
-正则表达式入门：http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html 
-
-
-
-正则表达式在线测试：http://tool.oschina.net/regex/ 
-
-
-
-其次就是解析库了，常用的有两个lxml和BeautifulSoup，对于这两个的使用介绍两个比较好的网站：
-
-
-
-lxml：http://my.oschina.net/jhao104/blog/639448 
-
-
-
-BeautifulSoup：http://cuiqingcai.com/1319.html 
-
-
-
-对于这两个库，我的评价是，都是HTML/XML的处理库，Beautifulsoup纯python实现，效率低，但是功能实用，比如能用通过结果搜索获得某个HTML节点的源码；lxmlC语言编码，高效，支持Xpath
-
 ### 6、验证码的处理
 
 对于一些简单的验证码，可以进行简单的识别。本人也只进行过一些简单的验证码识别。但是有些反人类的验证码，比如12306，可以通过打码平台进行人工打码，当然这是要付费的。
