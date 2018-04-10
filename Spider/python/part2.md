@@ -5,33 +5,31 @@
  - 通用
 
    - urllib -网络库(stdlib)。
+   - requests -网络库。
+   - grab – 网络库（基于pycurl）。
 
-requests -网络库。
+   - pycurl – 网络库（绑定libcurl）。
 
-grab – 网络库（基于pycurl）。
+   - urllib3 – Python HTTP库，安全连接池、支持文件post、可用性高。
 
-pycurl – 网络库（绑定libcurl）。
+   - httplib2 – 网络库。
 
-urllib3 – Python HTTP库，安全连接池、支持文件post、可用性高。
+   - RoboBrowser – 一个简单的、极具Python风格的Python库，无需独立的浏览器即可浏览网页。
 
-httplib2 – 网络库。
+   - MechanicalSoup -一个与网站自动交互Python库。
 
-RoboBrowser – 一个简单的、极具Python风格的Python库，无需独立的浏览器即可浏览网页。
+   - mechanize -有状态、可编程的Web浏览库。
 
-MechanicalSoup -一个与网站自动交互Python库。
+   - socket – 底层网络接口(stdlib)。
 
-mechanize -有状态、可编程的Web浏览库。
+   - Unirest for Python – Unirest是一套可用于多种语言的轻量级的HTTP库。
 
-socket – 底层网络接口(stdlib)。
+   - hyper – Python的HTTP/2客户端。
 
-Unirest for Python – Unirest是一套可用于多种语言的轻量级的HTTP库。
+   - PySocks – SocksiPy更新并积极维护的版本，包括错误修复和一些其他的特征。作为socket模块的直接替换。
 
-hyper – Python的HTTP/2客户端。
+ - 异步
 
-PySocks – SocksiPy更新并积极维护的版本，包括错误修复和一些其他的特征。作为socket模块的直接替换。
+   - treq – 类似于requests的API（基于twisted）。
 
-异步
-
-treq – 类似于requests的API（基于twisted）。
-
-aiohttp – asyncio的HTTP客户端/服务器(PEP-3156)。
+   - aiohttp – asyncio的HTTP客户端/服务器(PEP-3156)。
