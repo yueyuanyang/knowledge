@@ -4,14 +4,10 @@
 - 网络
  - 通用
 
-   - urllib -网络库(stdlib)。
-   
+   - urllib -网络库(stdlib)。   
    - requests -网络库。
-   
    - grab – 网络库（基于pycurl）。
-
    - pycurl – 网络库（绑定libcurl）。
-
    - urllib3 – Python HTTP库，安全连接池、支持文件post、可用性高。
 
    - httplib2 – 网络库。
