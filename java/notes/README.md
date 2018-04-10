@@ -92,6 +92,50 @@ Map的keySet 每次返回的是同一个Set实例。
 除非池中的对象是非常`重量级`的。
 
 
+### 6. 消除过期的对象引用
+
+避免内存泄漏。
+
+只要类是自己管理内存（数组存储对象引用，及时置位null），程序员就应该警惕内存泄漏问题。
+
+### 7. 避免使用终结方法
+
+终结方法finalizer通常是不可预测的，也是很危险的，一般情况下是不必要的。 它不保证何时执行，是否执行。且会带来性能损失。
+
+如果需要，提供一个`显式的终止方法`。类似InputStream。 
+显式的终止方法通常与try-finally结合起来使用，以确保及时终止。`在finally子句内调用显式的终止方法`，可以保证即使在使用对象的时候，有异常抛出，该终止方法也会执行。
+
+终结方法的合法用途： 
+
+`1 使用者忘记调用显式终止方法，终结方法可以充当 “安全网”，迟一点释放比不释放要好`。（希望尽可能不要这样） 。如果终结方法发现资源还未被终止，`应该在日志中记录一条警告`。因为这是客户端的一个bug。但是要考虑这种额外的保护是否值得。 
+四个示例：FileInputStream、FileOutputStream、Timer、Connection。
+
+2 释放native对象的资源。
+
+还有一点，终结方法链不会自动执行。如果类有终结方法，并且子类覆盖了终结方法，要手动调用超类的终结方法。应该在try中终结子类，在finally中调用超类的finalize().
+```
+ protected void finalize() throws Throwable {
+        try {
+            //finalize自己
+        } finally {
+            super.finalize();
+        }
+    }
+    
+```
+为了防范子类没有手工调用超类的终结方法。可以采用匿名内部类实现一个**终结方法守卫者**。
+
+```
+//终结方法守卫者
+private final Object finalizerGuardian = new Object() {
+    @Override
+    protected void finalize() throws Throwable {
+        //在这里调用外围实例的finalize
+        FinalizeTest.this.finalize();
+    }
+};
+    
+```
 
 
 
