@@ -2,6 +2,10 @@
 
 HBase 不仅提供了这些简单的查询，而且提供了更加高级的过滤器（Filter）来查询。
 
+###  filter 概览
+
+![概览](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/h1.png)
+
 ### 1.1 过滤器的两类参数
 
 过滤器可以根据列族、列、版本等更多的条件来对数据进行过滤，基于 HBase 本身提供的三维有序（行键，列，版本有序），这些过滤器可以高效地完成查询过滤的任务，带有过滤器条件的 RPC 查询请求会把过滤器分发到各个 RegionServer（这是一个服务端过滤器），这样也可以降低网络传输的压力。
