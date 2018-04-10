@@ -39,7 +39,57 @@
 3. getInstance。 
 4. newInstance。与3相比，确保返回的每个实例都与其他的所有实例不同。 
 5. getXXXX。 
-6. newXXXX。 
+6. newXXXX。
+
+```
+class Child{
+    int age = 10;
+    int weight = 30;
+    public static Child newChild(int age, int weight) {
+        Child child = new Child();
+        child.weight = weight;
+        child.age = age;
+        return child;
+    }
+    
+    // 构造函数参数只识别类型，忽略参数名称，使用静态方法可以区分传入的参数
+    
+    public static Child newChildWithWeight(int weight) {
+        Child child = new Child();
+        child.weight = weight;
+        return child;
+    }
+    public static Child newChildWithAge(int age) {
+        Child child = new Child();
+        child.age = age;
+        return child;
+    }
+}
+
+#### 可以减少对外暴露的属性
+// 指定类型的传入
+class Player {
+    public static final int TYPE_RUNNER = 1;
+    public static final int TYPE_SWIMMER = 2;
+    public static final int TYPE_RACER = 3;
+    int type;
+
+    private Player(int type) {
+        this.type = type;
+    }
+
+    public static Player newRunner() {
+        return new Player(TYPE_RUNNER);
+    }
+    public static Player newSwimmer() {
+        return new Player(TYPE_SWIMMER);
+    }
+    public static Player newRacer() {
+        return new Player(TYPE_RACER);
+    }
+}
+
+```
 
 **总结：**
 
