@@ -5,7 +5,9 @@
  - 通用
 
    - urllib -网络库(stdlib)。
+   
    - requests -网络库。
+   
    - grab – 网络库（基于pycurl）。
 
    - pycurl – 网络库（绑定libcurl）。
@@ -27,6 +29,7 @@
    - hyper – Python的HTTP/2客户端。
 
    - PySocks – SocksiPy更新并积极维护的版本，包括错误修复和一些其他的特征。作为socket模块的直接替换。
+   
 
  - 异步
 
