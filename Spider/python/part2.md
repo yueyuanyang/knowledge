@@ -3,7 +3,6 @@
 
 - 网络
  - 通用
-
    - urllib -网络库(stdlib)。   
    - requests -网络库。
    - grab – 网络库（基于pycurl）。
