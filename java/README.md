@@ -6,4 +6,4 @@
 
 ### 杂记
 
-[<<Effective Java>>读书笔记]()
+[《Effective Java》读书笔记]()
