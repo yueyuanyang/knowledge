@@ -4,18 +4,18 @@
 
 **选项说明：**
 
--e : 执行短命令
--f :  执行文件（适合脚本封装）
--S : 安静模式，不显示MR的运行过程
--hivevar : 传参数 ，专门提供给用户自定义变量。
--hiveconf : 传参数，包括了hive-site.xml中配置的hive全局变量。
+- -e : 执行短命令
+- -f :  执行文件（适合脚本封装）
+- -S : 安静模式，不显示MR的运行过程
+- -hivevar : 传参数 ，专门提供给用户自定义变量。
+- -hiveconf : 传参数，包括了hive-site.xml中配置的hive全局变量。
 
 **例子1**：hive -e 查询
 
 ```
 命令: hive -S -e "use default; select * from kimbo_test limit 3;"
 
-``
+```
 
 **例子2**：hive -f 执行文件
 
