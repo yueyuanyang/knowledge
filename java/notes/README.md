@@ -95,7 +95,7 @@ class Player {
 
 和构造器比，各有好处。优先使用静态工厂。
 
-（重用对象的好处 可以用 == 替代 equals，性能更好。静态工厂参考Boolean.valueOf().）
+(重用对象的好处 可以用 == 替代 equals，性能更好。静态工厂参考Boolean.valueOf().)
 
 ---
 
@@ -109,14 +109,22 @@ Builder模式构建时，被构建类的field一般都是final。
 
 `如类的构造器或者静态工厂中具有多个参数，特别大多数参数时可选的时候，使用Builder模式。`
 
+[Builder模式 请参考](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part2.md)
+
 （最好一开始就用Builder，否则兼容以前的构造函数和静态工厂很烦。）
+
+```
+
+```
 
 ### 3.用私有构造器或者枚举类型强化Singleton属性
 
+这种方法更加简洁，无偿的提供了序列化机制，绝对防止多次实例化（由Enum保证），即使是在面对复杂的序列化或者反序列化或者反射攻击的时候也可以保证唯一。这已成为实现 Singleton的最佳方法。
+
 ```
+// 写成枚举类型
 public enum EnumSingleton {
     INSTANCE;
-
 
     EnumSingleton() {
         System.out.println("我被创建了");
@@ -131,7 +139,27 @@ public enum EnumSingleton {
 
 ### 4. 通过私有构造器强化不可实例化的能力
 
-副作用是 使得一个类不能被子类化。可用作常量定义工具类。
+副作用是使得一个类不能被子类化。可用作常量定义工具类。
+
+**场景**：
+
+在创建工具类的时候，大部分是无需实例化的，实例化对它们没有意义。在这种情况下，创建的类，要确保它是不可以实例化的。
+ 
+**存在问题**：
+
+在创建不可实例化的类时，虽然没有定义构造器。但是，客户端在使用该类的时候，依然可以实例化它。客户端，可以继承该类，通过实例化其子类来实现实例化；客户端可以调用默认的构造器来实例化该类。
+ 
+要避免这个问题，使用的方式是，定义一个私有的构造器：
+
+```
+public class UtilityClass {
+    // Suppress default constructor for noninstantiability
+    private UtilityClass() {
+        throw new AssertionError();
+    }
+}
+
+```
 
 ### 5. 避免创建不必要的对象
 
