@@ -163,11 +163,94 @@ public class UtilityClass {
 
 ### 5. 避免创建不必要的对象
 
-Map的keySet 每次返回的是同一个Set实例。 
-`优先使用基本类型而不是装箱基本类型`，当心无意识的自动装箱。 
-并不代表我们要尽可能的避免创建对象，对于小对象而言，它的创建和回收动作是非常廉价的。 
-反之，通过维护自己的`对象池`来避免创建对象并不是一种好的做法。 
-除非池中的对象是非常`重量级`的。
+1) 一般来说，最好能重用对象而不是在每次需要的时候就创建一个相同功能的新对象。
+
+**demo1**：
+```
+String s = new String("hello world");
+```
+需要改成
+```
+String s = "hello world";
+```
+**因为**第一种写法，每一次调用的时候都会创建一个新的String实例。但是第二种写法，在同一台虚拟机中运行的代码，只要他们包含相同的字符串字面常量，就会被重用。
+
+2) 除了重用不可变的对象之外，也可以重用那些已经不会被修改的可变对象。
+
+**错误方式**：
+
+isBabyBoomer每次被调用，都会新建一个Calendar、一个TimeZone和两个Date实例。
+```
+import java.util.*;  
+  
+public class Person {  
+    private final Date birthDate;  
+  
+    public Person(Date birthDate) {  
+        // Defensive copy - see Item 39  
+        this.birthDate = new Date(birthDate.getTime());  
+    }  
+  
+    // Other fields, methods omitted  
+  
+    // DON'T DO THIS!  
+    public boolean isBabyBoomer() {  
+        // Unnecessary allocation of expensive object  
+        Calendar gmtCal =  
+            Calendar.getInstance(TimeZone.getTimeZone("GMT"));  
+        gmtCal.set(1946, Calendar.JANUARY, 1, 0, 0, 0);  
+        Date boomStart = gmtCal.getTime();  
+        gmtCal.set(1965, Calendar.JANUARY, 1, 0, 0, 0);  
+        Date boomEnd = gmtCal.getTime();  
+        return birthDate.compareTo(boomStart) >= 0 &&  
+               birthDate.compareTo(boomEnd)   <  0;  
+    }  
+}
+
+```
+**正确方式**:
+
+```
+import java.util.*;  
+  
+class Person {  
+    private final Date birthDate;  
+  
+    public Person(Date birthDate) {  
+        // Defensive copy - see Item 39  
+        this.birthDate = new Date(birthDate.getTime());  
+    }  
+  
+    // Other fields, methods  
+  
+    /** 
+     * The starting and ending dates of the baby boom. 
+     */  
+    private static final Date BOOM_START;  
+    private static final Date BOOM_END;  
+  
+    static {  
+        Calendar gmtCal =  
+            Calendar.getInstance(TimeZone.getTimeZone("GMT"));  
+        gmtCal.set(1946, Calendar.JANUARY, 1, 0, 0, 0);  
+        BOOM_START = gmtCal.getTime();  
+        gmtCal.set(1965, Calendar.JANUARY, 1, 0, 0, 0);  
+        BOOM_END = gmtCal.getTime();  
+    }  
+  
+    public boolean isBabyBoomer() {  
+        return birthDate.compareTo(BOOM_START) >= 0 &&  
+               birthDate.compareTo(BOOM_END)   <  0;  
+    }  
+} 
+
+```
+
+**总结**：
+
+- Map的keySet 每次返回的是同一个Set实例。 
+- `优先使用基本类型而不是装箱基本类型`，当心无意识的自动装箱,例如：在求和时，将sum的类型从Long改为long，运行速度提成了7倍。。 
+- 并不代表我们要尽可能的避免创建对象，对于小对象而言，它的创建和回收动作是非常廉价的。 反之，通过维护自己的`对象池`来避免创建对象并不是一种好的做法。 除非池中的对象是非常`重量级`的。
 
 
 ### 6. 消除过期的对象引用
