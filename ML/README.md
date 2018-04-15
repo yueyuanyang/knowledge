@@ -10,6 +10,7 @@
 
 ### 算法理论
 
+[1.TF-IDF理论与余弦相似性的应用](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part3.md)
 
 ### 文本分析
 
