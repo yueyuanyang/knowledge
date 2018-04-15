@@ -1,4 +1,11 @@
-### TF-IDF与余弦相似性的应用（一）：自动提取关键词
+## 目录
+
+- TF-IDF与余弦相似性的应用（一）：自动提取关键词
+- TF-IDF与余弦相似性的应用（二）：找出相似文章
+- TF-IDF与余弦相似性的应用（三）：自动摘要
+
+
+### 一、TF-IDF与余弦相似性的应用（一）：自动提取关键词
 
 有一篇很长的文章，我要用计算机提取它的关键词（Automatic Keyphrase extraction），完全不加以人工干预，请问怎样才能正确做到？
 
@@ -58,7 +65,7 @@
 
 TF-IDF算法的优点是简单快速，结果比较符合实际情况。缺点是，单纯以"词频"衡量一个词的重要性，不够全面，有时重要的词可能出现次数并不多。而且，这种算法无法体现词的位置信息，出现位置靠前的词与出现位置靠后的词，都被视为重要性相同，这是不正确的。（一种解决方法是，对全文的第一段和每一段的第一句话，给予较大的权重。）
 
-### TF-IDF与余弦相似性的应用（二）：找出相似文章
+### 二、TF-IDF与余弦相似性的应用（二）：找出相似文章
 
 今天，我们再来研究另一个相关的问题。有些时候，除了找到关键词，我们还希望找到与原文章相似的其他文章。比如，"Google新闻"在主新闻下方，还提供多条相似的新闻。
 
@@ -145,10 +152,70 @@ TF-IDF算法的优点是简单快速，结果比较符合实际情况。缺点�
 下一次，我想谈谈如何在词频统计的基础上，自动生成一篇文章的摘要。
 
 
+### 三、TF-IDF与余弦相似性的应用（三）：自动摘要
 
+有时候，很简单的数学方法，就可以完成很复杂的任务。
 
+这个系列的前两部分就是很好的例子。仅仅依靠统计词频，就能找出关键词和相似文章。虽然它们算不上效果最好的方法，但肯定是最简便易行的方法。
 
+今天，依然继续这个主题。讨论如何通过词频，**对文章进行自动摘要（Automatic summarization）**。
 
+![p1](https://github.com/yueyuanyang/knowledge/blob/master/ML/img/IF-IDF/p14.png)
 
+如果能从3000字的文章，提炼出150字的摘要，就可以为读者节省大量阅读时间。由人完成的摘要叫"人工摘要"，由机器完成的就叫"自动摘要"。许多网站都需要它，比如论文网站、新闻网站、搜索引擎等等。2007年，美国学者的论文《A Survey on Automatic Text Summarization》（Dipanjan Das, Andre F.T. Martins, 2007）总结了目前的自动摘要算法。其中，很重要的一种就是词频统计。
+
+这种方法最早出自1958年的IBM公司科学家H.P. Luhn的论文《The Automatic Creation of Literature Abstracts》。
+
+Luhn博士认为，文章的信息都包含在句子中，有些句子包含的信息多，有些句子包含的信息少。"自动摘要"就是要找出那些包含信息最多的句子。
+
+句子的信息量用"关键词"来衡量。如果包含的关键词越多，就说明这个句子越重要。Luhn提出用"簇"（cluster）表示关键词的聚集。所谓"簇"就是包含多个关键词的句子片段。
+
+![p1](https://github.com/yueyuanyang/knowledge/blob/master/ML/img/IF-IDF/p15.png)
+
+上图就是Luhn原始论文的插图，被框起来的部分就是一个"簇"。只要关键词之间的距离小于"门槛值"，它们就被认为处于同一个簇之中。Luhn建议的门槛值是4或5。也就是说，如果两个关键词之间有5个以上的其他词，就可以把这两个关键词分在两个簇。
+
+![p1](https://github.com/yueyuanyang/knowledge/blob/master/ML/img/IF-IDF/p16.png)
+
+以前图为例，其中的簇一共有7个词，其中4个是关键词。因此，它的重要性分值等于 ( 4 x 4 ) / 7 = 2.3。
+
+然后，找出包含分值最高的簇的句子（比如5句），把它们合在一起，就构成了这篇文章的自动摘要。具体实现可以参见《Mining the Social Web: Analyzing Data from Facebook, Twitter, LinkedIn, and Other Social Media Sites》（O'Reilly, 2011）一书的第8章，python代码见github。
+
+Luhn的这种算法后来被简化，不再区分"簇"，只考虑句子包含的关键词。下面就是一个例子（采用伪码表示），只考虑关键词首先出现的句子。
+
+下一步，对于每个簇，都计算它的重要性分值。
+
+```
+Summarizer(originalText, maxSummarySize):
+
+　　　　// 计算原始文本的词频，生成一个数组，比如[(10,'the'), (3,'language'), (8,'code')...]
+　　　　wordFrequences = getWordCounts(originalText)
+
+　　　　// 过滤掉停用词，数组变成[(3, 'language'), (8, 'code')...]
+　　　　contentWordFrequences = filtStopWords(wordFrequences)
+
+　　　　// 按照词频进行排序，数组变成['code', 'language'...]
+　　　　contentWordsSortbyFreq = sortByFreqThenDropFreq(contentWordFrequences)
+
+　　　　// 将文章分成句子
+　　　　sentences = getSentences(originalText)
+
+　　　　// 选择关键词首先出现的句子
+　　　　setSummarySentences = {}
+　　　　foreach word in contentWordsSortbyFreq:
+　　　　　　firstMatchingSentence = search(sentences, word)
+　　　　　　setSummarySentences.add(firstMatchingSentence)
+　　　　　　if setSummarySentences.size() = maxSummarySize:
+　　　　　　　　break
+
+　　　　// 将选中的句子按照出现顺序，组成摘要
+　　　　summary = ""
+　　　　foreach sentence in sentences:
+　　　　　　if sentence in setSummarySentences:
+　　　　　　　　summary = summary + " " + sentence
+
+　　　　return summary
+```
+
+类似的算法已经被写成了工具，比如基于Java的Classifier4J库的SimpleSummariser模块、基于C语言的OTS库、以及基于classifier4J的C#实现和python实现。
 
 
