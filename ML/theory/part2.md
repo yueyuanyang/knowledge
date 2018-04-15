@@ -107,6 +107,7 @@ Binarizer(threshold=3).fit_transform(iris.data)
 使用preproccessing库的Binarizer类对数据进行二值化的代码如下：
 
 #### 2.3 对定性特征哑编码
+
 由于IRIS数据集的特征皆为定量特征，故使用其目标值进行哑编码（实际上是不需要的）。使用preproccessing库的OneHotEncoder类对数据进行哑编码的
 代码如下：
 ```
@@ -167,6 +168,7 @@ Imputer().fit_transform(vstack((array([nan, nan, nan, nan]), iris.data)))
 ```
 
 #### 2.6 数据变换
+
 常见的数据变换有基于多项式的、基于指数函数的、基于对数函数的。4个特征，度为2的多项式转换
 公式如下：
 
@@ -276,6 +278,7 @@ SelectKBest(lambda X, Y: array(map(lambda x:mic(x, Y), X.T)).T, k=2)
 ```
 
 ### 3.2 Wrapper
+
 **3.2.1 递归特征消除法**
 
 递归消除特征法使用一个基模型来进行多轮训练，每轮训练后，消除若干权值系数的特征，再基于新的特征集进行下一轮训练。使用feature_selection库的RFE类来选择特征的代码如下：
@@ -308,11 +311,6 @@ SelectFromModel(LogisticRegression(penalty="l1", C=0.1)).fit_transform(iris.data
 实际上，L1惩罚项降维的原理在于保留多个对目标值具有同等相关性的特征中的一个，所以没选到的特征不代表不重要。故，可结合L2惩罚项来优化。具体操作为：若一个特征在L1中的权值为1，选择在L2中权值差别不大且在L1中权值为0的特征构成同类集合，将这一集合中的特征平分L1中的权值，故需要构建一个新的逻辑回归模型：
 
 ```
-作者：城东
-链接：https://www.zhihu.com/question/29316149/answer/110159647
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 class LR(LogisticRegression):
     def __init__(self, threshold=0.01, dual=False, tol=1e-4, C=1.0,
                  fit_intercept=True, intercept_scaling=1, class_weight=None,
@@ -376,8 +374,12 @@ from sklearn.ensemble import GradientBoostingClassifier
 #GBDT作为基模型的特征选择
 SelectFromModel(GradientBoostingClassifier()).fit_transform(iris.data, iris.target)
 ```
+### 3.4 特征组合
+
+通过特征组合后再来选择特征：如对用户id和用户特征最组合来获得较大的特征集再来选择特征，这种做法在推荐系统和广告系统中比较常见
 
 ### 4 特征提取
+
 当特征选择完成后，可以直接训练模型了，但是可能由于特征矩阵过大，导致计算量大，训练时间长的问题，因此降低特征矩阵维度也是必不可少的。常见的降维方法除了以上提到的基于L1惩罚项的模型以外，另外还有主成分分析法（PCA）和线性判别分析（LDA），线性判别分析本身也是一个分类模型。PCA和LDA有很多的相似点，其本质是要将原始的样本映射到维度更低的样本空间中，但是PCA和LDA的映射目标不一样：PCA是为了让映射后的样本具有最大的发散性；而LDA是为了让映射后的样本有最好的分类性能。所以说PCA是一种无监督的降维方法，而LDA是一种有监督的降维方法。
 
 ### 4.1 主成分分析法（PCA）
