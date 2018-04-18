@@ -66,12 +66,21 @@ PageRank需要使用上面的公式多次迭代才能得到结果。初始时，
 
 首先对这句话分词，这里可以借助各种分词项目，比如HanLP 或 jieba分词，得出分词结果：
 ```
-[程序员/n, (, 英文/nz, programmer/en, ), 是/v, 从事/v, 程序/n, 开发/v, 、/w, 维护/v, 的/uj, 专业/n, 人员/n, 。/w, 一般/a, 将/d, 程序员/n, 分为/v, 程序/n, 设计/vn, 人员/n, 和/c, 程序/n, 编码/n, 人员/n, ，/w, 但/c, 两者/r, 的/uj, 界限/n, 并/c, 不/d, 非常/d, 清楚/a, ，/w, 特别/d, 是/v, 在/p, 中国/ns, 。/w, 软件/n, 从业/b, 人员/n, 分为/v, 初级/b, 程序员/n, 、/w, 高级/a, 程序员/n, 、/w, 系统/n, 分析员/n, 和/c, 项目/n, 经理/n, 四/m, 大/a, 类/q, 。/w]
+[程序员/n, (, 英文/nz, programmer/en, ), 是/v, 从事/v, 程序/n, 开发/v, 、/w, 
+维护/v, 的/uj, 专业/n, 人员/n, 。/w, 一般/a, 将/d, 程序员/n, 分为/v, 程序/n, 
+设计/vn, 人员/n, 和/c, 程序/n, 编码/n, 人员/n, ，/w, 但/c, 两者/r, 的/uj, 
+界限/n, 并/c, 不/d, 非常/d, 清楚/a, ，/w, 特别/d, 是/v, 在/p, 中国/ns, 
+。/w, 软件/n, 从业/b, 人员/n, 分为/v, 初级/b, 程序员/n, 、/w, 高级/a, 
+程序员/n, 、/w, 系统/n, 分析员/n, 和/c, 项目/n, 经理/n, 四/m, 大/a, 
+类/q, 。/w]
 ```
 
 然后去掉里面的停用词，这里我去掉了标点符号、常用词、以及“名词、动词、形容词、副词之外的词”。得出实际有用的词语：
 ```
-[程序员, 英文, 程序, 开发, 维护, 专业, 人员, 程序员, 分为, 程序, 设计, 人员, 程序, 编码, 人员, 界限, 特别, 中国, 软件, 人员, 分为, 程序员, 高级, 程序员, 系统, 分析员, 项目, 经理]
+[程序员, 英文, 程序, 开发, 维护, 专业, 人员, 程序员, 
+分为, 程序, 设计, 人员, 程序, 编码, 人员, 界限, 特别, 
+中国, 软件, 人员, 分为, 程序员, 高级, 程序员, 系统, 
+分析员, 项目, 经理]
 
 ```
 之后建立两个大小为5的窗口，每个单词将票投给它身前身后距离5以内的单词：
@@ -81,7 +90,8 @@ PageRank需要使用上面的公式多次迭代才能得到结果。初始时，
 
  软件=[程序员, 分为, 界限, 高级, 中国, 特别, 人员],
 
- 程序员=[开发, 软件, 分析员, 维护, 系统, 项目, 经理, 分为, 英文, 程序, 专业, 设计, 高级, 人员, 中国],
+ 程序员=[开发, 软件, 分析员, 维护, 系统, 项目, 经理, 分为, 
+ 英文, 程序, 专业, 设计, 高级, 人员, 中国],
 
  分析员=[程序员, 系统, 项目, 经理, 高级],
 
@@ -120,26 +130,26 @@ PageRank需要使用上面的公式多次迭代才能得到结果。初始时，
 然后开始迭代投票：
 
 ```
-        for (int i = 0; i < max_iter; ++i)
-        {
-            Map<String, Float> m = new HashMap<String, Float>();
-            float max_diff = 0;
-            for (Map.Entry<String, Set<String>> entry : words.entrySet())
-            {
-                String key = entry.getKey();
-                Set<String> value = entry.getValue();
-                m.put(key, 1 - d);
-                for (String other : value)
-                {
-                    int size = words.get(other).size();
-                    if (key.equals(other) || size == 0) continue;
-                    m.put(key, m.get(key) + d / size * (score.get(other) == null ? 0 : score.get(other)));
-                }
-                max_diff = Math.max(max_diff, Math.abs(m.get(key) - (score.get(key) == null ? 0 : score.get(key))));
-            }
-            score = m;
-            if (max_diff <= min_diff) break;
-        }
+  for (int i = 0; i < max_iter; ++i)
+  {
+      Map<String, Float> m = new HashMap<String, Float>();
+      float max_diff = 0;
+      for (Map.Entry<String, Set<String>> entry : words.entrySet())
+      {
+          String key = entry.getKey();
+          Set<String> value = entry.getValue();
+          m.put(key, 1 - d);
+          for (String other : value)
+          {
+              int size = words.get(other).size();
+              if (key.equals(other) || size == 0) continue;
+              m.put(key, m.get(key) + d / size * (score.get(other) == null ? 0 : score.get(other)));
+          }
+          max_diff = Math.max(max_diff, Math.abs(m.get(key) - (score.get(key) == null ? 0 : score.get(key))));
+      }
+      score = m;
+      if (max_diff <= min_diff) break;
+  }
 
 ```
 
