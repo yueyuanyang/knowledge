@@ -25,7 +25,7 @@ PageRank最开始用来计算网页的重要性。整个www可以看作一张有
 
 构造完图后，使用下面的公式：
 
-![p9]https://github.com/yueyuanyang/knowledge/blob/master/ML/img/p9.png)
+![p9](https://github.com/yueyuanyang/knowledge/blob/master/ML/img/p9.png)
 
 S(Vi)是网页i的中重要性（PR值）。d是阻尼系数，一般设置为0.85。In(Vi)是存在指向网页i的链接的网页集合。Out(Vj)是网页j中的链接存在的链接指向的网页的集合。|Out(Vj)|是集合中元素的个数。
 
@@ -35,7 +35,7 @@ PageRank需要使用上面的公式多次迭代才能得到结果。初始时，
 
 正规的TextRank公式在PageRank的公式的基础上，引入了边的权值的概念，代表两个句子的相似度。
 
-![p11]https://github.com/yueyuanyang/knowledge/blob/master/ML/img/p11.png)
+![p11](https://github.com/yueyuanyang/knowledge/blob/master/ML/img/p11.png)
 
 但是很明显我只想计算关键字，如果把一个单词视为一个句子的话，那么所有句子（单词）构成的边的权重都是0（没有交集，没有相似性），所以分子分母的权值w约掉了，算法退化为PageRank。所以说，这里称关键字提取算法为PageRank也不为过。
 
@@ -45,7 +45,7 @@ PageRank需要使用上面的公式多次迭代才能得到结果。初始时，
 
 1、把给定的文本T按照完整句子进行分割，即:
 
-![p10]https://github.com/yueyuanyang/knowledge/blob/master/ML/img/p10.png)
+![p10](https://github.com/yueyuanyang/knowledge/blob/master/ML/img/p10.png)
 
 ### TextRank提取关键短语
 
