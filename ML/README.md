@@ -12,6 +12,8 @@
 
 [1.TF-IDF理论与余弦相似性的应用](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part3.md)
 
+[2. 基于TextRank的关键词、短语、摘要提取 ](https://github.com/yueyuanyang/knowledge/blob/master/ML/textAnalysis/part2.md)
+
 ### 文本分析
 
 [1. 基于CHI/TFIDT/贝叶斯方法的文本(网页)分类器](https://github.com/yueyuanyang/knowledge/blob/master/ML/textAnalysis/part1.md)
