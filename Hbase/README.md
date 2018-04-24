@@ -6,6 +6,8 @@
 
 [2. HBase的 RowKey 设计原则](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/theory/part2.md)
 
+[3. HBase Rowkey的散列与预分区设计](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/theory/part3.md)
+
 ### 操作篇
 
 **hbase shel 操作**
