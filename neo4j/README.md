@@ -8,6 +8,6 @@
 
 [2. Cypher的基本句法](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/operator/part2.md)
 
-### neo4j 实战笔记
+### <<neo4j 实战>>笔记
 [1. cypher 使用笔记](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/action/part1.md)
 
