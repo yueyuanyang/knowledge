@@ -18,3 +18,5 @@
 
 [1. 基于CHI/TFIDT/贝叶斯方法的文本(网页)分类器](https://github.com/yueyuanyang/knowledge/blob/master/ML/textAnalysis/part1.md)
 
+[2. 文本分类,数据挖掘和机器学习](https://github.com/yueyuanyang/knowledge/blob/master/ML/textAnalysis/part2.md)
+
