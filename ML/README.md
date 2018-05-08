@@ -20,6 +20,7 @@
 
 [4.文本分类,数据挖掘和机器学习](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part4.md)
 
+[5.网络挖掘技术——微博文本特征提取](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part5.md)
 
-
+[6.语义分析的一些方法](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part6.md)
 
