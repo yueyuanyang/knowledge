@@ -433,7 +433,26 @@ if(searchHits.getTotalHits() > 0){
 **java api 实现方法**
 
 ```
+ Client client = TransportClient.builder().build().addTransportAddress(
+         new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
 
+
+ TermsLookupQueryBuilder terms = QueryBuilders.termsLookupQuery("uuid")
+         .lookupIndex("user")
+         .lookupType("user")
+         .lookupId("5")
+         .lookupPath("uuids");
+
+ HasChildQueryBuilder hQuery = QueryBuilders
+                               .hasChildQuery("instance",QueryBuilders
+                               .hasChildQuery("instance_permission",terms));
+ SearchResponse searchResponse1 = client.prepareSearch("foo_oa_hr_askforleave")
+          .setQuery(hQuery).execute().actionGet();
+ System.out.println("There were " + searchResponse1.getHits().getTotalHits()
+         + " results found for Query 1.");
+ System.out.println(searchResponse1.toString());
+ System.out.println();
+ 
 ```
 
 
