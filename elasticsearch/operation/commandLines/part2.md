@@ -1,4 +1,6 @@
-### Elasticsearch索引的父子关系(index parent-child)
+# Elasticsearch索引的父子关系(index parent-child)
+
+## 简单嵌套
 
 #### 一、父子文档的mapping
 
@@ -291,6 +293,46 @@ curl -XGET "http://192.168.0.224:9200/company/employee/_search?pretty" -d '{
  }
 
 ```
+
+### 搜索有相同父id的子文档
+#### 搜索父id为london的employee：
+
+```
+curl GET company/employee/_search?pretty -d
+{"query":{  
+       "has_parent":{  
+         "type":"branch",  
+         "query":{  
+           "term":{  
+               "_parent":"london"  
+           }  
+         }   
+       }  
+     }  
+   } 
+}  
+```
+java API 实现方法
+
+```
+Client client = TransportClient.builder().build().addTransportAddress(
+        new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
+/*** 多条件查询*/
+SearchRequestBuilder searchRequestBuilder = client.prepareSearch().setIndices("company");
+
+/**搜索有相同父id的*子文档* **/
+HasParentQueryBuilder hpqb1 = QueryBuilders.hasParentQuery("branch", QueryBuilders.idsQuery().ids("london"));
+SearchResponse response = searchRequestBuilder.setQuery(hpqb1).execute().actionGet();
+
+SearchHits searchHits = response.getHits();
+if(searchHits.getTotalHits() > 0){
+    for (int i = 0; i< searchHits.getTotalHits() -1;i++){
+        System.out.println(searchHits.getAt(0).getSourceAsString());
+    }
+}
+
+```
+
 
 
 
