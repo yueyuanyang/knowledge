@@ -374,6 +374,73 @@ if(searchHits.getTotalHits() > 0){
 
 ```
 
+### 六、多代父子关系问题
+
+简单的单层父子关系肯定无法满足复杂需求，所以ES允许**多代父子关系（grandchild等）**的定义，父辈和祖辈之间按照前面的方式，但此时**子辈和父辈之间需要改变一些条件，将子文档的routing参数设置为祖辈的ID**，否则有很大的可能导致三代文档不在同一分片上，继而无法通过（has_parent or has_child）语句正确搜索到。
+
+**重点来了，为什么不设置routing参数，多代父子文档就无法正确被搜索？**
+
+要搞清楚这个，首先我们需要了解一下什么是分片，它是ES底层的工作单元，它只保存一部分数据，我们的一份文档会被随机发送到一个分片上，一个分片是一个 Lucene 的实例，它本身就是一个完整的搜索引擎，分片只知道自己分片内部发生的事，并不能去操作其它分片，至于统筹分配任务则是ES的事。或许你并没有设置分片数量，但ES默认给你设置了5个分片，意味着文档将被“随机”存储到这5个分片中，是真的随机吗？我们来大致了解一下当一个文档被索引（存储）的时候，发生了什么事情。
+
+难道ES不支持多代关系的父子文档？肯定不会的。官方说了，在这个时候，你需要手动多设置一个routing参数为祖辈文档id，来取代parent（注意只是取代分片路由功能，parent还用来定义父子关系，不能抛弃！）。**当你手动设置了routing参数，那么parent的分片路由功能也将失效，ES计算的时候会选取routing的值带入hash函数中**。
+
+**总结：**
+1) 将子辈和父辈之间需要改变一些条件，将子文档的routing参数设置为祖辈的ID
+
+### 多级文档创建
+```
+1) POST /my_index?pretty // 祖文档
+{ "index": { "_id": "london" }}
+{ "name": "London Westminster", "city": "London", "country": "UK" }
+
+2) POST /my_index/my_type?pretty //父文档
+{ "index": { "_id": young, "parent": "london" }}
+{ "name": "Mark Thomas", "dob": "1982-05-16", "hobby": "diving" }
+
+2) POST /my_index/my_type/baz?parent=bar&**routing=london** // 子文档(routing 祖文档ID)
+{ "index": { "_id":1, "parent": "young" }}
+{ "name": "Toms", "dob": "1988-05-16", "hobby": "shuffer" }
+
+```
+
+**根据子文档查询祖文档**
+
+```
+{
+  "query": {
+    "has_child": {
+      "type": "instance",
+      "query": {
+        "has_child": {
+          "type": "instance_permission",
+          "query": {
+            "terms": {
+              "uuid": {
+                "index": "user",
+                "type": "user",
+                "id": "5",
+                "path": "uuids"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**java api 实现方法**
+
+```
+
+```
+
+
+
+
+
+
 
 
 
