@@ -1,6 +1,7 @@
 ### Elasticsearch索引的父子关系(index parent-child)
 
-一、父子文档的mapping
+#### 一、父子文档的mapping
+
 建立文档的父子关系最重要的一步是在创建索引的时候在mapping中声明哪个是父文档哪个是子文档。官网文档给了一个公司在很多城市的分支(branch)和每个分支有相关员工(employee)的例子，如果想把员工和他们工作的分公司关联起来，我们需要告诉Elasticsearch文档之间的父子关系，这里employee是child type,branch是parent type，在mapping中声明：
 ```
 curl -XPUT  "http://192.168.0.224:9200/company" -d '
