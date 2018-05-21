@@ -1,5 +1,16 @@
 # Elasticsearch索引的父子关系(index parent-child)
 
+### 目录
+
+- 父子文档的mapping定义
+- 父子文档的索引定义
+- 索引子文档定义
+- 搜索有相同父id的子文档 
+- 通过父文档查询子文档
+- 通过子文档查询父文档
+- 多级文档定义
+- 多级文档查询
+
 ## 简单嵌套
 
 #### 一、父子文档的mapping
@@ -40,7 +51,7 @@ curl -XPUT  "http://192.168.0.224:9200/company" -d '
 ```
 curl -XPOST "http://192.168.0.224:9200/company/branch/_bulk?pretty" --data-binary @company.json
 ```
-#### 2.2索引子文档
+#### 2.2 索引子文档
 
 索引子文档需要制定子文档的父ID，给子文档的每条文档设置parent属性的value为父文档id即可：
 
