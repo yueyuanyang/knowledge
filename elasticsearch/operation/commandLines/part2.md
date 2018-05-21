@@ -23,7 +23,7 @@ curl -XPUT  "http://192.168.0.224:9200/company" -d '
 
 ### 二、父子文档的索引
 
-#### 2.1索引父文档
+#### 2.1 索引父文档
 
 索引父文档和索引一般的文档没有任何区别。 
 准备几条公司的数据，存在company.json文件中：
@@ -223,6 +223,22 @@ curl -XGET "http://192.168.0.224:9200/company/branch/_search?pretty" -d '{
   }
 }
 ```
+
+**java API 实现方法**
+
+```
+
+ /**通过子文档查询父文档**/
+ HasChildQueryBuilder hcqb2 = QueryBuilders.hasChildQuery("employee",
+         QueryBuilders.matchQuery("name", "Barry Smith"));
+ SearchResponse responseChild = searchRequestBuilder.setQuery(hcqb2).execute().actionGet();
+ SearchHits searchHits1 = responseChild.getHits();
+ if(searchHits1.getTotalHits() > 0){
+     for (int i = 0; i < searchHits1.getTotalHits()-1;i++){
+         System.out.println(searchHits1.getAt(0).getSourceAsString());
+    
+```
+
 ### 四、通过父文档查询子文档
 
 搜搜工作在UK的employee：
@@ -294,7 +310,21 @@ curl -XGET "http://192.168.0.224:9200/company/employee/_search?pretty" -d '{
 
 ```
 
-### 搜索有相同父id的子文档
+**java API 实现方法**
+
+```
+ /***通过父文档查询子文档**/
+ HasParentQueryBuilder hpqb3 = QueryBuilders.hasParentQuery("branch",QueryBuilders.matchQuery("country","UK"));
+ SearchResponse responseParent = searchRequestBuilder.setQuery(hpqb3).execute().actionGet();
+ SearchHits searchHitsUK = responseParent.getHits();
+ if(searchHitsUK.getTotalHits() > 0){
+     for (int i = 0; i < searchHitsUK.getTotalHits()-1;i++){
+         System.out.println("UK : " +searchHitsUK.getAt(0).getSourceAsString());
+     }
+ }
+```
+
+### 五、搜索有相同父id的子文档
 #### 搜索父id为london的employee：
 
 ```
@@ -312,7 +342,7 @@ curl GET company/employee/_search?pretty -d
    } 
 }  
 ```
-java API 实现方法
+**java API 实现方法**
 
 ```
 Client client = TransportClient.builder().build().addTransportAddress(
