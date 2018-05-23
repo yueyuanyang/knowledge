@@ -27,4 +27,4 @@
 
 #### 查询操作
 
-[3.Elasticsearch的查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询),Fuzzy Queries（模糊查询）](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part4.md)
+[1.Elasticsearch的查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询),Fuzzy Queries（模糊查询）](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part4.md)
