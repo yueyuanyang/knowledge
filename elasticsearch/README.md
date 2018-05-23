@@ -27,8 +27,8 @@
 
 #### 查询操作
 
-[1.Elasticsearch的查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询),Fuzzy Queries（模糊查询）](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part4.md)
+[1.Elasticsearch模糊查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询),Fuzzy Queries（模糊查询）](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part4.md)
 
-[2.Elasticsearch的查询 —— match_all(匹配全部),terms(精确多个),term(相等的查询),range(范围查询),filter(过滤)](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part5.md)
+[2.Elasticsearch精确查询 —— match_all(匹配全部),terms(精确多个),term(相等的查询),range(范围查询),filter(过滤)](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part5.md)
 
 [3.Elasticsearch匹配查询 —— Bool Query(布尔查询),Match Phrase Query(匹配短语查询),Match Phrase Prefix Query(匹配短语前缀查询)](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/operation/commandLines/part6.md)
