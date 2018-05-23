@@ -79,7 +79,7 @@ QueryBuilders.multiMatchQuery("beijing test","hotelName","hotelNo").operator(Mat
 ```
 Boosting不仅仅意味着计算出来的分数(calculated score)直接乘以boost factor，最终的boost value会经过归一化以及其他一些内部的优化
 
-**4、common term query**
+**common term query**
 
 一种略高级的查询，充分考虑了stop-word的低优先级，提高了查询精确性。他将查询短语分词，将分词后的term分为高频词和低频词
 
