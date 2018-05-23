@@ -99,6 +99,23 @@ cutoffFrequency 设置高频词的score因子
 
 **query string**
 
+```
+curl -XGET 'localhost:9200/megacorp/employee/_search' -d '
+{
+    "query": {
+        "query_string" : {
+            "query": "(saerch~1 algorithm~1) AND (grant ingersoll) OR (tom morton)",
+            "fields": ["_all", "summary^2"]
+        }
+    },
+    "_source": [ "title", "summary", "authors" ],
+    "highlight": {
+        "fields" : {
+            "summary" : {}
+        }
+    }
+}'
+```
 默认是全部field进行搜索_all;可以明确指定某个field;支持分词等
 
 QueryString 被分词 默认分词之间是OR 关系， 支持 AND OR 来决定每个term之间的关系；同时 支持通配符，正则 等操作
@@ -108,7 +125,8 @@ QueryString 被分词 默认分词之间是OR 关系， 支持 AND OR 来决定�
 ```
 QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("四 AND 酒 AND  店 ").defaultField("hotelName");
 ```
-** simple query string**
+
+**simple query string**
 
 简单查询
 ```
@@ -257,7 +275,3 @@ curl -XGET 'localhost:9200/megacorp/employee/_search' -d '
 ```
 
 
-
- 
- 
- 
