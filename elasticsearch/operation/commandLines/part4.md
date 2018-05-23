@@ -1,8 +1,8 @@
-## Elasticsearch的查询 —— wildcard,
+## Elasticsearch的查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询)
 
-### 1.通配符查询 
+### 1.通配符查询(wildcard) 
 
-wildcard是通配符查询，它和prefix查询类似，也是一个基于词条的低级别查询。但是它能够让你指定一个模式(Pattern)，而不是一个前缀(Prefix)。它使用标准的shell通配符：?用来匹配任意字符，*用来匹配零个或者多个字符。
+wildcard是通配符查询，它和prefix查询类似，也是一个基于词条的低级别查询。但是它能够让你指定一个模式(Pattern)，而不是一个前缀(Prefix)。它使用标准的shell通配符：?用来匹配任意字符，`*`用来匹配零个或者多个字符。
 
 ```
 //以下查询能够匹配包含W1F 7HW和W2F 8HW的文档：
@@ -14,12 +14,9 @@ GET /my_index/address/_search
         }
     }
 }
-
-
-
 ```
 
-#### 2. 正则表达式查询
+#### 2. 正则表达式查询(regexp)
 
 regexp是正则表达式查询。假设现在你想匹配在W地域(Area)的所有邮政编码。使用前缀匹配时，以WC开头的邮政编码也会被匹配，在使用通配符查询时也会遇到类似的问题。我们只想匹配以W开头，紧跟着数字的邮政编码。使用regexp查询能够让你写下更复杂的模式：
 
@@ -69,6 +66,30 @@ GET /my_index/address/_search
 
 ```
 prefix 查询是一个词级别的底层的查询，它不会在搜索之前分析查询字符串，它假定传入前缀就正是要查找的前缀。
+
+**java api**
+
+```
+SearchResponse response = client.prepareSearch("索引名称")
+            .setTypes("type名称")
+.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .setQuery(queryBuilder)
+            .execute()
+            .actionGet();
+//1、prefix query:匹配分词前缀 如果字段没分词，就匹配整个字段前缀
+QueryBuilders.prefixQuery("hotelName","花园")
+
+//2、wildcard query:通配符查询，支持* 任意字符串；？任意一个字符
+QueryBuilders.wildcardQuery("channelCode","ctr*")
+QueryBuilders.wildcardQuery("channelCode","c?r?")
+
+//3、regexp query:正则表达式匹配分词
+QueryBuilders.regexpQuery()
+
+//4、fuzzy query:分词模糊查询，通过增加fuzziness模糊属性来查询,如能够匹配hotelName为tel前或后加一个字母的文档，fuzziness 的含义是检索的term 前后增加或减少n个单词的匹配查询
+QueryBuilders.fuzzyQuery("hotelName", "tel").fuzziness(Fuzziness.ONE)
+                       
+```
 
 
 
