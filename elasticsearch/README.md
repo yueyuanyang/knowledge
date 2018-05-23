@@ -32,3 +32,5 @@
 [2.Elasticsearch精确查询 —— match_all(匹配全部),terms(精确多个),term(相等的查询),range(范围查询),filter(过滤)](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part5.md)
 
 [3.Elasticsearch匹配查询 —— Bool Query(布尔查询),Match Phrase Query(匹配短语查询),Match Phrase Prefix Query(匹配短语前缀查询)](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/operation/commandLines/part6.md)
+
+[4.Elasticsearch DSL查询语言 —— size(返回个数),from(分页开始),to(分页结束),sort(排序),source(返回fields)](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/operation/commandLines/part7.md)
