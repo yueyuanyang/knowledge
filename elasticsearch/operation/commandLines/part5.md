@@ -87,6 +87,29 @@ curl -XPOST :9200/megacorp/employee/_search?pretty' -d '
     "_source" : ["first_name","last_name","about", "interests"]
 }'
 ```
+**api**
+
+过滤器（filter）通常用于过滤文档的范围，比如某个字段是否属于某个类型，或者是属于哪个时间区间。filter是不计算相关性的，同时可以cache。因此，filter速度要快于query。
+```
+FilterBuilders.andFilter(    
+                FilterBuilders.rangeFilter("age").from(1).to(100),    
+                FilterBuilders.prefixFilter("name", "Jack")    
+        ); 
+
+同样，多条件查询也可以用boolFilter()：
+
+FilterBuilders.boolFilter()    
+                .must(FilterBuilders.termFilter("name", "Jack"))    
+                .mustNot(FilterBuilders.rangeFilter("age").from(10).to(30))    
+                .should(FilterBuilders.termFilter("home", "hometown"));    
+    }  
+
+构造好Filter 传到elasticsearch里进行过滤：
+
+SearchResponse response = client.prepareSearch()    
+        .setFilter(filterBuilder)    
+        .execute().actionGet();   
+```
 
 ### java api 实现
 
