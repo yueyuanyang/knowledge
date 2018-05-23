@@ -1,4 +1,4 @@
-## Elasticsearch的查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询)
+## Elasticsearch的查询 —— wildcard(通配符查询),regexp(正则)，prefix(前缀查询),Fuzzy Queries（模糊查询）
 
 ### 1.通配符查询(wildcard) 
 
@@ -67,7 +67,26 @@ GET /my_index/address/_search
 ```
 prefix 查询是一个词级别的底层的查询，它不会在搜索之前分析查询字符串，它假定传入前缀就正是要查找的前缀。
 
-**java api**
+### 4.Fuzzy Queries（模糊查询）
+
+模糊查询可以在Match和 Multi-Match查询中使用以便解决拼写的错误，模糊度是基于Levenshteindistance计算与原单词的距离。使用如下：
+
+```
+curl -XGET 'localhost:9200/megacorp/employee/_search' -d '
+{
+    "query": {
+        "multi_match" : {
+            "query" : "rock climb",
+            "fields": ["about", "interests"],
+            "fuzziness": "AUTO"
+        }
+    },
+    "_source": ["about", "interests", "first_name"],
+    "size": 1
+}'
+```
+
+### java api
 
 ```
 SearchResponse response = client.prepareSearch("索引名称")
@@ -86,7 +105,8 @@ QueryBuilders.wildcardQuery("channelCode","c?r?")
 //3、regexp query:正则表达式匹配分词
 QueryBuilders.regexpQuery()
 
-//4、fuzzy query:分词模糊查询，通过增加fuzziness模糊属性来查询,如能够匹配hotelName为tel前或后加一个字母的文档，fuzziness 的含义是检索的term 前后增加或减少n个单词的匹配查询
+//4、fuzzy query:分词模糊查询，通过增加fuzziness模糊属性来查询,如能够匹配hotelName为tel前或后加一个字母的文档，
+fuzziness 的含义是检索的term 前后增加或减少n个单词的匹配查询
 QueryBuilders.fuzzyQuery("hotelName", "tel").fuzziness(Fuzziness.ONE)
                        
 ```
