@@ -66,7 +66,7 @@ QueryBuilders.multiMatchQuery("beijing test","hotelName","hotelNo").operator(Mat
 
 我们上面使用同一个搜索请求在多个field中查询，你也许想提高某个field的查询权重,在下面的例子中，我们把interests的权重调成3，这样就提高了其在结果中的权重，这样把_id=4的文档相关性大大提高了，如下：
 
- ```
+```
  curl -XGET 'localhost:9200/megacorp/employee/_search' -d '
 {
     "query": {
@@ -76,15 +76,60 @@ QueryBuilders.multiMatchQuery("beijing test","hotelName","hotelNo").operator(Mat
         }
     }
 }'
- ```
- Boosting不仅仅意味着计算出来的分数(calculated score)直接乘以boost factor，最终的boost value会经过归一化以及其他一些内部的优化
- 
+```
+Boosting不仅仅意味着计算出来的分数(calculated score)直接乘以boost factor，最终的boost value会经过归一化以及其他一些内部的优化
 
- ```
+**4、common term query**
+
+一种略高级的查询，充分考虑了stop-word的低优先级，提高了查询精确性。他将查询短语分词，将分词后的term分为高频词和低频词
+
+高频词（也可以理解为stopwords）比如 的，个，是 ；英文的 the is 等 无意义且出现频率极高的词
+
+**低频词**就是我们要时间查询的词，比如酒店 宾馆等
+
+查询过程：通过匹配低频词检索出我们需要的数据，然后在这个基础上继续匹配高频词，既能完成检索数据又能充分匹配高频词
+
+因为我们可能搜索词 happy 和 not happy 如果不匹配高频词 搜索的结果将会是一样的 显然这不是我们需要的
+
+举例如果想要能够匹配如下 "hotelName":"新增的第一个酒店"
+```
+QueryBuilders.commonTermsQuery("hotelName","的酒个店").cutoffFrequency(0.001f)
+cutoffFrequency 设置高频词的score因子
+```
+
+**query string**
+
+默认是全部field进行搜索_all;可以明确指定某个field;支持分词等
+
+QueryString 被分词 默认分词之间是OR 关系， 支持 AND OR 来决定每个term之间的关系；同时 支持通配符，正则 等操作
+
+如下查询 hotelName 字段 查询 QueryString 为 "四 AND 酒 AND 店 " 查询结果是 hotelName 同时包含 "四" "酒" "店" 如果不明确 AND 则是OR的关系，包含任意一个term即被命中
+
+```
+QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("四 AND 酒 AND  店 ").defaultField("hotelName");
+```
+** simple query string**
+
+简单查询
+
+支持符号操作，不像query string那样支持正则等表达式
+
+**支持的符号如**： + 表示 AND ， | 表示 OR ， - 表示 否 还有其他支持符号就查看文档吧
+
+**flag**明确指定支持的符号有哪些，
+
+查询 hotelName 字段 查询 simpleQueryString 为 "四+酒+店 " 查询结果是 hotelName 同时包含 "四" "酒" "店"
+```
+QueryBuilders.simpleQueryStringQuery("四+酒+店").field("hotelName")
+```
+下面看下flag 的作用，flag 明确指明 支持OR操作，此时 + 不生效，三个词是默认的 OR关系
+```
+QueryBuilders.simpleQueryStringQuery("四+酒+店").field("hotelName").flags(SimpleQueryStringFlag.OR)
+```
  
- ### 1.Bool Query(布尔查询)
+### 1.Bool Query(布尔查询)
  
- 我们可以在查询条件中使用AND/OR/NOT操作符，这就是布尔查询(Bool Query)。布尔查询可以接受一个must参数(等价于AND)，一个must_not参数(等价于NOT)，以及一个should参数(等价于OR)。比如，我想查询about中出现music或者climb关键字的员工，员工的名字是John，但姓氏不是smith，我们可以这么来查询：
+我们可以在查询条件中使用AND/OR/NOT操作符，这就是布尔查询(Bool Query)。布尔查询可以接受一个must参数(等价于AND)，一个must_not参数(等价于NOT)，以及一个should参数(等价于OR)。比如，我想查询about中出现music或者climb关键字的员工，员工的名字是John，但姓氏不是smith，我们可以这么来查询：
  
 ```
 curl -XGET 'localhost:9200/megacorp/employee/_search' -d '
@@ -193,6 +238,8 @@ curl -XGET 'localhost:9200/megacorp/employee/_search' -d '
     ]
 }'
 ```
+
+
 
  
  
