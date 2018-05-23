@@ -1,6 +1,11 @@
 ## Elasticsearch匹配查询 —— match(基本查询),multi_match(多域查询),Boosting(查询权重),bool(多条件查询)
 
-匹配查询共有三种类型，分别是布尔（boolean）、短语（phrase）和短语前缀（phrase_prefix），默认的匹配查询是布尔类型，这意味着，ElasticSearch引擎首先分析查询字符串，根据分析器对其进行分词，例如，对于以下match查询：
+匹配查询共有三种类型:
+- 分别是布尔（boolean）
+- 短语（phrase）
+- 短语前缀（phrase_prefix）
+
+默认的匹配查询是布尔类型，这意味着，ElasticSearch引擎首先分析查询字符串，根据分析器对其进行分词.
 
 ### 1. match(基本查询)
 
