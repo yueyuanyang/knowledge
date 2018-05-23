@@ -111,6 +111,23 @@ QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("四 AND 酒 AND  店
 ** simple query string**
 
 简单查询
+```
+curl -POST 'localhost:9200/megacorp/employee/_search' -d '
+{
+    "query": {
+        "simple_query_string" : {
+        "query": "(saerch~1 algorithm~1) + (grant ingersoll) | (tom morton)",
+        "fields": ["_all", "summary^2"]
+        }
+    },
+    "_source": [ "title", "summary", "authors" ],
+    "highlight": {
+        "fields" : {
+            "summary" : {}
+        }
+    }
+}'
+```
 
 支持符号操作，不像query string那样支持正则等表达式
 
