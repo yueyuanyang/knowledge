@@ -13,3 +13,18 @@
 - [2.3 Elasticsearch系统概念 —— 分片](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part6.md)
 
 [3. Elasticsearch 基本概念含义](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part2.md)
+
+
+### 操作篇
+
+#### 创建操作
+
+[1.创建mapping](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part1.md)
+
+[2.索引的父子关系](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part2.md)
+
+[3.Elasticsearch shield权限管理详解](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part3.md)
+
+#### 查询操作
+
+[3.Elasticsearch基本操作](https://github.com/yueyuanyang/knowledge/tree/master/elasticsearch/operation/commandLines/part4.md)
