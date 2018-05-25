@@ -116,7 +116,7 @@ Elasticsearch 前不久发布了 5.0 版本, 基于 Lucene 6, 默认使用了 BM
 
 总体而言, 主要还是分三部分, **TF - IDF - Document Length**
 
-![es_3](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/es_3.png)
+![es_3](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/es_3.jpg)
 
 IDF 还是和之前的一样. 公式 IDF(q) = 1 + ln(maxDocs/(docFreq + 1))
 
