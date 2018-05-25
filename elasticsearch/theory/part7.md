@@ -80,6 +80,27 @@ PUT /my_index
 ```
 假设我们查询了"happy hippopotamus"。一个像happy这样的常见单词的权重是较低的，然而像hippopotamus这样的罕见单词则拥有较高的权重。假设happy的权重为2而hippopotamus的权重为5。我们可以使用坐标来表达这个简单的二维向量 - [2, 5] - 一条从坐标(0, 0)到坐标(2, 5)的直线，如下所示：
 
+![es_1](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/es_1.png)
 
+现在，假设我们有三份文档：
 
+- I am happy in summer.
+- After Christmas I’m a hippopotamus.
+- The happy hippopotamus helped Harry.
+
+我们可以为每份文档创建一个类似的向量，它由每个查询词条的权重组成 - 也就是出现在文档中的词条happy和hippopotamus，然后将它绘制在坐标中，如下图：
+
+- 文档1：(happy,____________) — [2,0]
+- 文档2：( ___ ,hippopotamus) — [0,5]
+- 文档3：(happy,hippopotamus) — [2,5]
+
+![es_2](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/es_2.png)
+
+向量的一个很棒的性质是它们能够被比较。通过测量查询向量和文档向量间的角度，我们可以给每份文档计算一个相关度分值。文档1和查询之间的角度较大，因此它的相关度较低。文档2和查询更靠近，所以它的相关度更高，而文档3和查询之间则是一个完美的匹配。
+
+**TIP**
+
+```
+实际上，只有二维向量(使用两个词条的查询)才能够被简单地表示在坐标中。幸运的是，线性代数 - 数学的一个分支，能够处理向量 - 提供了用来比较多维向量间角度的工具，这意味着我们能够使用上述原理对包含很多词条的查询进行处理。
+```
 
