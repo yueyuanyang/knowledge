@@ -12,7 +12,10 @@
 
 - [2.3 Elasticsearch系统概念 —— 分片](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part6.md)
 
+- [2.4 Elasticsearch系统概念 —— 相关分数](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part7.md)
+
 [3. Elasticsearch 基本概念含义](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part2.md)
+
 
 
 ### 操作篇
