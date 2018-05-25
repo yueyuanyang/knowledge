@@ -1,6 +1,6 @@
 ## Elasticsearch匹配查询 —— Bool Query(布尔查询),Match Phrase Query(匹配短语查询),Match Phrase Prefix Query(匹配短语前缀查询)
 
-匹配查询共有三种类型:
+Elasticsearch FullText Query 匹配查询共有三种类型:
 - 分别是布尔（boolean）
 - 短语（phrase）
 - 短语前缀（phrase_prefix）
