@@ -55,8 +55,13 @@ Atrribute values arw interconnected(属性值是相互关联的)
 
 ![neo4j3](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-3.png)
 
+### 什么时候使用属性(User properties when)
 
+there is no  need to quality the relationship(没有必要质量关系)
 
+**and**
+
+atrribute value is a simple value type(属性值是一个简单的值类型)
 
 
 
