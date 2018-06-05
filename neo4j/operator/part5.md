@@ -111,10 +111,10 @@ Search Google -> google
 
 
 ### Linked Lists
-- Entites are linked in a sequence
-- You need to traverse the sequence
-- You may need to indentify the beginning or end(first/last,earliest/latest,etc.)
-- examples(Event stream;Episodes od a TV series;Job history)
+- Entites are linked in a sequence (实体按顺序链接)
+- You need to traverse the sequence (你需要遍历序列)
+- You may need to indentify the beginning or end(first/last,earliest/latest,etc.)(您可能需要识别开始或结束（第一个/最后一个，最早/最近等）)
+- examples(Event stream;Episodes od a TV series;Job history)(例子（事件流;电视连续剧的集数;工作经历）)
 
 
 
