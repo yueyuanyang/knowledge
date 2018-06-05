@@ -10,6 +10,8 @@
 
 [3. Cypher的基本句法](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/operator/part2.md)
 
+[4. 图数据库建模技巧](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/operator/part5.md)
+
 ### <<neo4j 实战>>笔记
 [1. cypher 使用笔记](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/action/part1.md)
 
