@@ -12,8 +12,8 @@
  Strength/weight/quality+metadata
  
 ### label 
--Role
--Group Node
+- Role
+- Group Node
 
 ### 性质对应关系
 普通名词 -> 标签(label)
