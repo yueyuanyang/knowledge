@@ -37,7 +37,7 @@ Ian ->({name:"Ian"})
 
 ### 当什么时候使用关系(RelationShips)
 
-you need to specify the weight,strength,or some other quality of the relationship(您需要指定关系的weight(重量，体重; 重担，重任; 重要; [统] 权，加重值，权重)，strength(力量; 优点，长处)或其他quality(质量，品质; 美质，优点; 才能，能力，技能，素养; 品种;))
+you need to specify the weight,strength,or some other quality of the relationship(您需要指定关系的weight(重量，体重; 重担，重任; 重要; [统] 权，加重值，权重)，strength(力量; 优点，长处)或其他quality(质量，品质; 美质，优点; 才能，能力，技能，素养; 品种))
 - friendShip strength(友谊的权重)
 - proficieiency in a skill(熟练掌握技巧)
 
@@ -57,11 +57,11 @@ Atrribute values arw interconnected(属性值是相互关联的)
 
 ### 什么时候使用属性(User properties when)
 
-there is no  need to quality the relationship(没有必要质量关系)
+there is no  need to quality the relationship(没有必要`quality(质量，品质; 美质，优点; 才能，能力，技能，素养; 品种)`关系)
 
 **and**
 
-atrribute value is a simple value type(属性值是一个简单的值类型)
+atrribute value is a simple value type(属性值是一个简单的`值`类型)
 
 ### align Relationships with Use cases(将关系与用例对齐)
 
