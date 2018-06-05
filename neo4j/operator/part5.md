@@ -110,6 +110,13 @@ Search Google -> google
 - but it can be overkill and will have an impact on performance(但它可能会过度，并会对性能产生影响)
 
 
+### Linked Lists
+- Entites are linked in a sequence
+- You need to traverse the sequence
+- You may need to indentify the beginning or end(first/last,earliest/latest,etc.)
+- examples(Event stream;Episodes od a TV series;Job history)
+
+
 
 
 
