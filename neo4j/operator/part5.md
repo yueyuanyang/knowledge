@@ -37,14 +37,14 @@ Ian ->({name:"Ian"})
 
 ### 当什么时候使用关系(RelationShips)
 
-you need to specify the weight,strength,or some other quality of the relationship(您需要指定关系的重量，强度或其他质量)
-- friendShip strength(友谊的力量)
+you need to specify the weight,strength,or some other quality of the relationship(您需要指定关系的weight(重量，体重; 重担，重任; 重要; [统] 权，加重值，权重)，strength(力量; 优点，长处)或其他quality(质量，品质; 美质，优点; 才能，能力，技能，素养; 品种;))
+- friendShip strength(友谊的权重)
 - proficieiency in a skill(熟练掌握技巧)
 
 **AND/OR**
 
 attribute value comprises a complex value type:(属性值包含复数值类型：)
-- Address(first line,second line ,zip code etc) 地址（第一行，第二行，邮政编码等）
+- Address(first line,second line ,zip code etc) 地址（第一线，第二线，邮政编码等）
 
 **AND/OR**
 
