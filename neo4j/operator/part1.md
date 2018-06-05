@@ -2,6 +2,10 @@
 
 ## 创建节点 —— CREATE命令
 
+**Neo4j操作图解**
+
+![Neo4j操作图解](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/Neo4j.png)
+
 **Neo4j的CQL创建没有性质的节点**
 
 **CREATE命令语法**
