@@ -73,6 +73,32 @@ Specialize the grap for different use case(以不同方式连接相同的东西�
 专注于不同用例的图形)
 
 
+### common graph structures (共同的图形结构)
+
+connect more then 2 nodes in a single context
+
+- lan bought a book in waterstones
+
+N-ary relationships 
+- sue invited sarah,Bob and charlie to her party
+
+Relate somethging to a relationship
+
+![neo4j](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-4.png)
+
+### Rich Context,Multiple Dimensions
+
+![neo4j](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-5.png)
+
+### Trap : Verbing
+- Be as simple as passible
+- but beware verbing
+ - Lanahage habit:varb -> noun
+  - send an email -> Email
+  - Search Google -> google
+
+
+
 
 
 
