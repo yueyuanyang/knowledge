@@ -98,7 +98,8 @@ Lanahage habit:varb -> noun
 send an email -> Email
 Search Google -> google
 
-
+### Example:[:EMAILED] to(:email)
+![neo4j](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-6.png)
 
 
 
