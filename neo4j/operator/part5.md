@@ -63,6 +63,13 @@ there is no  need to quality the relationship(没有必要质量关系)
 
 atrribute value is a simple value type(属性值是一个简单的值类型)
 
+### align Relationships with Use cases
+
+- Relationships are the "royal road" into the graph
+- when querying,well-named relationships help discover only what is absolutely necessary
+and eliminate unnecessary portions of the graph fro m consideration
+- connect the same thingd(nodes) in differnt ways(differently named relationships)
+Specialize the grap for different use case
 
 
 
