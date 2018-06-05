@@ -17,18 +17,23 @@
 
 ### 性质对应关系
 普通名词 -> 标签(label)
+
 user ->:User
+
 email ->:Email
 
 动词带动对象 -> 关系(RelationShip)
+
 sent -> SENT
+
 wrote -> WROTE
 
 正确的名词 -> 属性节点
+
 Ian ->({name:"Ian"})
 
 ### Atrributes:Property or Ralationoship?
-![neo4j2](https://github.com/yueyuanyang/knowledge/upload/master/neo4j/img/neo4j-2.png)
+![neo4j2](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-2.png)
 
 ### 当什么时候使用关系(RelationShips)
 
@@ -48,7 +53,7 @@ Atrribute values arw interconnected(属性值是相互关联的)
 
 ### modeling skills as nodes
 
-![neo4j3](https://github.com/yueyuanyang/knowledge/upload/master/neo4j/img/neo4j-3.png)
+![neo4j3](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-2.png)
 
 
 
