@@ -53,7 +53,7 @@ Atrribute values arw interconnected(属性值是相互关联的)
 
 ### modeling skills as nodes
 
-![neo4j3](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-2.png)
+![neo4j3](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-3.png)
 
 
 
