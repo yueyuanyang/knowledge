@@ -76,13 +76,12 @@ Specialize the grap for different use case(以不同方式连接相同的东西�
 ### common graph structures (共同的图形结构)
 
 connect more then 2 nodes in a single context
-
 - lan bought a book in waterstones
 
 N-ary relationships 
 - sue invited sarah,Bob and charlie to her party
 
-Relate somethging to a relationship
+Relate something to a relationship
 
 ![neo4j](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-4.png)
 
