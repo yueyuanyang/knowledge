@@ -27,5 +27,8 @@ wrote -> WROTE
 正确的名词 -> 属性节点
 Ian ->({name:"Ian"})
 
+### Atrributes:Property or Ralationoship?
+![]()
+
 
 
