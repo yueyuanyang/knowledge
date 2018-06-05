@@ -95,12 +95,20 @@ Relate somethging to a relationship
 - but beware verbing
 
 Lanahage habit:varb -> noun
+
 send an email -> Email
+
 Search Google -> google
 
 ### Example:[:EMAILED] to(:email)
+
 ![neo4j](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/img/neo4j-6.png)
 
+### considerations(注意事项)
+- an intermendiate node provides flexibility
+It allow more then two nodes to be  connected in a single context (一个intermendiate节点提供了灵活性
+它允许多于两个节点在单个环境中连接)
+- but it can be overkill and will have an impact on performance(但它可能会过度，并会对性能产生影响)
 
 
 
