@@ -93,9 +93,10 @@ Relate somethging to a relationship
 ### Trap : Verbing
 - Be as simple as passible
 - but beware verbing
- - Lanahage habit:varb -> noun
-  - send an email -> Email
-  - Search Google -> google
+
+Lanahage habit:varb -> noun
+send an email -> Email
+Search Google -> google
 
 
 
