@@ -28,10 +28,3 @@
 
 [1. 细说中文分词](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part7.md)
 
-[2. 统计自然语言处理梳理一：分词、命名实体识别、词性标注](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part8.md)
-
-[3. 统计自然语言处理梳理二：句法分析](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part9.md)
-
-[4. 统计自然语言处理梳理三：语义分析](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part10.md)
-
-[5. 统计自然语言处理梳理四：篇章分析](https://github.com/yueyuanyang/knowledge/blob/master/ML/theory/part11.md)
