@@ -121,9 +121,13 @@ HMM模型示意图
 HMM的典型介绍就是这个模型是一个五元组:
 
 -StatusSet: 状态值集合
+
 -ObservedSet: 观察值集合
+
 -TransProbMatrix: 转移概率矩阵
+
 -EmitProbMatrix: 发射概率矩阵
+
 -InitStatus: 初始状态分布
 
 #### HMM模型可以用来解决三种问题：
