@@ -40,8 +40,11 @@
 
 那么怎么来通过计算确定这两个命题是否相关呢？这里就要引出计算公式：
 
+![a1](https://github.com/yueyuanyang/knowledge/tree/master/ML/algorithm/img/a1.png)
 
 这是一般情况，简化成我们这个案例的公式，就是
+
+![a2](https://github.com/yueyuanyang/knowledge/tree/master/ML/algorithm/img/a2.png)
 
 这里的A就是我们的实际情况，T就是预期结果
 
@@ -57,6 +60,8 @@ x2用于衡量实际值与理论值的差异程度（也就是卡方检验的核
 自由度等于V = (行数 - 1) * (列数 - 1)，对四格表，自由度V = 1。
 
 对V = 1，卡方分布的临界概率是：
+
+![a3](https://github.com/yueyuanyang/knowledge/tree/master/ML/algorithm/img/a3.png)
 
 我们根据自由度，查分布临界值表，发现10.01>7.88，那么我们之前所做的假设成立的概率<0.005，即0.5%。显然，两者相关的可能性非常大。
 
