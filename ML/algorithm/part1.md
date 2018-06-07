@@ -40,11 +40,11 @@
 
 那么怎么来通过计算确定这两个命题是否相关呢？这里就要引出计算公式：
 
-![a1](https://github.com/yueyuanyang/knowledge/tree/master/ML/algorithm/img/a1.png)
+![a1](https://github.com/yueyuanyang/knowledge/blob/master/ML/algorithm/img/a1.png)
 
 这是一般情况，简化成我们这个案例的公式，就是
 
-![a2](https://github.com/yueyuanyang/knowledge/tree/master/ML/algorithm/img/a2.png)
+![a2](https://github.com/yueyuanyang/knowledge/blob/master/ML/algorithm/img/a2.png)
 
 这里的A就是我们的实际情况，T就是预期结果
 
@@ -61,10 +61,39 @@ x2用于衡量实际值与理论值的差异程度（也就是卡方检验的核
 
 对V = 1，卡方分布的临界概率是：
 
-![a3](https://github.com/yueyuanyang/knowledge/tree/master/ML/algorithm/img/a3.png)
+![a3](https://github.com/yueyuanyang/knowledge/blob/master/ML/algorithm/img/a3.png)
 
 我们根据自由度，查分布临界值表，发现10.01>7.88，那么我们之前所做的假设成立的概率<0.005，即0.5%。显然，两者相关的可能性非常大。
 
 ### 应用
 
 通过上一个案例，我们获得了卡方检验的校验值，那么这个值的大小，其实是可以用来说明两个命题的相关性的。就上一个文本分类的例子来说，我们可以通过计算一个词典的所有的词出现与否与该文章是否为科技文来计算得到两者的相关性，并且倒序排列，我们就能知道某个类型的文章最能出现怎样的词了。
+
+### 实例
+
+spark 卡方检验
+
+```
+import org.apache.spark.ml.linalg.{Vector, Vectors}
+import org.apache.spark.ml.stat.ChiSquareTest
+
+val data = Seq(
+  (0.0, Vectors.dense(0.5, 10.0)),
+  (0.0, Vectors.dense(1.5, 20.0)),
+  (1.0, Vectors.dense(1.5, 30.0)),
+  (0.0, Vectors.dense(3.5, 30.0)),
+  (0.0, Vectors.dense(3.5, 40.0)),
+  (1.0, Vectors.dense(3.5, 40.0))
+)
+
+val df = data.toDF("label", "features")
+val chi = ChiSquareTest.test(df, "features", "label").head
+println(s"pValues = ${chi.getAs[Vector](0)}")
+result : pValues = [0.6872892787909721,0.6822703303362126]
+
+println(s"degreesOfFreedom ${chi.getSeq[Int](1).mkString("[", ",", "]")}")
+result : degreesOfFreedom [2,3]
+
+println(s"statistics ${chi.getAs[Vector](2)}")
+result:statistics [0.75,1.5]
+```
