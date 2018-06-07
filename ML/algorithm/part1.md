@@ -88,12 +88,18 @@ val data = Seq(
 
 val df = data.toDF("label", "features")
 val chi = ChiSquareTest.test(df, "features", "label").head
+
+result: chi: org.apache.spark.sql.Row = [[0.6872892787909721,0.6822703303362126],WrappedArray(2, 3),[0.75,1.5]]
+
 println(s"pValues = ${chi.getAs[Vector](0)}")
+
 result : pValues = [0.6872892787909721,0.6822703303362126]
 
 println(s"degreesOfFreedom ${chi.getSeq[Int](1).mkString("[", ",", "]")}")
+
 result : degreesOfFreedom [2,3]
 
 println(s"statistics ${chi.getAs[Vector](2)}")
+
 result:statistics [0.75,1.5]
 ```
