@@ -23,3 +23,9 @@
 |不含"机器学习" | 19| 24| 43
 |含"机器学习" | 34 | 10 | 44
 |合计 | 53 | 34 | 87
+
+| Name | Academy | score | 
+| - | :-: | -: | 
+| Harry Potter | Gryffindor| 90 | 
+| Hermione Granger | Gryffindor | 100 | 
+| Draco Malfoy | Slytherin | 90 |
