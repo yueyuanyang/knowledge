@@ -100,4 +100,7 @@ println(s"statistics ${chi.getAs[Vector](2)}")
 result:statistics [0.75,1.5]
 
 ```
-> 例子： https://www.cnblogs.com/barrenlake/p/4354579.html
+> 参考： https://www.cnblogs.com/barrenlake/p/4354579.html
+https://blog.csdn.net/lovebyz/article/details/78770296
+
+
