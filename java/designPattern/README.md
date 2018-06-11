@@ -20,7 +20,7 @@
 - Decorator Pattern（装饰者模式）
 - Façade Pattern（外观模式）
 - Flyweight Pattern（享元模式）
-- Proxy Pattern（代理模式）   
+- [Proxy Pattern（代理模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part7.md)   
 
 ### 行为型设计模式
 
