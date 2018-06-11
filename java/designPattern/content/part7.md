@@ -17,7 +17,149 @@ Java编程的目标是实现现实不能完成的，优化现实能够完成的�
 - RealSubject：真实主题角色，是实现抽象主题接口的类。
 - Proxy：代理角色，内部含有对真实对象RealSubject的引用，从而可以操作真实对象。代理对象提供与真实对象相同的接口，以便在任何时刻都能代替真实对象。同时，代理对象可以在执行真实对象操作时，附加其他的操作，相当于对真实对象进行封装。
 
-实现动态代理的关键技术是反射。
+**实现动态代理的关键技术是反射**。
+
+## 动态代理
+
+有两种方法 一种是**java反射机制**，另一种效率比较好，**采用cglib**，后者也是spring AOP采用的技术。
+
+### java反射机制 实现动态代理
+
+```
+接口
+public interface StudentDao {  
+    public void saveStudent();  
+    public void queryStudent();  
+}  
+
+被代理类
+public class StudentDaoImpl implements StudentDao {  
+  
+    @Override  
+    public void saveStudent() {  
+        System.out.println("保存学生资料。。。。");  
+    }  
+  
+    @Override  
+    public void queryStudent() {  
+        System.out.println("查询学生资料。。。。");  
+    }  
+  
+}  
+
+代理类
+public class DAOProxy implements InvocationHandler {  
+  
+    private Object originalObject;  
+   
+    public Object bind(Object obj) {  
+        this.originalObject = obj;  
+        return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj  
+                .getClass().getInterfaces(), this);  
+    }  
+  
+    void preMethod() {  
+        System.out.println("----执行方法之前----");  
+    }  
+  
+    void afterMethod() {  
+        System.out.println("----执行方法之后----");  
+    }  
+  
+    @Override  
+    public Object invoke(Object proxy, Method method, Object[] args)  
+            throws Throwable {  
+        Object result = null;  
+        preMethod();  
+        result = method.invoke(this.originalObject, args);  
+        afterMethod();  
+        return result;  
+    }  
+  
+}  
+
+测试类
+public class TestDaoProxy extends TestCase {  
+    public void testDaoProxy(){  
+        StudentDao studentDao = new StudentDaoImpl();  
+        DAOProxy daoProxy=new DAOProxy();  
+        studentDao = (StudentDao)daoProxy.bind(studentDao);  
+        studentDao.queryStudent();  
+    }  
+} 
+
+
+
+```
+
+### cglib 动态代理
+
+```
+被代理类
+public class StudentDao {  
+    public void saveStudent() {  
+        System.out.println("保存学生资料。。。。");  
+    }  
+  
+    public void queryStudent() {  
+        System.out.println("查询学生资料。。。。");  
+    }  
+}  
+
+代理类
+public class DAOCglibProxy implements MethodInterceptor {  
+  
+    private Object originalObject;  
+  
+    public Object bind(Object obj) {  
+        this.originalObject = obj;  
+        Enhancer enhancer = new Enhancer();  
+        enhancer.setSuperclass(obj.getClass());  
+        enhancer.setCallback(this);  
+        return enhancer.create();  
+    }  
+  
+    void preMethod() {  
+        System.out.println("----执行方法之前----");  
+    }  
+  
+    void afterMethod() {  
+        System.out.println("----执行方法之后----");  
+    }  
+  
+    @Override  
+    public Object intercept(Object obj, Method method, Object[] args,  
+            MethodProxy proxy) throws Throwable {  
+        preMethod();  
+        Object result = proxy.invokeSuper(obj, args);  
+        afterMethod();  
+        return result;  
+    }  
+  
+}  
+
+测试类
+public void testDAOCglibProxy() {  
+    StudentDao studentsDao = new StudentDao();  
+    DAOCglibProxy proxy = new DAOCglibProxy();  
+    studentsDao = (StudentDao) proxy.bind(studentsDao);  
+    studentsDao.queryStudent();  
+}  
+    
+```
+**优点：** ： 打破了动态代理的时候，代理对象只能是接口，代理对象不能是类。 
+
+cglib实际上是通过继承出一个子类实现的代理。可以把Enhancer看做那个子类的生成器 ，所以在bind方法中，指定父类，然后绑定好代理对象就可以了
+
+指定父类：enhancer.setSuperclass(obj.getClass());
+
+绑定代理方法：enhancer.setCallback(this);
+
+然后返回创建好的已经加了代理的目标对象：return enhancer.create();
+
+在测试类中使用的时候很简单，只要绑定好，然后执行就行。
+
+可见还是cglib这个方法更方便，而且据说效率最高。所以spring采用之。
 
 ## 静态代理
 代理模式有几种，虚拟代理，计数代理，远程代理，动态代理。主要分为两类，静态代理和动态代理。静态代理比较简单，是由程序员编写的代理类，并在程序运行前就编译好的，而不是由程序动态产生代理类，这就是所谓的静态。
