@@ -1,8 +1,8 @@
-## Proxy Pattern（代理模式）  
+## Proxy Pattern（代理模式）（建议使用 cglib 动态代理） 
 
 ### 作用
 
-主要用来做方法的**增强**，让你可以在不修改源码的情况下，增强一些方法，在方法执行前后做任何你想做的事情（甚至根本不去执行这个方法），因为在InvocationHandler的invoke方法中，你可以直接获取正在调用方法对应的Method对象，具体应用的话，比如可以添加调用日志，做事务控制等。
+主要用来做方法的**增强**，让你可以**在不修改源码的情况下，增强一些方法，在方法执行前后做任何你想做的事情（甚至根本不去执行这个方法）**，因为在InvocationHandler的invoke方法中，你可以直接获取正在调用方法对应的Method对象，具体应用的话，比如可以添加调用日志，做事务控制等。
 动态代理是设计模式当中代理模式的一种。
 
 ### 简介
@@ -93,6 +93,21 @@ public class TestDaoProxy extends TestCase {
 ```
 
 ### cglib 动态代理
+**maven**
+```
+<dependency>
+    <groupId>cglib</groupId>
+    <artifactId>cglib</artifactId>
+    <version>3.2.6</version>
+</dependency>
+<dependency>
+    <groupId>asm</groupId>
+    <artifactId>asm</artifactId>
+    <version>3.3.1</version>
+</dependency>
+```
+
+**样例**
 
 ```
 被代理类
