@@ -134,10 +134,12 @@ public class DAOCglibProxy implements MethodInterceptor {
         return enhancer.create();  
     }  
   
+  // 增强方法(原方法前)
     void preMethod() {  
         System.out.println("----执行方法之前----");  
     }  
-  
+    
+  // 增强方法(原方法后)
     void afterMethod() {  
         System.out.println("----执行方法之后----");  
     }  
