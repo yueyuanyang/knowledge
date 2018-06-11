@@ -1,4 +1,4 @@
-## Java 动态代理
+## Proxy Pattern（代理模式）  
 
 ### 作用
 
