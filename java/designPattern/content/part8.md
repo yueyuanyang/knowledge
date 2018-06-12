@@ -27,7 +27,7 @@
 
 （3）通过和面机搅拌，最后生产出“玉米馒头”。
 
-![dp1]()
+![dp1](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp1.jpg)
 
 ### 原始设计
 ```
@@ -154,7 +154,7 @@ public class SweetBread extends NormalBread {
 
 使用装饰者的静态类图，结构如图所示。
 
-![dp2]()
+![dp2](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp2.jpg)
 
 ####  （1）为了装饰正常馒头NormalBread，我们需要一个正常馒头一样的抽象装饰者:AbstractBread,该类和正常馒头类NormalBread一样实现IBread馒头接口，不同的是该抽象类含有一个IBread接口类型的私有属性bread,然后通过构造方法，将外部IBread接口类型对象传入。
 
@@ -318,7 +318,7 @@ public class Client {
 
 可能你会感觉比较奇怪，我们先使用的是甜蜜素，然后使用的是着色剂，应该先打印甜蜜素，然后再打印着色剂才对？不用奇怪，这也不矛盾，因为装饰者相当于对原有对象的包装，这就像一个礼品盒，最里面是一个最普通的纸盒，然后用一般的纸包装起来，最后使用比较漂亮的包装纸包装，我们最先看到的是最外漂亮的包装纸，其次才是里面的一般包装纸。
 
-![dp3]()
+![dp3](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp3.jpg)
 
 ### 3、设计原则
 
@@ -359,7 +359,7 @@ public class Client {
 
 下面我们来看一下装饰者模式的静态类图.使我们对装饰者模式有一个更加清晰的认识
 
-![dp4]()
+![dp4](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp4.jpg)
 
 A、被装饰者抽象Component:是一个接口或抽象类，是定义的核心对象。
 
