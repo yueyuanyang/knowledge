@@ -12,7 +12,7 @@
 
 （3）当不能采用生成子类的方法进行扩充时。一种情况是，可能有大量独立的扩展，为支持每一种组合将产生大量的 子类，使得子类数目呈爆炸性增长。另一种情况可能是因为类定义被隐藏，或类定义不能用于生成子类。
 
-![dp5](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp5.jpg)
+![dp5](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp5.png)
 
 ### 定义
 装饰者模式(Decorator ['dekəreitə]  Pattren)，是在不改变原类文件和使用继承的情况下，动态地扩展一个对象的功能，它是通过创建一个包装对象，也就是装饰来包裹真实的对象。
