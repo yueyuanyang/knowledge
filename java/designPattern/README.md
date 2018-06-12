@@ -38,6 +38,6 @@
 
 ### 总结
 
-- [适配器模式、装饰器模式、代理模式的区别]()
+- [适配器模式、装饰器模式、代理模式的区别](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/summary/part1.md)
 
 
