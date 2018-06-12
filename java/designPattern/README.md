@@ -17,7 +17,7 @@
 - [Adapter Pattern（适配器模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part5.md) 
 - Bridge Pattern（桥接模式）
 - Composite Pattern（组合模式）
-- Decorator Pattern（装饰者模式）
+- [Decorator Pattern（装饰者模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part8.md)
 - Façade Pattern（外观模式）
 - Flyweight Pattern（享元模式）
 - [Proxy Pattern（代理模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part7.md)   
