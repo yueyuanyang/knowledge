@@ -36,3 +36,8 @@
 - Template Method Pattern（模板方法模式）
 - Visitor Pattern（访问者模式）
 
+### 总结
+
+- [适配器模式、装饰器模式、代理模式的区别]()
+
+
