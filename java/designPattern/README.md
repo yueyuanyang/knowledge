@@ -24,7 +24,7 @@
 
 ### 行为型设计模式
 
-- Chain of Responsibility Pattern（职责链模式）
+- [Chain of Responsibility Pattern（职责链模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part9.md)
 - Command Pattern（命令模式）
 - Interpreter Pattern（解释器模式）  
 - Iterator Pattern（迭代器模式）
