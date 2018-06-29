@@ -22,6 +22,8 @@
 
 [6. Elasticsearch初识document写入原理(写入数据)](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part10.md)
 
+[6. Elasticsearch官方文档整理](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part11.md)
+
 
 
 
