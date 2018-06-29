@@ -18,6 +18,9 @@
 
 [4. master、data、client node的区别与各自特点](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part8.md)
 
+[5. Elasticsearch初识搜索引擎- fetch phase和query phase原理](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/theory/part9.md)
+
+
 
 
 ### 操作篇
