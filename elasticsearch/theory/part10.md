@@ -102,6 +102,8 @@ PUT /my_index/_settings
 （4）将新的segment打开供搜索
 （5）将旧的segment删除
 
+![p6](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/p7.png)
+
 ```
 POST /my_index/_optimize?max_num_segments=1，
 ```
