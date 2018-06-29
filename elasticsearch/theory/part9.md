@@ -8,3 +8,5 @@
 - 2)coordinate node将请求转发到所有shard，每个shard本地搜索，并构建一个本地的priority queue
 - 3)各个shard将自己的priority queue返回给coordinate node，并构建一个全局的priority queue
 
+
+#### 2、图解query phase
