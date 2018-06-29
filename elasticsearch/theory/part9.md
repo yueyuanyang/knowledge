@@ -10,7 +10,7 @@
 
 #### 2、图解query phase
 
-![p1]()
+![p1](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/p1.png)
 
 #### 3、replica shard如何提升搜索吞吐量？
 
@@ -25,7 +25,7 @@
 
 #### 2、图解
 
-![p2]()
+![p2](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/p2.png)
 
 #### 3、疑问
 
