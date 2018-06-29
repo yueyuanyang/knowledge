@@ -13,7 +13,7 @@
 
 ### 2、深入图解
 
-![p3]()
+![p3](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/p3.png)
 
 ### Elasticsearch内核原理-优化写入流程，实现NRT近实时
 
@@ -27,7 +27,7 @@
 - 2)每隔一定时间（最慢1s），buffer中的数据被写入index segment文件，但是先写入os cache
 - 3)只要segment写入os cache，那就直接打开供search使用，不立即执行commit
 
-![p3]()
+![p4](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/p4.png)
 
 **数据写入os cache，并被打开供搜索的过程，叫做refresh，默认是每隔1秒refresh一次**，也就是说，每隔一秒就会将buffer中的数据写入一个新的index segment file，县写入os cache中，所以ES是近实时的，数据写入到可以被搜索默认是1s。
 
