@@ -97,9 +97,13 @@ PUT /my_index/_settings
 每次merge操作的执行流程
 
 （1）选择一些有相似大小的segment，merge成一个大的segment
+
 （2）将新的segment flush到磁盘上去
+
 （3）写一个新的commit point，包括了新的segment，并且排除旧的那些segment
+
 （4）将新的segment打开供搜索
+
 （5）将旧的segment删除
 
 ![p6](https://github.com/yueyuanyang/knowledge/blob/master/elasticsearch/img/p7.png)
