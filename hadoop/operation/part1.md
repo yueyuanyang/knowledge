@@ -618,7 +618,7 @@ hadoop dfs -cat /test/wd2/part-r-00000
 ```
 
 
-
+> https://blog.csdn.net/woloqun/article/details/76068147
 
 
 
