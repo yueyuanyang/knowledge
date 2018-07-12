@@ -2,6 +2,7 @@
 
 ### hadoop 理论
 
+[1.Mapreduce原理全剖析过程](https://github.com/yueyuanyang/knowledge/blob/master/hadoop/theory/part1.md)
 
 
 ### hadoop 实战
