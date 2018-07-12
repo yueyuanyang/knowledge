@@ -277,7 +277,8 @@ public class RunTempJob {
      * 输出的Key是自定义的KeyPair
      */
     static class TempMapper extends Mapper<LongWritable,Text,KeyPair,Text>{
-        protected void map(LongWritable key,Text value,Context context) throws IOException,InterruptedException{
+        protected void map(LongWritable key,Text value,Context context) 
+            throws IOException,InterruptedException{
             String line=value.toString();
             //1949-10-01 14:21:02    34℃
             // 前面是空格 时间和温度通过\t分割
@@ -310,7 +311,8 @@ public class RunTempJob {
      */
     static class TempReducer extends Reducer<KeyPair,Text,KeyPair,Text> {
         @Override
-        protected void reduce(KeyPair kp, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+        protected void reduce(KeyPair kp, Iterable<Text> values, Context context) 
+             throws IOException, InterruptedException {
             for (Text value:values){
                 context.write(kp,value);
             }
