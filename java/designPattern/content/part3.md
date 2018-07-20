@@ -104,12 +104,13 @@ public class Singleton {
     // 私有构造
     private Singleton() {}
 
-    private static Singleton single = null;
+    // 单例模式: volatile + 双重检测-> 禁止指令重排
+    private volatile static Singleton single = null;
 
     // 双重检查
     public static Singleton getInstance() {
-        if (single == null) {
-            synchronized (Singleton.class) {
+        if (single == null) { // 双重检测机制
+            synchronized (Singleton.class) { // 同步所(修饰类)
                 if (single == null) {
                     single = new Singleton4();
                 }
