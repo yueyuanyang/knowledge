@@ -1,0 +1,5 @@
+## 线程池
+
+无论是在java还是在android中其实使用到的线程池都基本是一样的，因此本篇我们将来认识一下线程池Executor框架（相关知识点结合了并发编程艺术书以及Android开发艺术探索而总结），下面是本篇的主要知识点：
+
+> https://blog.csdn.net/javazejian/article/details/50890554
