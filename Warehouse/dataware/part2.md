@@ -19,15 +19,15 @@ DWD层命名规范：dw_主题+common+summary
 #### 1.4 ADS层 （应用数据层）
 ADS层命名规范：ads_主题+common
 
-#### 2 脚本
+### 2 脚本
 命名规范：功能+表名
 例如，统计表dw_user_car_info的总数据，命名为count_dw_user_car_info.sh
 
-#### 3 job
+### 3 job
 
 job的命名和脚本一样，只是后缀不同，如count_dw_user_car_info.job
 
-#### 4 元数据
+### 4 元数据
 
 命名规范：meta+功能+表名
 例如，监控表数据是否为空，meta_monitor_table_null
