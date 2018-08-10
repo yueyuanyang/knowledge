@@ -10,3 +10,10 @@
 
 [理论篇~第三章 数据模型设计](https://github.com/yueyuanyang/knowledge/blob/master/Warehouse/dataware/part3.md)
 
+[理论篇~第四章 维度设计](https://github.com/yueyuanyang/knowledge/blob/master/Warehouse/dataware/part4.md)
+
+## 数据仓库实战
+
+[美团旅行数据质量监管平台实践](https://github.com/yueyuanyang/knowledge/blob/master/Warehouse/dataware/part11.md)
+
+
