@@ -154,7 +154,7 @@ public class test {
 
 ```
 
-### 接口适配器
+### 实战
 
 首先想象这么一个场景，有一天，你的老板交给你这么一个任务，查看你们新上线的游戏中每个服的在线人数。对于相应的功能，相应的接口已经提供，只需要调用就行，例如你们的游戏有三个服务器，只要调用Utility.getOnlinePlayerCount(int)，传入相应的数值，就能得到在线人数，如果你传入了一个不存在的服，则会返回-1。然后你只要将得到的数据拼装成XML就好，具体的显示功能由你的老板来完成。于是，初步的代码便很快写出来:
 
@@ -277,7 +277,129 @@ public class Test {
 }
 
 ```
-### 4、适配器模式应用场景
+#### 接口适配器
+
+#### 应用场景：不想实现接口中的所有方法
+
+**-创建接口**
+```
+/**
+ * Created by 谭健 2017年7月2日 20:56:08
+ * 定义端口接口，提供通信服务
+ */
+public interface Port {
+
+    // 远程SSH端口22
+    public void SSH();
+
+    // 网络端口80
+    public void NET();
+
+    // Tomcat容器端口8080
+    public void Tomcat();
+
+    // Mysql数据库端口3306
+    public void Mysql();
+
+    // Oracle数据库端口1521
+    public void Oracle();
+
+    // 文件传输FTP端口21
+    public void FTP();
+}
+```
+**2 - 伪实现接口**
+
+```
+/**
+ * 定义抽象类实现端口接口，但是什么事情都不做
+ */
+public abstract class Wrapper implements Port{
+
+    @Override
+    public void SSH(){};
+
+    @Override
+    public void NET(){};
+
+    @Override
+    public void Tomcat(){};
+
+    @Override
+    public void Mysql(){};
+
+    @Override
+    public void Oracle(){};
+
+    @Override
+    public void FTP(){};
+}
+```
+
+**3 - 覆写伪接口实现一种功能**
+```
+/**
+ * 提供聊天服务
+ * 需要网络和文件传输功能
+ */
+public class Chat extends Wrapper{
+
+    @Override
+    public void NET(){ System.out.println("Hello world!"); };
+
+    @Override
+    public void FTP(){ System.out.println("File upload succeddful!"); };
+
+}
+```
+**4 - 覆写伪接口实现另外一种功能**
+```
+/**
+ * 网站服务器
+ * 需要Tomcat容器，Mysql数据库，网络服务，远程服务
+ */
+public class Server extends Wrapper{
+
+    @Override
+    public void SSH(){ System.out.println("Connect success!"); };
+
+    @Override
+    public void NET(){ System.out.println("Hello WWW!"); };
+
+    @Override
+    public void Tomcat(){ System.out.println("Tomcat 9 is running!"); };
+
+    @Override
+    public void Mysql(){ System.out.println("Mysql is running!"); };
+}
+```
+**5 - 运行服务**
+```
+/**
+ * 运行器
+ * 运行聊天服务和服务器
+ */
+public class Start {
+    private static Port chatPort = new Chat();
+    private static Port serverPort = new Server();
+    public static void main(String[] args) {
+    // 聊天服务
+    chatPort.FTP();
+    chatPort.NET();
+
+    // 服务器
+    serverPort.Mysql();
+    serverPort.SSH();
+    serverPort.Tomcat();
+    serverPort.NET();
+    }
+}
+```
+
+
+
+
+#### 4、适配器模式应用场景
 
 **类适配器与对象适配器的使用场景一致，仅仅是实现手段稍有区别，二者主要用于如下场景**：
 
