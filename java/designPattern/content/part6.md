@@ -96,17 +96,17 @@ public class ChicagoPizzaStore extends PizzaStore {
 - 纽约风味的pizza。
 
 ```
-public class ChicagoPizzaStore extends PizzaStore {
+public class NYPizzaStore extends PizzaStore {
 
     Pizza createPizza(String item) {
             if (item.equals("cheese")) {
-                    return new ChicagoStyleCheesePizza();
+                    return new NYStyleCheesePizza();
             } else if (item.equals("veggie")) {
-                    return new ChicagoStyleVeggiePizza();
+                    return new NYStyleVeggiePizza();
             } else if (item.equals("clam")) {
-                    return new ChicagoStyleClamPizza();
+                    return new NYStyleClamPizza();
             } else if (item.equals("pepperoni")) {
-                    return new ChicagoStylePepperoniPizza();
+                    return new NYStylePepperoniPizza();
             } else return null;
     }
 }
