@@ -10,7 +10,7 @@
 
 看一张图：
 
-![]()
+![](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp6.jpg)
 
 如上图所示，服务号就是我们的主题，使用者就是观察者。现在我们明确下功能：
 
@@ -24,7 +24,7 @@
 
 好了，现在我们来看看观察者模式的类图：
 
-![]()
+![](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/img/dp7.jpg)
 
 接下来就是代码时间了，我们模拟一个微信3D彩票服务号，和一些订阅者。
 
