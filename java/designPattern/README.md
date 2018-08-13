@@ -30,7 +30,7 @@
 - Iterator Pattern（迭代器模式）
 - Mediator Pattern（中介者模式）
 - Memento Pattern（备忘录模式）
-- Observer Pattern（观察者模式）
+- [Observer Pattern（观察者模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part10.md)
 - State Pattern（状态模式）
 - [Strategy Pattern（策略模式）](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/content/part4.md)
 - Template Method Pattern（模板方法模式）
