@@ -36,7 +36,8 @@ public class Door
 }
 
 ```
-``/**
+```
+/**
  * 电灯
  * @author zhy
  *
@@ -53,9 +54,8 @@ public class Light
 		System.out.println("关闭电灯");
 	}
 }
-`
-
 ```
+
 ```
 /**
  * 电脑
@@ -85,6 +85,7 @@ public interface Command
 }
 
 ```
+
 ```
 
 /**
@@ -110,6 +111,7 @@ public class LightOffCommond implements Command
 }
 
 ```
+
 ```
 /**
  * 打开电灯的命令
@@ -134,6 +136,7 @@ public class LightOnCommond implements Command
 }
 
 ```
+
 ```
 /**
  * 开电脑的命令
@@ -158,6 +161,7 @@ public class ComputerOnCommond implements Command
 }
 
 ```
+
 ```
 
 /**
@@ -229,11 +233,9 @@ public class ControlPanel
 	}
  
 }
-
-
-```
 ```
 
+```
 /**
  * @author zhy
  *
@@ -252,6 +254,7 @@ public class NoCommand implements Command
 注意看到我们的遥控器有9个按钮，提供了设置每个按钮的功能和点击的方法，还有注意到我们使用了一个NoCommand对象，叫做空对象，这个对象的好处就是，我们不用执行前都判断个if(!=null)，并且提供了一致的操作。
 
 最后测试一下代码：
+
 ```
 public class Test
 {
