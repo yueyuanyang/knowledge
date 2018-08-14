@@ -311,6 +311,8 @@ public class Client {
         // 使用柠檬黄的着色剂装饰馒头  
         normalBread = new CornDecorator(normalBread);  
         // 生产馒头信息  
+        // 另外一种写法(java IO 流实现)
+       //  IBread normalBread = new CornDecorator(new SweetDecorator(new NormalBread())); 
         normalBread.process();  
         System.out.println("====装饰馒头结束！！！");  
   
