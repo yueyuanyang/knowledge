@@ -12,4 +12,5 @@
 [线程池]()\
 
 ### log4j 日志框架使用
-[配置Log4j(很详细)]()
+[配置Log4j(很详细)](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part1.md)
+[配置Log4j样例](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part2.md)
