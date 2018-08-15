@@ -15,3 +15,5 @@
 [配置Log4j(很详细)](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part1.md)
 
 [配置Log4j样例](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part2.md)
+
+[Java开发人员必知必会的20种常用类库和API](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part2.md)
