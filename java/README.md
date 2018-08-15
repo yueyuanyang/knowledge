@@ -1,5 +1,9 @@
 ## 目录
 
+### java 基础知识
+
+[Java开发人员必知必会的20种常用类库和API](https://github.com/yueyuanyang/knowledge/blob/master/java/baseknowkdge/part1.md)
+
 ### 设计模式
 
 [设计模式](https://github.com/yueyuanyang/knowledge/blob/master/java/designPattern/README.md)
@@ -16,4 +20,3 @@
 
 [配置Log4j样例](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part2.md)
 
-[Java开发人员必知必会的20种常用类库和API](https://github.com/yueyuanyang/knowledge/blob/master/java/log4j/part2.md)
