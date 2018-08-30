@@ -13,7 +13,9 @@ Master
 systemctl restart network
 
 ```
+
 #### galera 集群安装
+
 ```
 yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
 systemctl start mysqld
@@ -28,7 +30,11 @@ step 2: ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
 step 3: flush privileges;
 // 验证wsrep
 show status like 'wsrep%'
+//创建拷贝用户
+GRANT ALL ON *.* TO 'asiainfo'@'192.168.8.%' IDENTIFIED BY 'Asiainfo@123';
+flush privileges;
 ```
+
 #### 方法二：
 
 > newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
@@ -67,4 +73,29 @@ baseurl=ftp://asiainfo-168/galera
 gpgcheck=0
 
 ```
-### 
+### galera 配置实例
+
+
+```
+// 位置
+
+vim /etc/my.cnf
+//配置
+server-id=1 // 集群id
+binlog_format=row // binlog 格式
+default_storage_engine=InnoDB // 存储引擎
+innodb_file_per_table=1 // 独立表空间
+innodb_autoinc_lock_mode=2
+
+wsrep_on=ON
+wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+wsrep_cluster_name='asiainfo' // 集群名字
+wsrep_cluster_address='gcomm://' // 介绍人
+wsrep_node_name='asiainfo-158' 
+wsrep_node_address='192.168.8.158'
+wsrep_sst_auth=asiainfo:Asiainfo@123  // 登陆用户和密码
+wsrep_sst_method=rsync // 数据传输的方式
+
+```
+
+
