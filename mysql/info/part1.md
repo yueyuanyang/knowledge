@@ -13,3 +13,18 @@ Master
 systemctl restart network
 
 ```
+
+
+galera 集群安装
+> yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
+
+### mysql 密码修改
+#### 方法一：
+```
+step 1: SET PASSWORD = PASSWORD('your new password');
+step 2: ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
+step 3: flush privileges;
+```
+#### 方法二：
+
+> newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
