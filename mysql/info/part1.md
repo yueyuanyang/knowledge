@@ -28,3 +28,30 @@ step 3: flush privileges;
 #### 方法二：
 
 > newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
+
+### 构建自己的yum仓库
+#### 创建yum repo
+```
+1) 拷贝rmp 到 galerar中
+find  /var/cache/yum/x86_64/7/ -iname "*.rpm" -exec cp -a {} galera/ \;
+2）构建 yum repo 仓库
+2.1） 创建 vsftpd 服务器 createrepo
+yum -y install vsftpd createrepo
+拷贝到ftp服务器上
+cp -r galera /var/ftp
+2.2）创建yum仓库
+createrepo /var/ftp/galera
+
+2.3) 关闭防火墙
+systemctl stop firewalld;systemctl disable firewalld
+2.4) 启动ftp服务器
+systemctl start vsftpd
+systemctl enable vsftpd
+```
+#### 其他机器创建仓库
+```
+
+
+
+```
+### 
