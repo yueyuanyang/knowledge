@@ -23,6 +23,17 @@ systemctl enable mysqld
 ```
 
 ### mysql 密码修改
+#### 修改集群密码
+```
+// my.conf添加
+skip-grant-tables
+
+// mysql 中
+update mysql.user set authentication_string = password('root'), password_expired = 'N', password_last_changed = now() where user = 'root';
+// 重启mysql
+systemctl restart mysqld
+
+```
 #### 方法一：
 ```
 step 1: SET PASSWORD = PASSWORD('Asiainfo@123');
