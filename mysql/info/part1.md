@@ -13,17 +13,21 @@ Master
 systemctl restart network
 
 ```
-
-
-galera 集群安装
-> yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
+#### galera 集群安装
+```
+yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
+systemctl start mysqld
+systemctl enable mysqld
+```
 
 ### mysql 密码修改
 #### 方法一：
 ```
-step 1: SET PASSWORD = PASSWORD('your new password');
+step 1: SET PASSWORD = PASSWORD('Asiainfo@123');
 step 2: ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
 step 3: flush privileges;
+// 验证wsrep
+show status like 'wsrep%'
 ```
 #### 方法二：
 
@@ -32,6 +36,10 @@ step 3: flush privileges;
 ### 构建自己的yum仓库
 #### 创建yum repo
 ```
+0) 下载是修改yum参数
+vim /etc/yum.conf
+修改
+keepcache=1
 1) 拷贝rmp 到 galerar中
 find  /var/cache/yum/x86_64/7/ -iname "*.rpm" -exec cp -a {} galera/ \;
 2）构建 yum repo 仓库
@@ -50,8 +58,13 @@ systemctl enable vsftpd
 ```
 #### 其他机器创建仓库
 ```
-
-
+创建本地镜像repo
+vi /etc/yum.repos.d/galera.repo
+配置文件
+[galera]
+name=galera
+baseurl=ftp://asiainfo-168/galera
+gpgcheck=0
 
 ```
 ### 
