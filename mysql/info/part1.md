@@ -96,6 +96,11 @@ wsrep_node_address='192.168.8.158'
 wsrep_sst_auth=asiainfo:Asiainfo@123  // 登陆用户和密码
 wsrep_sst_method=rsync // 数据传输的方式
 
+// 重启mysql
+systemctl restart mysqld
+//验证是否启动
+ss -tnlp |egrep '3306|4567'
 ```
+
 
 
