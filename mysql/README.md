@@ -19,6 +19,6 @@
 
 ### 2. mysql 集群数据库
 
-- [1. mysql+galare+mycat高可用集群](https://github.com/yueyuanyang/knowledge/blob/master/mysql/error/part8.md)
+- [1. mysql+galare+mycat高可用集群](https://github.com/yueyuanyang/knowledge/blob/master/mysql/info/part1.md)
 
 
