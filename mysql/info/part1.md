@@ -113,5 +113,31 @@ systemctl restart mysqld
 ss -tnlp |egrep '3306|4567'
 ```
 
+### mycat 相关配置
+
+#### 安装
+```
+// mycat 用户使用
+/mycat/bin/mycat start
+
+jps // 查看进程
+ps aux | grep java
+
+// 8066 数据端口 
+ss -tnlp | grep java
+
+// 修改mycat 日志级别(debug)
+vim /usr/local/mycat/conf/log4j2.xml
+
+//创建连接信息
+mysql -h192.168.8.168 -uasiainfo_in -p123456 -P8066
+
+```
+
+
+
+
+
+
 
 
