@@ -353,7 +353,7 @@ vim /usr/local/mycat/conf/log4j2.xml
 
 haproxy下载地址：http://www.haproxy.org/download
 
-本案例使用yum 安装
+**1) 本案例使用yum 安装**
 
 ```
 // yum 安装haproxy
@@ -365,7 +365,7 @@ haproxy下载地址：http://www.haproxy.org/download
 // 给haproxy目录授权：
 # sudo chmod -R 777 haproxy/
 ```
-**创建haproxy.cfg配置文件**
+**2) 创建haproxy.cfg配置文件**
 
 ```
 global
@@ -405,7 +405,8 @@ listen mycat_service #192.168.8.200:18066
     server mycat_159 192.168.8.159:8066 check port 48700 inter 5s rise 2 fall 3
     timeout server 20000
 
-#192.168.57.200:19066 ##客户端就是通过这个ip和端口进行连接，这个vip和端口绑定的是mycat9066端口
+##客户端就是通过这个ip和端口进行连接，这个vip和端口绑定的是mycat9066端口
+#192.168.57.200:19066 
 listen mycat_admin 
     bind 192.168.8.200:8097
     mode tcp
@@ -417,5 +418,180 @@ listen mycat_admin
     timeout server 20000
     
 ```
+**3) haproxy记录日志**：
 
+默认haproxy是不记录日志的，为了记录日志还需要配置syslog模块，在Linux下是rsyslogd服务
+
+```
+# yum -y install rsyslog
+
+//记录haproxy日志的配置
+# cd /etc/rsyslog.d/  
+
+// 如果没有这个目录，新建：cd /etc    
+mkdir rsyslog.d
+cd /etc/rsyslog.d/
+sudo touch haproxy.conf
+sudo vi /etc/rsyslog.d/haproxy.conf
+
+内容如下
+$ModLoad imudp
+$UDPServerRun 514
+local0.* /var/log/haproxy.log
+
+# vi /etc/rsyslog.conf
+在#### RULES ####上面一行的地方加入以下内容：
+# Include all config files in /etc/rsyslog.d/
+$IncludeConfig /etc/rsyslog.d/*.conf
+#### RULES ####
+ 
+在 local7.* /var/log/boot.log 的下面加入以下内容（增加后的效果如下）：
+# Save boot messages also to boot.log 
+local7.*       /var/log/boot.log 
+local0.*      /var/log/haproxy.log 
+ 
+//保存，重启 rsyslog 服务
+# service rsyslog restart
+
+```
+
+**4) 配置监听 mycat 是否存活**
+   
+这个步骤需要在安装mycat的机器上都操作，比如168,159
+
+mycat上都需要添加检测端口 48700 的脚本，为此需要用到 xinetd，xinetd 为linux 系统的基础服务。 
+
+首先在 xinetd 目录下面增加脚本与端口的映射配置文件 
+
+1、如果 xinetd 没有安装，使用如下命令安装： 
+> # yum install xinetd -y 
+
+2.检查/etc/xinetd.conf 的末尾是否有这一句：
+
+includedir /etc/xinetd.d  没有就加上
+ 
+3.检查 /etc/xinetd.d 文件夹是否存在，不存在则创建 
+```
+cd /etc 
+mkdir xinetd.d 
+```
+
+4、增加 /etc/xinetd.d/mycat_status 
+
+监听 mycat 是否存活的配置,执行以下命令：
+```
+cd /etc 
+mkdir xinetd.d 
+cd /etc/xinetd.d/ 
+vim /etc/xinetd.d/mycat_status
+
+内容如下： 
+
+service mycat_status
+{
+    flags = REUSE
+    socket_type = stream
+    port = 48700
+    wait = no
+    user = root
+    server = /usr/local/bin/mycat_status
+    log_on_failure += USERID
+    disable = no
+}
+
+注意：等号两边有的有空格
+给脚本授权，sudo chmod 777/etc/xinetd.d/mycat_status,这脚本需要执行权限
+```
+
+5 /usr/local/bin/mycat_status 脚本 
+
+touch mycat_status
+
+内容如下：
+```
+#!/bin/bash
+#/usr/local/bin/mycat_status.sh
+# This script checks if a mycat server is healthy running on localhost. It will
+# return:
+# "HTTP/1.x 200 OK\r" (if mycat is running smoothly)
+# "HTTP/1.x 503 Internal Server Error\r" (else)
+mycat=`/opt/soft/mycat/bin/mycat status |grep 'not running' | wc -l`
+if [ "$mycat" = "0" ];
+then
+    /bin/echo -e "HTTP/1.1 200 OK\r\n"
+else
+    /bin/echo -e "HTTP/1.1 503 Service Unavailable\r\n"
+fi
+
+```
+
+这个脚本也需要执行权限：
+
+> sudo chmod 777 /usr/local/bin/mycat_status
+
+检测脚本是否编写正确执行下面的代码：
+
+> /usr/local/bin/mycat_status.sh，如果输出：HTTP/1.1 200 OK，（200需要mycat开启）则表示正确。
+
+6、/etc/services 中加入 mycat_status 服务
+```
+cd /etc 
+vi services
+在末尾加入以下内容：
+mycat_status    48700/tcp    # mycat_status
+
+保存  
+重启 xinetd 服务  
+service xinetd restart
+
+```
+7、验证 mycat_status 服务是否启动成功 
+
+> netstat -antup|grep 48700 
+
+**4) 启动haproxy**
+
+1.haproxy安装完成后配置文件检查，启动：
+
+```
+/usr/local/haproxy/sbin/haproxy -f /usr/local/haproxy/haproxy.cfg -c   检查配置文件是否正确
+/usr/local/haproxy/sbin/haproxy -f /usr/local/haproxy/haproxy.cfg   启动配置文件 
+```
+
+ 2，启动mycat   cd /usr/local/mycat/bin ./mycat start
+      3,启动haproxy 
+      /usr/local/haproxy/sbin/haproxy -f /usr/local/haproxy/haproxy.cfg -c   检查配置文件是否正确
+     /usr/local/haproxy/sbin/haproxy -f /usr/local/haproxy/haproxy.cfg   启动配置文件
+ 
+4，如果出现下面的错误：
+
+> /usr/local/haproxy/sbin/haproxy.main()] Cannot raise FD limit to 8207, limit is 4096 
+
+使用： ulimit a，查看打开文件数量
+
+使用ulimit 8222设置打开文件数
+
+然后在启动haproxy，有时启动需要加
+
+> sudo /usr/local/haproxy/sbin/haproxy -f /usr/local/haproxy/haproxy.cfg 
+
+5，通过haproxy登入mycat
+
+>  mysql -umycat -p -h192.168.0.105 -P8096
+
+用户名是mycat的用户名，密码是mycat的密码  
+
+6. 开启远程访问haproxy端口，重启防火墙：
+
+```
+firewall-cmd --zone=public --add-port=48800/tcp --permanent
+firewall-cmd --permanent --zone=public --add-port=48800/udp
+firewall-cmd --reload
+
+```  
+
+7.打开浏览器，输入http://192.168.9.165:48800/admin-status
+看到下面的页面说明启动，配置成功：
+
+  
 
