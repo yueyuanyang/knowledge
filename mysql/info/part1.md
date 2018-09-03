@@ -319,14 +319,16 @@ PATH=$JAVA_HOME/bin:$HOME/bin:$HOME/.local/bin:$PATH
         </dataHost>
 </mycat:schema>               
 ```
+注意:  
 
-注意:  balance
+balance
 
-      writeType
-      
-      witchType
-      
+writeType
+
+switchType
+
 启动配置好的mycat服务
+
 ```
 // mycat 启动使用
 /mycat/bin/mycat start
@@ -345,5 +347,75 @@ vim /usr/local/mycat/conf/log4j2.xml
 创建连接信息
 
 > mysql -h192.168.8.168 -uasiainfo_in -p123456 -P8066
+
+### haproxy 高可用配置
+**haproxy下载和安装**
+
+haproxy下载地址：http://www.haproxy.org/download
+
+本案例使用yum 安装
+
+```
+// yum 安装haproxy
+# yum -y install haproxy
+
+/ /创建haproxy.cfg配置文件
+# vim /etc/haproxy/haproxy.cfg
+
+// 给haproxy目录授权：
+# sudo chmod -R 777 haproxy/
+```
+**创建haproxy.cfg配置文件**
+
+```
+global
+    log 127.0.0.1   local0  ##记日志的功能
+    maxconn 4096
+    #chroot /usr/local/haproxy
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log global
+    option dontlognull 	
+    retries 3
+    option redispatch
+    maxconn 2000
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+    mode http
+    option httplog
+
+listen  admin_stats 192.168.8.200:48800 ##统计页面
+    stats uri /admin-status 
+    stats auth  admin:admin
+    mode http
+    option httplog
+
+##客户端就是通过这个ip和端口进行连接，这个vip和端口绑定的是mycat8066端口
+listen mycat_service #192.168.8.200:18066 
+    bind 192.168.8.200:8096    
+    mode tcp
+    option tcplog
+    option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www
+    balance roundrobin
+    server mycat_168 192.168.8.168:8066 check port 48700 inter 5s rise 2 fall 3
+    server mycat_159 192.168.8.159:8066 check port 48700 inter 5s rise 2 fall 3
+    timeout server 20000
+
+#192.168.57.200:19066 ##客户端就是通过这个ip和端口进行连接，这个vip和端口绑定的是mycat9066端口
+listen mycat_admin 
+    bind 192.168.8.200:8097
+    mode tcp
+    option tcplog
+    option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www
+    balance roundrobin
+    server mycat_168 192.168.8.168:9066 check port 48700 inter 5s rise 2 fall 3
+    server mycat_159 192.168.8.159:9066 check port 48700 inter 5s rise 2 fall 3
+    timeout server 20000
+    
+```
 
 
