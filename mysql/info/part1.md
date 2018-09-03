@@ -1,56 +1,41 @@
 ### centos7 主机名修改
 
 #### 主机名修改
+
+为了便于识别和机器映射，需要修改主机饿名称
 > hostnamectl set-hostname  asiainfo-159
 
 ####  ip及主机名映射
+
+ip及域名的地址映射
+
 ```
 // 打开软件
-vi /etc/hosts 92.168.242.130 
+vi /etc/hosts 192.168.8.168 
 // 填写主机名
-Master 
+silent-1 
 // 重启网关
 systemctl restart network
-
 ```
 
-#### galera 集群安装
+### galera版 mysql 集群安装
+
+galera版的mysql，为插件化的mysql组件，提供了多台机器同步复制的功能，以保证mysql的高并发和高容错
+
+本次集群安装才用yum形式去构建mysql galera版集群
+
+| 名称 | 机器
+| ------ | ------ 
+| 机器-1 | 192.169.8.168
+| 机器-2 | 192.169.8.158
+| 机器-3 | 192.169.8.159
 
 ```
 yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
 systemctl start mysqld
 systemctl enable mysqld
 ```
-
-### mysql 密码修改
-#### 修改集群密码
-```
-// my.conf添加
-skip-grant-tables
-
-// mysql 中
-update mysql.user set authentication_string = password('root'), password_expired = 'N', password_last_changed = now() where user = 'root';
-// 重启mysql
-systemctl restart mysqld
-
-```
-#### 方法一：
-```
-step 1: SET PASSWORD = PASSWORD('Asiainfo@123');
-step 2: ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
-step 3: flush privileges;
-// 验证wsrep
-show status like 'wsrep%'
-//创建拷贝用户
-GRANT ALL ON *.* TO 'asiainfo'@'192.168.8.%' IDENTIFIED BY 'Asiainfo@123';
-flush privileges;
-```
-
-#### 方法二：
-
-> newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
-
-### 构建自己的yum仓库
+#### 构建自己的yum仓库
 #### 创建yum repo
 ```
 0) 下载是修改yum参数
@@ -84,8 +69,37 @@ baseurl=ftp://asiainfo-168/galera
 gpgcheck=0
 
 ```
-### galera 配置实例
 
+### mysql 密码修改
+#### 修改集群密码
+```
+// my.conf添加
+skip-grant-tables
+
+// mysql 中
+update mysql.user set authentication_string = password('root'), password_expired = 'N', password_last_changed = now() where user = 'root';
+// 重启mysql
+systemctl restart mysqld
+
+```
+#### 方法一：
+```
+step 1: SET PASSWORD = PASSWORD('Asiainfo@123');
+step 2: ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
+step 3: flush privileges;
+// 验证wsrep
+show status like 'wsrep%'
+//创建拷贝用户
+GRANT ALL ON *.* TO 'asiainfo'@'192.168.8.%' IDENTIFIED BY 'Asiainfo@123';
+flush privileges;
+```
+
+#### 方法二：
+
+> newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
+
+
+### galera 配置实例
 
 ```
 // 位置
@@ -112,6 +126,8 @@ systemctl restart mysqld
 //验证是否启动
 ss -tnlp |egrep '3306|4567'
 ```
+
+
 
 ### mycat 相关配置
 
