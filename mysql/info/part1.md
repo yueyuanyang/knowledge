@@ -24,50 +24,105 @@ galera版的mysql，为插件化的mysql组件，提供了多台机器同步复�
 
 本次集群安装才用yum形式去构建mysql galera版集群
 
-| 名称 | 机器
-| ------ | ------ 
-| 机器-1 | 192.169.8.168
-| 机器-2 | 192.169.8.158
-| 机器-3 | 192.169.8.159
+| 名称 | 机器 |
+| ------ | ------ |
+| 机器-1 | 192.169.8.168 |
+| 机器-2 | 192.169.8.158 |
+| 机器-3 | 192.169.8.159 |
+
+1) 创建galera 本地yum源(192.169.8.168 上操作)
+
+其中: galera 下载地址: http://releases.galeracluster.com/mysql-wsrep-5.7/centos/7/x86_64/
+
+```
+# vim /etc/yum.repos.d/galera.repo
+// 编辑内容
+[galera]
+name=galera
+baseurl=http://releases.galeracluster.com/mysql-wsrep-5.7/centos/7/x86_64/
+gpgchectk=0
+
+# yum list | egrep 'wsrep|galera' // 查看galera仓库
+-------------------------------------------------------------------
+// MariaDB 数据库安装(非必须)
+# vim /etc/yum.repos.d/MariaDB.repo
+
+// 编辑内容 
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.3/centos73-amd64/
+gpgcheck = 0
+```
+
+根据本地yum源下载相应的rmp包
 
 ```
 yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
+
+// `注意`：下载并修改yum参数,用于缓存数据
+vim /etc/yum.conf
+// 修改
+keepcache=1
+
+// 启动yum安装的mysql 数据库
+
 systemctl start mysqld
 systemctl enable mysqld
 ```
+
 #### 构建自己的yum仓库
 #### 创建yum repo
+
+由于yum源下载数据较慢，故安装本地yum源服务器，以构建本地yum.repo
+
+构建ftp和仓库的具体步骤如下：
+
 ```
-0) 下载是修改yum参数
-vim /etc/yum.conf
-修改
-keepcache=1
 1) 拷贝rmp 到 galerar中
 find  /var/cache/yum/x86_64/7/ -iname "*.rpm" -exec cp -a {} galera/ \;
-2）构建 yum repo 仓库
-2.1） 创建 vsftpd 服务器 createrepo
+
+2) 构建 yum repo 仓库
+2.1) 创建 vsftpd 服务器 createrepo
 yum -y install vsftpd createrepo
-拷贝到ftp服务器上
+
+//拷贝到ftp服务器上
 cp -r galera /var/ftp
-2.2）创建yum仓库
+
+2.2)创建yum仓库
 createrepo /var/ftp/galera
 
 2.3) 关闭防火墙
 systemctl stop firewalld;systemctl disable firewalld
+
 2.4) 启动ftp服务器
 systemctl start vsftpd
 systemctl enable vsftpd
 ```
-#### 其他机器创建仓库
+
+在其他机器上安装本地yum.repo只需要将url指向ftp本地地址即可
+
+在其他机器上(192.169.8.159,192.169.8.158两台机器上相同的操作)：
+
 ```
-创建本地镜像repo
+// 创建本地镜像repo
 vi /etc/yum.repos.d/galera.repo
-配置文件
+
+// 配置文件
 [galera]
 name=galera
 baseurl=ftp://asiainfo-168/galera
 gpgcheck=0
 
+```
+
+完成以上步骤后，可以在机器上执行相同的操作：
+
+```
+yum -y install mysql-wsrep-5.7.x86_64 galera.x86_64 --nogpgcheck
+
+// 启动yum安装的mysql 数据库
+systemctl start mysqld
+systemctl enable mysqld
 ```
 
 ### mysql 密码修改
