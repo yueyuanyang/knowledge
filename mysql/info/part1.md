@@ -239,9 +239,96 @@ show status like 'wsrep%'
 
 ### mycat 相关配置
 
-#### 安装
+mycat 采用离线下载
+
+mycat 下载地址：
+> http://dl.mycat.io/1.6.5/Mycat-server-1.6.5-release-20180122220033-unix.tar.gz
+
+**安装及配置**
+
+mycat 为java语言编写的插件，所有需在本机上安装java环境
+
 ```
-// mycat 用户使用
+// 下载 java包
+# cd /opt/soft // 软件安装目录
+# tar zxvf jdk-8u181-linux-x64.tar.gz
+
+// 配置环境变量
+# vim /etc/profile
+
+JAVA_HOME=/opt/soft/jdk1.8.0_181
+CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar
+PATH=$JAVA_HOME/bin:$HOME/bin:$HOME/.local/bin:$PATH
+
+// 生效配置文件
+# source /etc/profile
+```
+
+**mycat 安装**
+
+1) 解压及安装
+```
+// 解压
+# cd /opt/soft
+# tar zxvf mycat.tar.gz
+```
+简单配置文件样例:
+
+```
+# cd /opt/soft/mycat/conf
+
+# vim server.xml
+//  编辑内容
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mycat:server SYSTEM "server.dtd">
+<mycat:server xmlns:mycat="http://io.mycat/">
+	<system>
+	<property name="useSqlStat">0</property>  <!-- 1为开启实时统计、0为关闭 -->
+	<property name="useGlobleTableCheck">0</property>  <!-- 1为开启全加班一致性检测、0为关闭 -->
+	<property name="sequnceHandlerType">2</property>
+	<property name="processorBufferPoolType">0</property>
+	<property name="handleDistributedTransactions">0</property>
+		<property name="useOffHeapForMerge">1</property>
+		<property name="memoryPageSize">1m</property>
+		<property name="spillsFileBufferSize">1k</property>
+		<property name="useStreamOutput">0</property>
+		<property name="systemReserveMemorySize">384m</property>
+		<property name="useZKSwitch">true</property>
+	</system>
+	<user name="asiainfo_in">
+		<property name="password">123456</property>
+		<property name="schemas">asiainfo</property>	
+	</user>
+</mycat:server>
+
+// schame.xml 配置文件
+
+<?xml version="1.0"?>
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns:mycat="http://io.mycat/">
+
+        <schema name="asiainfo" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn1">
+        </schema>
+        <dataNode name="dn1" dataHost="asiainfopool" database="asiainfo" />
+        <dataHost name="asiainfopool" maxCon="1000" minCon="10" balance="0"
+                          writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
+                <heartbeat>show status like 'wsrep%'</heartbeat>
+                <writeHost host="asiainfo-158" url="asiainfo-158:3306" user="asiainfo_out" password="Asiainfo@123"> </writeHost>
+                <writeHost host="asiainfo-159" url="asiainfo-159:3306" user="asiainfo_out" password="Asiainfo@123"> </writeHost>
+                <writeHost host="asiainfo-168" url="asiainfo-168:3306" user="asiainfo_out" password="Asiainfo@123"> </writeHost>
+        </dataHost>
+</mycat:schema>               
+```
+
+注意:  balance
+
+      writeType
+      
+      witchType
+      
+启动配置好的mycat服务
+```
+// mycat 启动使用
 /mycat/bin/mycat start
 
 jps // 查看进程
@@ -253,15 +340,10 @@ ss -tnlp | grep java
 // 修改mycat 日志级别(debug)
 vim /usr/local/mycat/conf/log4j2.xml
 
-//创建连接信息
-mysql -h192.168.8.168 -uasiainfo_in -p123456 -P8066
-
 ```
 
+创建连接信息
 
-
-
-
-
+> mysql -h192.168.8.168 -uasiainfo_in -p123456 -P8066
 
 
