@@ -34,6 +34,8 @@ galera版的mysql，为插件化的mysql组件，提供了多台机器同步复�
 
 其中: galera 下载地址: http://releases.galeracluster.com/mysql-wsrep-5.7/centos/7/x86_64/
 
+构建自己的yum源
+
 ```
 # vim /etc/yum.repos.d/galera.repo
 // 编辑内容
@@ -43,7 +45,9 @@ baseurl=http://releases.galeracluster.com/mysql-wsrep-5.7/centos/7/x86_64/
 gpgchectk=0
 
 # yum list | egrep 'wsrep|galera' // 查看galera仓库
+
 -------------------------------------------------------------------
+
 // MariaDB 数据库安装(非必须)
 # vim /etc/yum.repos.d/MariaDB.repo
 
@@ -70,8 +74,9 @@ systemctl start mysqld
 systemctl enable mysqld
 ```
 
-#### 构建自己的yum仓库
-#### 创建yum repo
+**构建自己的yum仓库**
+
+**创建yum repo**
 
 由于yum源下载数据较慢，故安装本地yum源服务器，以构建本地yum.repo
 
@@ -125,8 +130,14 @@ systemctl start mysqld
 systemctl enable mysqld
 ```
 
-### mysql 密码修改
-#### 修改集群密码
+### mysql 集群配置
+
+安装完mysql集群后需要进行数据库的配置
+
+**修改集群密码**
+
+如果出现忘记root 的初始化密码，可进行如下的操作:
+
 ```
 // my.conf添加
 skip-grant-tables
@@ -137,28 +148,54 @@ update mysql.user set authentication_string = password('root'), password_expired
 systemctl restart mysqld
 
 ```
-#### 方法一：
+
+mysql 5.7 要求新安装的mysql 服务器，需要修改原始密码
+
+如下提供了两种修改密码的方法，如下所示:
+
+查看原始密码的方法
+
+```
+newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;
+echo $newpass
+```
+
+**方法一**：
+
+登陆mysql后，命令界面中进行修改
+
 ```
 step 1: SET PASSWORD = PASSWORD('Asiainfo@123');
 step 2: ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
 step 3: flush privileges;
+
 // 验证wsrep
 show status like 'wsrep%'
-//创建拷贝用户
-GRANT ALL ON *.* TO 'asiainfo'@'192.168.8.%' IDENTIFIED BY 'Asiainfo@123';
-flush privileges;
 ```
 
-#### 方法二：
+**方法二**：
 
-> newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
+脚本进行密码的修改
 
+```
+newpass=`grep 'password' /var/log/mysqld.log  | awk '{print $NF}'`;mysqladmin -p"$newpass" password 'Asiainfo@123'
+```
 
 ### galera 配置实例
 
+修改完mysql的基本操作后，我们可以进行galera的相关配置
+
+第一步:
+
+```
+//mysql中创建拷贝用户
+GRANT ALL ON *.* TO 'asiainfo'@'192.168.8.%' IDENTIFIED BY 'Asiainfo@123';
+flush privileges;
+```
+第二步:
+
 ```
 // 位置
-
 vim /etc/my.cnf
 //配置
 server-id=1 // 集群id
@@ -171,16 +208,32 @@ wsrep_on=ON
 wsrep_provider=/usr/lib64/galera/libgalera_smm.so
 wsrep_cluster_name='asiainfo' // 集群名字
 wsrep_cluster_address='gcomm://' // 介绍人
-wsrep_node_name='asiainfo-158' 
+wsrep_node_name='asiainfo-158'
 wsrep_node_address='192.168.8.158'
 wsrep_sst_auth=asiainfo:Asiainfo@123  // 登陆用户和密码
 wsrep_sst_method=rsync // 数据传输的方式
 
 // 重启mysql
 systemctl restart mysqld
+
 //验证是否启动
 ss -tnlp |egrep '3306|4567'
+
+// mysql命令行中查看
+// 验证wsrep
+show status like 'wsrep%'
 ```
+
+注意事项:
+
+1) server-id=1 集群的id 每个主机的id在整集群中唯一
+
+2) wsrep_cluster_name 集群的名字，相同名字主机为一个集群
+
+3) wsrep_cluster_address 介绍人, 当初始化的时候为空，独立起来一个集群
+其他机器填写相应的介绍人的域名或IP,如wsrep_cluster_address='gcomm://192.168.8.158,192.168.8.159
+
+4) wsrep_sst_auth mysql 创建用户的用户名和密码
 
 
 
