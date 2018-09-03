@@ -1,7 +1,8 @@
 ## keepalived+haproxy+mycat+galera mysql高可用集群
 
 高可用框架结构图
-![](https://github.com/yueyuanyang/knowledge/tree/master/mysql/img/mycat.png)
+
+![p1](https://github.com/yueyuanyang/knowledge/blob/master/mysql/img/mycat.png)
 
 ### centos7 主机名修改
 
