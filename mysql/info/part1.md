@@ -593,5 +593,209 @@ firewall-cmd --reload
 7.打开浏览器，输入http://192.168.9.165:48800/admin-status
 看到下面的页面说明启动，配置成功：
 
-  
+8.查看haproxy的日志：
+
+> sudo tail -f /var/log/haproxy.log
+
+
+### keepalived安装
+
+**1) yum 源安装**
+```
+# yum -y install openssl-devel openssl
+# yum -y install keepalived
+
+```
+
+**2) 创建配置文件和脚本**
+```
+mkdir /etc/keepalived/scripts
+cd /etc/keepalived/scripts
+```
+
+**vim /etc/keepalived/keepalived.conf**
+
+**master**
+```
+global_defs {
+   router_id haproxy01
+}
+vrrp_script chk_haproxy
+{
+     script "/etc/keepalived/scripts/haproxy_check.sh"
+     interval 2
+     timeout 2
+     fall 3
+}
+vrrp_instance haproxy {
+    state MASTER
+    interface ens160
+    virtual_router_id 200
+    priority  150
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+
+    virtual_ipaddress {
+      192.168.8.200/24
+    }
+
+    track_script {
+         chk_haproxy
+    }
+    notify_master /etc/keepalived/scripts/haproxy_master.sh
+    notify_backup /etc/keepalived/scripts/haproxy_backup.sh
+    notify_fault /etc/keepalived/scripts/haproxy_fault.sh
+    notify_stop /etc/keepalived/scripts/haproxy_stop.sh
+}
+
+```
+
+**backup**
+```
+
+global_defs {
+    router_id haproxy01
+}
+
+vrrp_script chk_haproxy
+{
+     script "/etc/keepalived/scripts/haproxy_check.sh"
+     interval 2
+     timeout 2
+     fall 3
+}
+vrrp_instance haproxy {
+    state BACKUP
+    interface ens160
+    virtual_router_id 200
+    priority  100
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+       192.168.8.200/24
+    }
+    track_script {
+         chk_haproxy
+    }
+    notify_master  /etc/keepalived/scripts/haproxy_master.sh
+    notify_backup /etc/keepalived/scripts/haproxy_backup.sh
+    notify_fault /etc/keepalived/scripts/haproxy_fault.sh
+    notify_stop /etc/keepalived/scripts/haproxy_stop.sh
+}
+```
+
+**vim /etc/keepalived/scripts/haproxy_check.sh**
+
+```
+#!/bin/bash
+STARTHAPROXY="haproxy -f /etc/haproxy/haproxy.cfg"
+STOPKEEPALIVED="service haproxy stop"
+LOGFILE="/var/log/keepalived-haproxy-state.log"
+echo "[check_haproxy status]" >> $LOGFILE
+A=`ps -C haproxy --no-header |wc -l`
+echo "[check_haproxy status]" >> $LOGFILE
+date >> $LOGFILE
+if [ $A -eq 0 ];then
+    echo $STARTHAPROXY >> $LOGFILE
+    $STARTHAPROXY >> $LOGFILE 2>&1
+    sleep 5
+fi
+if [ `ps -C haproxy --no-header |wc -l` -eq 0 ];then
+    echo "fail: check_haproxy status" >> $LOGFILE
+    exit 1
+else
+    echo "success: check_haproxy status" >> $LOGFILE
+    exit 0
+fi
+echo "OK"
+
+```
+
+**vim /etc/keepalived/scripts/haproxy_master.sh**
+
+```
+#!/bin/bash
+STARTHAPROXY=`haproxy -f /etc/haproxy/haproxy.cfg`
+STOPHAPROXY=`ps -ef | grep haproxy | grep -v grep | awk '{print $2}'| xargs kill -s 9`
+LOGFILE="/var/log/keepalived-haproxy-state.log"
+echo "[master]" >> $LOGFILE
+date >> $LOGFILE
+echo "Being master...." >> $LOGFILE 2>&1
+echo "stop haproxy...." >> $LOGFILE 2>&1
+$STOPHAPROXY >> $LOGFILE 2>&1
+echo "start haproxy...." >> $LOGFILE 2>&1
+$STARTHAPROXY >> $LOGFILE 2>&1
+echo "haproxy stared ..." >> $LOGFILE
+
+```
+
+**vim /etc/keepalived/scripts/haproxy_backup.sh**
+```
+#!/bin/bash
+STARTHAPROXY=`haproxy -f /etc/haproxy/haproxy.cfg`
+STOPHAPROXY=`ps -ef | grep haproxy | grep -v grep | awk '{print $2}'| xargs kill -s 9`
+LOGFILE="/var/log/keepalived-haproxy-state.log"
+echo "[backup]" >> $LOGFILE
+date >> $LOGFILE
+echo "Being backup...." >> $LOGFILE 2>&1
+echo "stop haproxy...." >> $LOGFILE 2>&1
+$STOPHAPROXY >> $LOGFILE 2>&1
+echo "start haproxy...." >> $LOGFILE 2>&1
+$STARTHAPROXY >> $LOGFILE 2>&1
+echo "haproxy stared ..." >> $LOGFILE
+
+```
+**vim /etc/keepalived/scripts/haproxy_fault.sh**
+```
+#!/bin/bash
+LOGFILE=/var/log/keepalived-haproxy-state.log
+echo "[fault]" >> $LOGFILE
+date >> $LOGFILE
+
+```
+
+**vim /etc/keepalived/scripts/haproxy_stop.sh**
+
+```
+#!/bin/bash
+LOGFILE=/var/log/keepalived-haproxy-state.log
+echo "[stop]" >> $LOGFILE
+date >> $LOGFILE
+```
+
+```
+ 赋予脚本可执行权限
+ > chmod 777 /etc/keepalived/scripts/*
+ 
+ 将keepalived加入自启动服务
+
+chkconfig --add keepalived
+chkconfig --level 2345 keepalived on
+
+--启动服务
+service keepalived start
+```
+
+注意: 配置好keepalived后，关闭haproxy,因为keepalived中带自启动程序
+
+
+以上高可以mysql集群就部署完毕
+```
+访问：
+// keepalived 虚拟地址
+mysql -h192.168.8.200 -uasiainfo_in -p123456 -P8096
+
+其中:
+-h192.168.8.200 为keepalived 虚拟出来的IP
+-uasiainfo_in 为mycat入口用户名
+-p123456 为mycat入口密码
+-P8096 为haproxy 代理端口
+```
+
+
+
 
