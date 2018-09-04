@@ -230,6 +230,7 @@ ss -tnlp |egrep '3306|4567'
 show status like 'wsrep%'
 ```
 
+
 注意事项:
 
 1) server-id=1 集群的id 每个主机的id在整集群中唯一
