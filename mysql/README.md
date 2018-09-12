@@ -21,4 +21,7 @@
 
 - [1. mysql+galare+mycat高可用集群](https://github.com/yueyuanyang/knowledge/blob/master/mysql/info/part1.md)
 
+### 3. 数据库配置
+
+
 
