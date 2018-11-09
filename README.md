@@ -12,3 +12,5 @@
 
 ### [6. 图数据库(neo4j & titan) ](https://github.com/yueyuanyang/knowledge/blob/master/neo4j/README.md)
 
+### [7. scala ](https://github.com/yueyuanyang/knowledge/tree/master/scala/readme.md)
+
