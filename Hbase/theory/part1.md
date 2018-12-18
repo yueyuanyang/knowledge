@@ -5,7 +5,7 @@
 HBase是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价PC Server上搭建大规模结构化的存储集群。HBase的目标是存储并处理大型数据，具体来说是仅需使用普通的硬件配置，就能够处理由成千上万的行和列所组成的大型数据。与MapReduce的离线批处理计算框架不同，HBase是一个可以随机访问的存储和检索数据平台，弥补了HDFS不能随机访问数据的缺陷，适合实时性要求不是非常高的业务场景。HBase存储的都是Byte数组，它不介意数据类型，允许动态、灵活的数据模型。
 
 **图片**
-![hadoop 生态图]()
+![hadoop 生态图](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/1.png)
 
 上图描述了Hadoop 2.0生态系统中的各层结构。其中HBase位于结构化存储层，HDFS为HBase提供了高可靠性的底层存储支持， MapReduce为HBase提供了高性能的批处理能力，Zookeeper为HBase提供了稳定服务和failover机制，Pig和Hive为HBase提供了进行数据统计处理的高层语言支持，Sqoop则为HBase提供了便捷的RDBMS数据导入功能，使业务数据从传统数据库向HBase迁移变的非常方便。
 
@@ -27,7 +27,7 @@ HBase由HMaster和 HRegionServer 组成，同样遵从主从服务器架构。HB
 
 **图片**
 
-![hbase 基本架构]()
+![hbase 基本架构](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/2.png)
 
 **Client：** 使用HBase的RPC机制与 HMaster和 HRegionServer 进行通信，提交请求和获取结果。对于管理类操作，Client与HMaster进行RPC；对于数据读写类操作，Client与HRegionServer进行RPC。
 
@@ -90,7 +90,7 @@ HBase的所有HRegion元数据被存储在.META.表中，随着HRegion的增多�
 
 **图片**
 
-![hbase ROOT表]()
+![hbase ROOT表](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/3.png)
 
 **-ROOT-** 表永远不会被分割，它只有一个HRegion，这样可以保证最多只需要三次跳转就可以定位任意一个HRegion。
 为了加快访问速度，.META.表的所有HRegion全部保存在内存中。客户端会将查询过的位置信息缓存起来，且缓存不会主动失效。如果客户端根据缓存信息还访问不到数据，则询问相关.META.表的Region服务器，试图获取数据的位置，如果还是失败，则询问-ROOT-表相关的.META.表在哪里。最后，如果前面的信息全部失效，则通过ZooKeeper重新定位HRegion的信息。所以如果客户端上的缓存全部是失效，则需要进行6次网络来回，才能定位到正确的HRegion。
