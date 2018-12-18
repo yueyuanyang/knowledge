@@ -17,7 +17,7 @@ HBase是一个分布式的数据库，使用Zookeeper管理集群，使用HDFS�
 
 **图片**
 
-![hbase 体系结构]()
+![hbase 体系结构](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/4.png)
 
 在HBase的概念中，HRegionServer对应集群中的一个节点，一个HRegionServer负责管理多个HRegion，而一个HRegion代表一张表的一部分数据。在HBase中，一张表可能会需要很多个HRegion来存储数据，每个HRegion中的数据并不是杂乱无章的。HBase在管理HRegion的时候会给每个HRegion定义一个Rowkey的范围，落在特定范围内的数据将交给特定的Region，从而将负载分摊到多个节点，这样就充分利用了分布式的优点和特性。另外，HBase会自动调节Region所处的位置，如果一个HRegionServer过热，即大量的请求落在这个HRegionServer管理的HRegion上，HBase就会把HRegion移动到相对空闲的其它节点，依次保证集群环境被充分利用。
 
@@ -80,10 +80,6 @@ RowKey列表{"abc", "a", "bdf", "cdf", "defg"}按字典排序后的结果为{"a"
 
 也就是说，当两个RowKey进行排序时，先对比两个RowKey的第一个字节，如果相同，则对比第二个字节，依次类推...如果在对比到第M个字节时，已经超出了其中一个RowKey的字节长度，那么，短的RowKey要被排在另外一个RowKey的前面。
 
-### Hbase 整体架构图
-
-![Hbase 整体架构图](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/Hbase_%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE.jpg)
-
 #### 2.3 ROOT 表和 META 表
 
 HBase的所有HRegion元数据被存储在.META.表中，随着HRegion的增多，.META.表中的数据也会增大，并分裂成多个新的HRegion。为了定位.META.表中各个HRegion的位置，把.META.表中所有HRegion的元数据保存在-ROOT-表中，最后由Zookeeper记录-ROOT-表的位置信息。所有客户端访问用户数据前，需要首先访问Zookeeper获得-ROOT-的位置，然后访问-ROOT-表获得.META.表的位置，最后根据.META.表中的信息确定用户数据存放的位置，如下图所示。
@@ -101,7 +97,7 @@ HBase是一个类似于BigTable的分布式数据库，它是一个稀疏的长�
 
 **图片**
 
-![hbase 数据模型]()
+![hbase 数据模型](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/5.png)
 
 可以将一个表想象成一个大的映射关系，通过行键、行键+时间戳或行键+列（列族：列修饰符），就可以定位特定数据。由于HBase是稀疏存储数据的，所以某些列可以是空白的。上表给出了com.cnn.www网站的数据存放逻辑视图，表中仅有一行数据，行的唯一标识为“com.cnn.www”，对这行数据的每一次逻辑修改都有一个时间戳关联对应。表中共有四列：contents:html、anchor:cnnsi.com、anchor:my.look.ca、mime:type，每一列以前缀的方式给出其所属的列族。
 
@@ -111,7 +107,7 @@ HBase是一个类似于BigTable的分布式数据库，它是一个稀疏的长�
 
 **图片**
 
-![HBase读写流程]()
+![HBase读写流程](https://github.com/yueyuanyang/knowledge/blob/master/Hbase/img/6.png)
 
 上图是HRegionServer数据存储关系图。上文提到，HBase使用MemStore和StoreFile存储对表的更新。数据在更新时首先写入HLog和MemStore。MemStore中的数据是排序的，当MemStore累计到一定阈值时，就会创建一个新的MemStore，并且将老的MemStore添加到Flush队列，由单独的线程Flush到磁盘上，成为一个StoreFile。与此同时，系统会在Zookeeper中记录一个CheckPoint，表示这个时刻之前的数据变更已经持久化了。当系统出现意外时，可能导致MemStore中的数据丢失，此时使用HLog来恢复CheckPoint之后的数据。
 
