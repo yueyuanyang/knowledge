@@ -62,19 +62,19 @@ public class Request {
      }  
   
      public static class Builder {  
-          public String name;  
+          private String name;  
   
-          public String reason;  
+          private String reason;  
   
-          public int days;  
+          private int days;  
   
-          public String groupLeaderInfo;  
+          private String groupLeaderInfo;  
   
-          public String managerInfo;  
+          private String managerInfo;  
   
-          public String departmentHeaderInfo;  
+          private String departmentHeaderInfo;  
   
-          public String customInfo;  
+          private String customInfo;  
   
           public Builder() {  
   
