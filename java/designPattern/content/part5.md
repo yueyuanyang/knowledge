@@ -248,9 +248,9 @@ public class Test {
 ```
 public class ServerAdaper implement PlayerCount {
     
-    private ServerFirst mSeverFirst;
+    private ServerFrist mServerFrist; // 原来实现方式
     public ServerAdaper() {
-        mSeverFirst = new ServerFrist;
+        mSeverFirst = new ServerFrist();
     }
     
    public String getServerName() {
