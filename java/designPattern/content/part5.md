@@ -183,7 +183,7 @@ public class ServerOne inplement PlayerCount {
 
 }
 
-public class ServerOne inplement PlayerCount {
+public class Servertwo inplement PlayerCount {
     public String getServerName() {
         return "二服"；
     }
@@ -195,7 +195,7 @@ public class ServerOne inplement PlayerCount {
 
 }
 
-public class ServerOne inplement PlayerCount {
+public class ServerThr inplement PlayerCount {
     public String getServerName() {
         return "三服"；
     }
